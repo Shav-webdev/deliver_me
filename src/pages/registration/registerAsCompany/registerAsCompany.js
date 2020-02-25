@@ -18,6 +18,7 @@ const { Title } = Typography;
 class RegisterAsCompany extends React.Component {
     state = {
         confirmDirty: false,
+        email: "",
     };
 
     handleSubmit = e => {
@@ -62,6 +63,14 @@ class RegisterAsCompany extends React.Component {
             </Select>,
         );
 
+        const onEmailHandleChange = (e) => {
+            console.log(e.target.value);
+            this.setState({
+                email: e.target.value,
+            })
+            console.log(this.state)
+        }
+
         return (
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                 <FormItem {...tailFormItemLayout}>
@@ -79,7 +88,7 @@ class RegisterAsCompany extends React.Component {
                                 message: 'Please input your E-mail!',
                             },
                         ],
-                    })(<Input />)}
+                    })(<Input onChange={e => onEmailHandleChange(e)} />)}
                 </Form.Item>
                 <Form.Item label="Password" hasFeedback>
                     {getFieldDecorator('password', {
