@@ -3,8 +3,6 @@ import 'antd/dist/antd.css';
 import {
     Form,
     Input,
-    Tooltip,
-    Icon,
     Select,
     Button,
     Typography
@@ -19,6 +17,10 @@ class RegisterAsCompany extends React.Component {
     state = {
         confirmDirty: false,
         email: "",
+        password: "",
+        phone: "",
+        tax: "",
+        activity: ""
     };
 
     handleSubmit = e => {
@@ -64,11 +66,33 @@ class RegisterAsCompany extends React.Component {
         );
 
         const onEmailHandleChange = (e) => {
-            console.log(e.target.value);
             this.setState({
                 email: e.target.value,
-            })
-            console.log(this.state)
+            });
+        }
+
+        const onPasswordHandleChange = (e) => {
+            this.setState({
+                password: e.target.value
+            });
+        }
+
+        const onPhoneHandleChange = (e) => {
+            this.setState({
+                phone: e.target.value
+            });
+        }
+
+        const onTaxHandleChange = (e) => {
+            this.setState({
+                tax: e.target.value
+            });
+        }
+
+        const onActivityHandleChange = (e) => {
+            this.setState({
+                activity: e.target.value
+            });
         }
 
         return (
@@ -98,21 +122,7 @@ class RegisterAsCompany extends React.Component {
                                 message: 'Please input your password!',
                             }
                         ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item
-                    label={
-                        <span>
-                            Nickname&nbsp;
-                <Tooltip title="What do you want others to call you?">
-                                <Icon type="question-circle-o" />
-                            </Tooltip>
-                        </span>
-                    }
-                >
-                    {getFieldDecorator('usernamee', {
-                        rules: [{ required: true, message: 'Please input your username!', whitespace: true }],
-                    })(<Input />)}
+                    })(<Input.Password onChange={e => onPasswordHandleChange(e)}/>)}
                 </Form.Item>
                 <Form.Item label="Address">
                     {getFieldDecorator('address', {
@@ -127,7 +137,7 @@ class RegisterAsCompany extends React.Component {
                 <Form.Item label="Phone Number">
                     {getFieldDecorator('phone', {
                         rules: [{ required: true, message: 'Please input your phone number!' }],
-                    })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
+                    })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} onChange={e => onPhoneHandleChange(e)} />)}
                 </Form.Item>
                 <Form.Item label="Tax Number">
                     {getFieldDecorator('tax', {
@@ -137,7 +147,7 @@ class RegisterAsCompany extends React.Component {
                                 message: 'Please input your tax number',
                             },
                         ],
-                    })(<Input />)}
+                    })(<Input onChange={e => onTaxHandleChange(e)} />)}
                 </Form.Item>
                 <Form.Item label="Activity">
                     {getFieldDecorator('activity', {
@@ -147,7 +157,7 @@ class RegisterAsCompany extends React.Component {
                                 message: 'Please input your activity',
                             }
                         ],
-                    })(<Input />)}
+                    })(<Input onChange={e => onActivityHandleChange(e)} />)}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
