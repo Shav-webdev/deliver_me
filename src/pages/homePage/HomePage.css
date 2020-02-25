@@ -1,0 +1,11 @@
+.buttons_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.buttons_wrapper a {
+    margin: 0 1rem;
+}

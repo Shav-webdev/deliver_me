@@ -1,7 +1,7 @@
 import React from "react";
 import AppRoute from "./approute";
 import {BrowserRouter as Router, Switch} from "react-router-dom";
-import defaultLayout from "../hoc/layout/defaultLayout";
+import defaultLayout from "../hoc/layout/defaultLayout/defaultLayout";
 import PageNotFound from "../pages/404/pageNotFound";
 import notFoundLayout from "../hoc/layout/notFoundLayout";
 import HomePage from "../pages/homePage/HomePage"

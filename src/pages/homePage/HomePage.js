@@ -1,22 +1,17 @@
 import React from "react";
-import { Button } from 'antd';
-import {NavLink} from 'react-router-dom';
-// import { RegisterAsCompany } from './'
+import Button from "antd/es/button";
+import 'antd/dist/antd.css';
+import "./HomePage.css"
 
 export default function HomePage() {
-    const handleClick = () => {
-        console.log('Done');
-    }
-
     return (
-        <div>
-            Home Page
-            <NavLink to="/register/company">
+        <div className="buttons_wrapper">
+            <Button href="/register/company" type="primary" shape="round">
                 Sign up as Company
-            </NavLink>
-            <NavLink to="/register/courier">
+            </Button>
+            <Button href="/register/courier" type="primary" shape="round">
                 Sign up Courier
-            </NavLink>
+            </Button>
         </div>
     )
 }
