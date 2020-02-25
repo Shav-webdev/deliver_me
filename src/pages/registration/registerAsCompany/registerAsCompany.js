@@ -87,7 +87,7 @@ class RegisterAsCompany extends React.Component {
                             {
                                 required: true,
                                 message: 'Please input your password!',
-                            }   
+                            }
                         ],
                     })(<Input.Password />)}
                 </Form.Item>
@@ -106,11 +106,8 @@ class RegisterAsCompany extends React.Component {
                     })(<Input />)}
                 </Form.Item>
                 <Form.Item label="Address">
-                    {getFieldDecorator('text', {
+                    {getFieldDecorator('address', {
                         rules: [
-                            {
-                                type: 'text',
-                            },
                             {
                                 required: true,
                                 message: 'Please input your Address!',
@@ -124,11 +121,8 @@ class RegisterAsCompany extends React.Component {
                     })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
                 </Form.Item>
                 <Form.Item label="Tax Number">
-                    {getFieldDecorator('text', {
+                    {getFieldDecorator('tax', {
                         rules: [
-                            {
-                                type: 'text',
-                            },
                             {
                                 required: true,
                                 message: 'Please input your tax number',
@@ -137,15 +131,12 @@ class RegisterAsCompany extends React.Component {
                     })(<Input />)}
                 </Form.Item>
                 <Form.Item label="Activity">
-                    {getFieldDecorator('text', {
+                    {getFieldDecorator('activity', {
                         rules: [
-                            {
-                                type: 'text',
-                            },
                             {
                                 required: true,
                                 message: 'Please input your activity',
-                            },
+                            }
                         ],
                     })(<Input />)}
                 </Form.Item>
