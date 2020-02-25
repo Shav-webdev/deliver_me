@@ -3,9 +3,21 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
+}
+
+.registration_wrapper::after {
+    content: "";
     background-color: #ffffff;
     background-image: url("../../../assets/images/registration-bg.svg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
+    opacity: 0.15;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
 }
