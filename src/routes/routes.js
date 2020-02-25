@@ -6,7 +6,7 @@ import PageNotFound from "../pages/404/pageNotFound";
 import notFoundLayout from "../hoc/layout/notFoundLayout";
 import HomePage from "../pages/homePage/HomePage"
 import registerLayout from "../hoc/layout/registerLayout/registerLayout";
-import RegisterAsCompany from "../pages/registration/registerAsCompany/registerAsCompany";
+import {WrappedRegisterAsCompany} from "../pages/registration/registerAsCompany/registerAsCompany";
 import RegisterAsCourier from "../pages/registration/registerAsCourier";
 
 
@@ -16,7 +16,7 @@ export default function Routes() {
             <Router>
                 <Switch>
                     <AppRoute exact path="/" layout={defaultLayout} component={HomePage}/>
-                    <AppRoute path="/register/company" layout={registerLayout} component={RegisterAsCompany}/>
+                    <AppRoute path="/register/company" layout={registerLayout} component={WrappedRegisterAsCompany}/>
                     <AppRoute path="/register/courier" layout={registerLayout} component={RegisterAsCourier}/>
                     <AppRoute path="*" layout={notFoundLayout} component={PageNotFound}/>
                 </Switch>
