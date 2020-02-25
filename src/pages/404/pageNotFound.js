@@ -5,6 +5,7 @@ export default function PageNotFound() {
         <div
             className="image_wrapper_404"
             style={{textAlign: "center"}}>
+            Page Not Found
         </div>
 
     )
