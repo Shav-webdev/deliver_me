@@ -5,8 +5,8 @@ import defaultLayout from "../hoc/layout/defaultLayout";
 import PageNotFound from "../pages/404/pageNotFound";
 import notFoundLayout from "../hoc/layout/notFoundLayout";
 import HomePage from "../pages/homePage/HomePage"
-import registerLayout from "../hoc/layout/registerLayout";
-import RegisterAsCompany from "../pages/registration/registerAsCompany";
+import registerLayout from "../hoc/layout/registerLayout/registerLayout";
+import RegisterAsCompany from "../pages/registration/registerAsCompany/registerAsCompany";
 import RegisterAsCourier from "../pages/registration/registerAsCourier";
 
 
