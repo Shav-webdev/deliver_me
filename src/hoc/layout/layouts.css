@@ -1,4 +1,4 @@
-.homepage_wrapper {
+.layout_wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,10 +6,9 @@
     position: relative;
 }
 
-.homepage_wrapper::after {
+.layout_wrapper::after {
     content: "";
     background-color: #ffffff;
-    background-image: url("../../../assets/images/delivery.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -20,4 +19,16 @@
     right: 0;
     position: absolute;
     z-index: -1;
+}
+
+.layout_wrapper.homepage_wrapper::after {
+    background-image: url("../../assets/images/delivery.jpg");
+    background-size: cover;
+    opacity: 0.65;
+}
+
+.layout_wrapper.registration_wrapper::after {
+    background-image: url("../../assets/images/registration-bg.svg");
+    background-size: contain;
+    opacity: 0.15;
 }

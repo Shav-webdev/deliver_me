@@ -1,11 +1,11 @@
 import React from "react";
 import {Layout} from "antd";
-import "./defaultLayout.css"
+import "../layouts.css"
 const {Content} = Layout;
 
 export default function defaultLayout(props) {
     return(
-        <div className="homepage_wrapper">
+        <div className="layout_wrapper homepage_wrapper">
             <Layout style={{background: "none"}}>
                 <Content>
                     {props.children}
