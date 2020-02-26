@@ -10,8 +10,7 @@ import {
     Col
 } from 'antd';
 import FormItem from "antd/lib/form/FormItem";
-import {signUp, getCompanies} from "../services/services";
-import axios from "axios";
+import {signUp} from "../services/services";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -27,15 +26,6 @@ class RegisterAsCompany extends React.Component {
         activity: "",
         name: ""
     };
-    componentDidMount() {
-       // getCompanies("http://192.168.3.11:4000/companies")
-        let url = "http://192.168.3.189:4001/companies";
-        axios.get(`${url}`)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
-    }
 
     handleSubmit = e => {
         e.preventDefault();
@@ -45,10 +35,11 @@ class RegisterAsCompany extends React.Component {
             email : this.state.email,
             password: this.state.password,
             phone: this.state.phone,
-            tax: this.state.tax,
+            taxNumber: this.state.tax,
             activity: this.state.activity,
+            address: "hi there",
         };
-        let url = "http://192.168.3.11:4000/sign-up-company";
+        let url = "http://192.168.3.189:4000/sign-up-company";
         signUp(url, company);
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {

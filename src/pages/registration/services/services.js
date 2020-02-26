@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export function signUp(url, data) {
-    axios.post(`${url}`, {data})
+    axios.post(`${url}`, data)
         .then(res => {
             console.log(res);
             console.log(res.data);
@@ -10,7 +10,7 @@ export function signUp(url, data) {
 }
 
 export function signIn(url, data) {
-    axios.post(`${url}`, {data})
+    axios.post(`${url}`, data)
         .then(res => {
             console.log(res);
             console.log(res.data);
