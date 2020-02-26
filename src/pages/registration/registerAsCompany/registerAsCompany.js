@@ -39,23 +39,23 @@ class RegisterAsCompany extends React.Component {
 
         const formItemLayout = {
             labelCol: {
-                xs: { span: 1 },
-                sm: { span: 6 },
+                xs: { span: 9 },
+                sm: { span: 10 },
             },
             wrapperCol: {
-                xs: { span: 1 },
-                sm: { span: 10 },
+                xs: { span: 3 },
+                sm: { span: 5 },
             },
         };
         const tailFormItemLayout = {
             wrapperCol: {
                 xs: {
-                    span: 1,
+                    span: 10,
                     offset: 10,
                 },
                 sm: {
-                    span: 5,
-                    offset: 10,
+                    span: 6,
+                    offset: 12,
                 },
             },
         };
@@ -182,10 +182,14 @@ class RegisterAsCompany extends React.Component {
                                 <Button type="primary" htmlType="submit" shape="round">
                                     Register
                                 </Button>
-                                <Button href="/login" type="link">
-                                    Already have an account? Sign in
-                                </Button>
                             </Form.Item>
+                            <Col sm={21}>
+                                <Form.Item {...tailFormItemLayout}>
+                                    <Button href="/login" type="link">
+                                        Already have an account? Sign in
+                                    </Button>
+                                </Form.Item>
+                            </Col>
                         </Col>
                     </Form>
                 </Row>
