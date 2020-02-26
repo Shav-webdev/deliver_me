@@ -3,11 +3,11 @@ import 'antd/dist/antd.css';
 import {
     Form,
     Input,
-    Tooltip,
-    Icon,
     Select,
     Button,
-    Typography
+    Typography,
+    Row,
+    Col
 } from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 
@@ -19,6 +19,10 @@ class RegisterAsCompany extends React.Component {
     state = {
         confirmDirty: false,
         email: "",
+        password: "",
+        phone: "",
+        tax: "",
+        activity: ""
     };
 
     handleSubmit = e => {
@@ -64,100 +68,128 @@ class RegisterAsCompany extends React.Component {
         );
 
         const onEmailHandleChange = (e) => {
-            console.log(e.target.value);
             this.setState({
                 email: e.target.value,
-            })
-            console.log(this.state)
+            });
+        }
+
+        const onPasswordHandleChange = (e) => {
+            this.setState({
+                password: e.target.value
+            });
+        }
+
+        const onPhoneHandleChange = (e) => {
+            this.setState({
+                phone: e.target.value
+            });
+        }
+
+        const onTaxHandleChange = (e) => {
+            this.setState({
+                tax: e.target.value
+            });
+        }
+
+        const onActivityHandleChange = (e) => {
+            this.setState({
+                activity: e.target.value
+            });
         }
 
         return (
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <FormItem {...tailFormItemLayout}>
-                    <Title level={3}>Sign Up</Title>
-                </FormItem>
-                <Form.Item label="E-mail">
-                    {getFieldDecorator('email', {
-                        rules: [
-                            {
-                                type: 'email',
-                                message: 'The input is not valid E-mail!',
-                            },
-                            {
-                                required: true,
-                                message: 'Please input your E-mail!',
-                            },
-                        ],
-                    })(<Input onChange={e => onEmailHandleChange(e)} />)}
-                </Form.Item>
-                <Form.Item label="Password" hasFeedback>
-                    {getFieldDecorator('password', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            }
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item
-                    label={
-                        <span>
-                            Nickname&nbsp;
-                <Tooltip title="What do you want others to call you?">
-                                <Icon type="question-circle-o" />
-                            </Tooltip>
-                        </span>
-                    }
-                >
-                    {getFieldDecorator('usernamee', {
-                        rules: [{ required: true, message: 'Please input your username!', whitespace: true }],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Address">
-                    {getFieldDecorator('address', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your Address!',
-                            },
-                        ],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Phone Number">
-                    {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
-                    })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
-                </Form.Item>
-                <Form.Item label="Tax Number">
-                    {getFieldDecorator('tax', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your tax number',
-                            },
-                        ],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Activity">
-                    {getFieldDecorator('activity', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your activity',
-                            }
-                        ],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Register
-                    </Button>
-                    <Button href="/login" type="link">
-                        Already have an account? Sign in
-                    </Button>
-                </Form.Item>
-            </Form>
+            <div className="formWrapper">
+                <Row type="flex">
+                    <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                        <Col sm={24}>
+                            <FormItem {...tailFormItemLayout}>
+                                <Title level={3}>Sign Up</Title>
+                            </FormItem>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="E-mail">
+                                {getFieldDecorator('email', {
+                                    rules: [
+                                        {
+                                            type: 'email',
+                                            message: 'The input is not valid E-mail!',
+                                        },
+                                        {
+                                            required: true,
+                                            message: 'Please input your E-mail!',
+                                        },
+                                    ],
+                                })(<Input onChange={e => onEmailHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Password" hasFeedback>
+                                {getFieldDecorator('password', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your password!',
+                                        }
+                                    ],
+                                })(<Input.Password onChange={e => onPasswordHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Address">
+                                {getFieldDecorator('address', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your Address!',
+                                        },
+                                    ],
+                                })(<Input />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Phone Number">
+                                {getFieldDecorator('phone', {
+                                    rules: [{ required: true, message: 'Please input your phone number!' }],
+                                })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} onChange={e => onPhoneHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Tax Number">
+                                {getFieldDecorator('tax', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your tax number',
+                                        },
+                                    ],
+                                })(<Input onChange={e => onTaxHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Activity">
+                                {getFieldDecorator('activity', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your activity',
+                                        }
+                                    ],
+                                })(<Input onChange={e => onActivityHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item {...tailFormItemLayout}>
+                                <Button type="primary" htmlType="submit" shape="round">
+                                    Register
+                                </Button>
+                                <Button href="/login" type="link">
+                                    Already have an account? Sign in
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Form>
+                </Row>
+            </div>
         );
     }
 }
