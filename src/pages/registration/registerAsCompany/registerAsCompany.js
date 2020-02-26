@@ -10,6 +10,7 @@ import {
     Col
 } from 'antd';
 import FormItem from "antd/lib/form/FormItem";
+import {signUp} from "../helpers/helpers";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -22,17 +23,30 @@ class RegisterAsCompany extends React.Component {
         password: "",
         phone: "",
         tax: "",
-        activity: ""
+        activity: "",
+        name: ""
     };
 
     handleSubmit = e => {
         e.preventDefault();
+
+        let company = {
+            name: this.state.name,
+            email : this.state.email,
+            password: this.state.password,
+            phone: this.state.phone,
+            tax: this.state.tax,
+            activity: this.state.activity,
+        };
+        let url = "http://192.168.3.189:4000/sign-up-company"
+        signUp(url, company);
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
             }
         });
     };
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
