@@ -47,7 +47,6 @@ class RegisterAsCompany extends React.Component {
         });
     };
 
-
     render() {
         const { getFieldDecorator } = this.props.form;
 
@@ -80,6 +79,12 @@ class RegisterAsCompany extends React.Component {
                 <Option value="374">+374</Option>
             </Select>,
         );
+
+        const onNameHandleChange = (e) => {
+            this.setState({
+                name: e.target.value,
+            });
+        }
 
         const onEmailHandleChange = (e) => {
             this.setState({
@@ -121,6 +126,18 @@ class RegisterAsCompany extends React.Component {
                             </FormItem>
                         </Col>
                         <Col sm={24}>
+                            <Form.Item label="Name">
+                                {getFieldDecorator('name', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your E-mail!',
+                                        },
+                                    ],
+                                })(<Input onChange={e => onNameHandleChange(e)} />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
                             <Form.Item label="E-mail">
                                 {getFieldDecorator('email', {
                                     rules: [
@@ -143,6 +160,11 @@ class RegisterAsCompany extends React.Component {
                                         {
                                             required: true,
                                             message: 'Please input your password!',
+                                        },
+                                        {
+                                            min: 8,
+                                            max: 32,
+                                            message: 'Password must be at least 8 characters!'
                                         }
                                     ],
                                 })(<Input.Password onChange={e => onPasswordHandleChange(e)} />)}
@@ -163,7 +185,20 @@ class RegisterAsCompany extends React.Component {
                         <Col sm={24}>
                             <Form.Item label="Phone Number">
                                 {getFieldDecorator('phone', {
-                                    rules: [{ required: true, message: 'Please input your phone number!' }],
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your phone number!'
+                                        },
+                                        {
+                                            pattern: "^[0-9]+$",
+                                            message: 'Please enter only numbers!'
+                                        },
+                                        {
+                                            len: 8,
+                                            message: 'Phone number must be 8 digits long!'
+                                        }
+                                    ],
                                 })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} onChange={e => onPhoneHandleChange(e)} />)}
                             </Form.Item>
                         </Col>
@@ -173,8 +208,16 @@ class RegisterAsCompany extends React.Component {
                                     rules: [
                                         {
                                             required: true,
-                                            message: 'Please input your tax number',
+                                            message: 'Please input your tax number!',
                                         },
+                                        {
+                                            len: 8,
+                                            message: 'Tax Number should be 8 digits long!'
+                                        },
+                                        {
+                                            pattern: "^[0-9]+$",
+                                            message: "Please enter only numbers!"
+                                        }
                                     ],
                                 })(<Input onChange={e => onTaxHandleChange(e)} />)}
                             </Form.Item>
