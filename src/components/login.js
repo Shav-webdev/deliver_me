@@ -41,13 +41,13 @@ class LoginForm extends React.Component {
                         valuePropName: 'checked',
                         initialValue: true,
                     })(<Checkbox>Remember me</Checkbox>)}
-                    <a className="login-form-forgot" href="">
+                    <a className="login-form-forgot" href="/kk">
                         Forgot password
                     </a>
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    Or <a href="">register now!</a>
+                    Or <a href="/kk">register now!</a>
                 </Form.Item>
             </Form>
         );
