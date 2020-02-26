@@ -12,53 +12,36 @@ import {
 import FormItem from "antd/lib/form/FormItem";
 import {signUp} from "../services/services";
 
-const { Option } = Select;
-const { Title } = Typography;
+const {Option} = Select;
+const {Title} = Typography;
 
 
 class RegisterAsCompany extends React.Component {
-    state = {
-        confirmDirty: false,
-        email: "",
-        password: "",
-        phone: "",
-        tax: "",
-        activity: "",
-        name: ""
-    };
 
     handleSubmit = e => {
         e.preventDefault();
 
-        let company = {
-            name: this.state.name,
-            email : this.state.email,
-            password: this.state.password,
-            phone: this.state.phone,
-            taxNumber: this.state.tax,
-            activity: this.state.activity,
-            address: "hi there",
-        };
         let url = "http://192.168.3.189:4000/sign-up-company";
-        signUp(url, company);
-        this.props.form.validateFieldsAndScroll((err, values) => {
+
+        this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                signUp(url, values);
             }
         });
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
 
         const formItemLayout = {
             labelCol: {
-                xs: { span: 9 },
-                sm: { span: 10 },
+                xs: {span: 9},
+                sm: {span: 10},
             },
             wrapperCol: {
-                xs: { span: 3 },
-                sm: { span: 5 },
+                xs: {span: 3},
+                sm: {span: 5},
             },
         };
         const tailFormItemLayout = {
@@ -76,46 +59,10 @@ class RegisterAsCompany extends React.Component {
         const prefixSelector = getFieldDecorator('prefix', {
             initialValue: '374',
         })(
-            <Select style={{ width: 70 }}>
+            <Select style={{width: 70}}>
                 <Option value="374">+374</Option>
             </Select>,
         );
-
-        const onNameHandleChange = (e) => {
-            this.setState({
-                name: e.target.value,
-            });
-        }
-
-        const onEmailHandleChange = (e) => {
-            this.setState({
-                email: e.target.value,
-            });
-        }
-
-        const onPasswordHandleChange = (e) => {
-            this.setState({
-                password: e.target.value
-            });
-        }
-
-        const onPhoneHandleChange = (e) => {
-            this.setState({
-                phone: e.target.value
-            });
-        }
-
-        const onTaxHandleChange = (e) => {
-            this.setState({
-                tax: e.target.value
-            });
-        }
-
-        const onActivityHandleChange = (e) => {
-            this.setState({
-                activity: e.target.value
-            });
-        }
 
         return (
             <div className="formWrapper">
@@ -135,7 +82,7 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Please input your E-mail!',
                                         },
                                     ],
-                                })(<Input onChange={e => onNameHandleChange(e)} />)}
+                                })(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -151,7 +98,7 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Please input your E-mail!',
                                         },
                                     ],
-                                })(<Input onChange={e => onEmailHandleChange(e)} />)}
+                                })(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -168,7 +115,7 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Password must be at least 8 characters!'
                                         }
                                     ],
-                                })(<Input.Password onChange={e => onPasswordHandleChange(e)} />)}
+                                })(<Input.Password/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -180,7 +127,7 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Please input your Address!',
                                         },
                                     ],
-                                })(<Input />)}
+                                })(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -200,12 +147,12 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Phone number must be 8 digits long!'
                                         }
                                     ],
-                                })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} onChange={e => onPhoneHandleChange(e)} />)}
+                                })(<Input addonBefore={prefixSelector} style={{width: '100%'}}/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
                             <Form.Item label="Tax Number">
-                                {getFieldDecorator('tax', {
+                                {getFieldDecorator('taxNumber', {
                                     rules: [
                                         {
                                             required: true,
@@ -220,7 +167,7 @@ class RegisterAsCompany extends React.Component {
                                             message: "Please enter only numbers!"
                                         }
                                     ],
-                                })(<Input onChange={e => onTaxHandleChange(e)} />)}
+                                })(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -232,7 +179,7 @@ class RegisterAsCompany extends React.Component {
                                             message: 'Please input your activity',
                                         }
                                     ],
-                                })(<Input onChange={e => onActivityHandleChange(e)} />)}
+                                })(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
@@ -256,4 +203,4 @@ class RegisterAsCompany extends React.Component {
     }
 }
 
-export const WrappedRegisterAsCompany = Form.create({ name: 'register' })(RegisterAsCompany);
+export const WrappedRegisterAsCompany = Form.create({name: 'register'})(RegisterAsCompany);
