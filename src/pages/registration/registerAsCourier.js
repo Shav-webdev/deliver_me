@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import 'antd/dist/antd.css';
 import {
     Form,
@@ -18,12 +19,18 @@ import { signUp } from "./services/services";
 const { Option } = Select;
 const { Title } = Typography;
 
+const state = {
+    imageurl: ''
+}
+
 const params = {
     name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action: '',
     headers: {
         authorization: 'authorization-text',
+        'Content-Type': 'application/x-ww-form-urlencoded'
     },
+
     onChange(info) {
         if (info.file.status !== 'uploading') {
             console.log(info.file, info.fileList);
@@ -47,10 +54,30 @@ class RegisterAsCourier extends React.Component {
             this.props.form.validateFields((err, values) => {
                 if (!err) {
                     console.log('Received values of form: ', values);
+                    values.passportURL = this.state.imageurl;
+                    console.log(values.image);
                     signUp(url, values);
                 }
             });
         });
+    }
+
+    handleChange = (event) => {
+        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfeoo5iog/upload';
+        const CLOUDINARY_UPLOAD_PRESET = 'lvxujt8u';
+        const formData = new FormData();
+        formData.append('file', event.file.originFileObj);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+
+        return axios.post(CLOUDINARY_URL, formData)
+            .then((res) => {
+                console.log(res.data.url);
+                this.setState({ imageurl: res.data.url });
+                console.log(this.state);
+                return res.data.url;
+            })
+            .catch(e => console.log(e.message));
     }
 
     render() {
@@ -186,21 +213,19 @@ class RegisterAsCourier extends React.Component {
                         </Col>
                         <Col sm={24}>
                             <Form.Item label="Upload Passport photo">
-                                {getFieldDecorator('dragger', {
-                                    valuePropName: 'fileList',
+                                {getFieldDecorator('passportURL', {
                                     rules: [
                                         {
                                             required: true,
-                                            message: "Please upload your Passport photo!"
+                                            message: 'Please upload a photo!'
                                         }
-                                    ]
-                                })(
-                                    <Upload {...params}>
-                                        <Button>
+                                    ],
+                                })
+                                    (<Upload {...params} onChange={(e) => this.handleChange(e)}>
+                                        <Button >
                                             <Icon type="upload" /> Click to Upload
-                                        </Button>
-                                    </Upload>,
-                                )}
+                                    </Button>
+                                    </Upload>)},
                             </Form.Item>
                         </Col>
                         <Col sm={24}>

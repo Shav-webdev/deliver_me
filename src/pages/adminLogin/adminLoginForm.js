@@ -1,8 +1,10 @@
 import React from "react";
 import { Form, Icon, Input, Button, Typography } from 'antd';
-import './adminLoginForm.css'
+import './adminLoginForm.css';
+import { getCompanies, signIn } from '../registration/services/services';
 
 const {Title} = Typography;
+const url = 'http://192.168.3.189:4000/admin';
 
 class AdminLoginForm extends React.Component {
     handleSubmit = e => {
@@ -10,6 +12,8 @@ class AdminLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                console.log(values);
+                signIn(url, values);
             }
         });
     };
@@ -23,12 +27,12 @@ class AdminLoginForm extends React.Component {
                         <Title level={3}>Sign In</Title>
                     </Form.Item>
                     <Form.Item>
-                        {getFieldDecorator('username', {
+                        {getFieldDecorator('email', {
                             rules: [{ required: true, message: 'Please input your username!' }],
                         })(
                             <Input
                                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="Username"
+                                placeholder="email"
                             />,
                         )}
                     </Form.Item>

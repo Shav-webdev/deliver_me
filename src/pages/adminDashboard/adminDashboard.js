@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import { getCompanies, signIn } from '../registration/services/services';
 
 const columns = [
     {
@@ -7,31 +8,21 @@ const columns = [
         dataIndex: 'name',
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
+        title: 'last name',
+        dataIndex: 'lastName',
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
+        title: 'phone',
+        dataIndex: 'phone',
     },
 ];
 
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        age: 32,
-        address: '10 Downing Street',
-    },
-    {
-        key: '2',
-        name: 'John',
-        age: 42,
-        address: '10 Downing Street',
-    },
-];
+
+
+const dataSource = [];
 
 export default class AdminDashboard extends Component {
+    
     render() {
         return (
             <div>
