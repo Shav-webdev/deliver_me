@@ -19,10 +19,6 @@ import { signUp } from "./services/services";
 const { Option } = Select;
 const { Title } = Typography;
 
-const state = {
-    imageurl: ''
-}
-
 const params = {
     name: 'file',
     action: '',
@@ -45,6 +41,10 @@ const params = {
 
 
 class RegisterAsCourier extends React.Component {
+    state = {
+        imageurl: ''
+    }
+
     handleSubmit = e => {
         e.preventDefault();
         let url = "http://192.168.3.189:4000/sign-up-user";
@@ -72,9 +72,7 @@ class RegisterAsCourier extends React.Component {
 
         return axios.post(CLOUDINARY_URL, formData)
             .then((res) => {
-                console.log(res.data.url);
                 this.setState({ imageurl: res.data.url });
-                console.log(this.state);
                 return res.data.url;
             })
             .catch(e => console.log(e.message));

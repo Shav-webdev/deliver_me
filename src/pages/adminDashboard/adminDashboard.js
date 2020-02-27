@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import { getCompanies, signIn } from '../registration/services/services';
 
 const columns = [
     {

@@ -3,8 +3,6 @@ import 'antd/dist/antd.css';
 import {Form, Input, Select, Button, Typography, Row, Col} from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 import {signUp} from "../services/services";
-import {getCookie} from "../services/cookies";
-import history from '../../../routes/history';
 
 const {Option} = Select;
 const {Title} = Typography;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Icon, Input, Button, Typography } from 'antd';
 import './adminLoginForm.css';
-import { getCompanies, signIn } from '../registration/services/services';
+import { signIn } from '../registration/services/services';
 
 const {Title} = Typography;
 const url = 'http://192.168.3.189:4000/admin';
