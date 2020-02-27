@@ -1,16 +1,10 @@
 import React from "react";
 import 'antd/dist/antd.css';
-import {
-    Form,
-    Input,
-    Select,
-    Button,
-    Typography,
-    Row,
-    Col
-} from 'antd';
+import {Form, Input, Select, Button, Typography, Row, Col} from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 import {signUp} from "../services/services";
+import {getCookie} from "../services/cookies";
+import history from '../../../routes/history';
 
 const {Option} = Select;
 const {Title} = Typography;
@@ -27,6 +21,11 @@ class RegisterAsCompany extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 signUp(url, values);
+                let tokenCookie = getCookie('token');
+                if (tokenCookie) {
+                    console.log(tokenCookie);
+                    history.push('/profile')
+                }
             }
         });
     };

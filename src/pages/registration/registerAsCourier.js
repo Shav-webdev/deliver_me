@@ -187,6 +187,7 @@ class RegisterAsCourier extends React.Component {
                         <Col sm={24}>
                             <Form.Item label="Upload Passport photo">
                                 {getFieldDecorator('dragger', {
+                                    valuePropName: 'fileList',
                                     rules: [
                                         {
                                             required: true,
