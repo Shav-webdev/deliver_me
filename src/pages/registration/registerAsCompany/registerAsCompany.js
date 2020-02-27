@@ -21,11 +21,7 @@ class RegisterAsCompany extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 signUp(url, values);
-                let tokenCookie = getCookie('token');
-                if (tokenCookie) {
-                    console.log(tokenCookie);
-                    history.push('/profile')
-                }
+
             }
         });
     };
