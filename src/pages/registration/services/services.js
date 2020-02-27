@@ -1,5 +1,5 @@
 import axios from "axios"
-import {setCookie, getCookie, eraseCookie} from "./cookies";
+import {setCookie} from "./cookies";
 import { message } from 'antd';
 
 
