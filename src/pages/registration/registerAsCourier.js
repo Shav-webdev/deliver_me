@@ -50,7 +50,7 @@ class RegisterAsCourier extends React.Component {
         let url = "http://192.168.3.189:4000/sign-up-user";
 
 
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFields((err, values) => {
             this.props.form.validateFields((err, values) => {
                 if (!err) {
                     console.log('Received values of form: ', values);
