@@ -1,24 +1,28 @@
 import React from "react";
-import {Form, Icon, Input, Button} from 'antd';
+import {Form, Icon, Input, Button, Radio} from 'antd';
 import './login.css'
 import {signIn} from "../../pages/registration/services/services";
 import {getCookie} from "../../pages/registration/services/cookies";
 import history from "../../routes/history";
 
 class LoginForm extends React.Component {
+
+
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                let url = "http://192.168.3.189:4000/login-company";
+                let url =(values["signInAs"] === "courier") ?
+                    "http://192.168.3.189:4000/login-user"
+                    :"http://192.168.3.189:4000/login-company";
+
                 signIn(url, values);
                 let tokenCookie = getCookie('token');
                 if (tokenCookie) {
                     console.log(tokenCookie);
                     history.push('/profile');
                 }
-
             }
         });
     };
@@ -43,7 +47,7 @@ class LoginForm extends React.Component {
                             ],
                         })(<Input prefix={<Icon type="mail" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                   placeholder="Email"
-                                   />)}
+                        />)}
                     </Form.Item>
                     <Form.Item>
                         {getFieldDecorator('password', {
@@ -64,6 +68,21 @@ class LoginForm extends React.Component {
                                 type="password"
                                 placeholder="Password"
                             />,
+                        )}
+                    </Form.Item>
+                    <Form.Item label="Sign in as">
+                        {getFieldDecorator('signInAs', {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Please tell us who you are.'
+                                },
+                            ],
+                        })(
+                            <Radio.Group>
+                                <Radio checked value="courier">Courier</Radio>
+                                <Radio value="company">Company</Radio>
+                            </Radio.Group>,
                         )}
                     </Form.Item>
                     <Form.Item>
