@@ -2,6 +2,8 @@ import React from "react";
 import {Form, Icon, Input, Button} from 'antd';
 import './login.css'
 import {signIn} from "../../pages/registration/services/services";
+import {getCookie} from "../../pages/registration/services/cookies";
+import history from "../../routes/history";
 
 class LoginForm extends React.Component {
     handleSubmit = e => {
@@ -10,7 +12,12 @@ class LoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 let url = "http://192.168.3.189:4000/login-company";
-                signIn(url, values)
+                signIn(url, values);
+                let tokenCookie = getCookie('token');
+                if (tokenCookie) {
+                    console.log(tokenCookie);
+                    history.push('/profile');
+                }
 
             }
         });
