@@ -40,7 +40,7 @@ const params = {
 class RegisterAsCourier extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
-        let url = "http://192.168.3.189:4000/sign-up-company";
+        let url = "http://192.168.3.189:4000/sign-up-user";
 
 
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -98,6 +98,18 @@ class RegisterAsCourier extends React.Component {
                         <Col sm={24}>
                             <Form.Item label="Name">
                                 {getFieldDecorator('name', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please input your E-mail!',
+                                        },
+                                    ],
+                                })(<Input />)}
+                            </Form.Item>
+                        </Col>
+                        <Col sm={24}>
+                            <Form.Item label="Last name">
+                                {getFieldDecorator('lastName', {
                                     rules: [
                                         {
                                             required: true,
