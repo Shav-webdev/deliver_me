@@ -10,7 +10,8 @@ class LoginForm extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        const {validateFields, setFieldsValue} = this.props.form;
+        validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
                 let url =(values["signInAs"] === "courier") ?
@@ -23,6 +24,13 @@ class LoginForm extends React.Component {
                     console.log(tokenCookie);
                     history.push('/profile');
                 }
+
+                console.log(this.props.form);
+                setFieldsValue({
+                    email: "",
+                    password: "",
+                    signInAs: ""
+                })
             }
         });
     };
