@@ -14,12 +14,22 @@ class RegisterAsCompany extends React.Component {
         e.preventDefault();
 
         let url = "http://192.168.3.189:4000/sign-up-company";
-
-        this.props.form.validateFields((err, values) => {
+        const {validateFields, setFieldsValue} = this.props.form;
+        validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                signUp(url, values);
-
+                //signUp(url, values);
+                console.log(this.props.form);
+                setFieldsValue({
+                    prefix: "374",
+                    name: "",
+                    email: "",
+                    password: "",
+                    address: "",
+                    phone: "",
+                    taxNumber: "",
+                    activity: ""
+                })
             }
         });
     };
