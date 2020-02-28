@@ -42,7 +42,7 @@ function companies(state = initialState.companies, action) {
     switch (action.type) {
         case GET_COMPANIES:
             return [
-                ...state, ...action.companies
+                ...action.companies
             ];
         default:
             return state;
@@ -53,7 +53,7 @@ function users(state = initialState.users, action) {
     switch (action.type) {
         case GET_USERS:
             return [
-                ...state, ...action.users
+                ...action.users
             ];
         default:
             return state;

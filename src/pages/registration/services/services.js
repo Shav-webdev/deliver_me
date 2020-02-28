@@ -1,6 +1,7 @@
 import axios from "axios"
-import {setCookie} from "./cookies";
+import {getCookie, setCookie} from "./cookies";
 import { message } from 'antd';
+import history from "../../../routes/history";
 
 
 export const successMessage = (msg = "") => {
@@ -11,28 +12,28 @@ export const errorMessage = (msg= "") => {
     message.error(msg);
 };
 
-export function signUp(url, data, sign_up_as) {
+export function signUp(url, data) {
     axios.post(`${url}`, data)
         .then(res => {
-            console.log(res);
             successMessage(`${res.data.message}, please login for continue`);
         })
         .catch(e => {
-            console.log(e);
-            console.log(e.message);
             errorMessage(e.message);
         })
 }
 
-export function signIn(url, data) {
+export function signIn(url, data, redirectUrl ="/") {
     axios.post(`${url}`, data)
         .then(res => {
             setCookie('token',`${res.data.token}`);
             successMessage("You will redirected to your profile soon");
+            if (!getCookie("token")){
+                history.push("/")
+            }else {
+                history.push(redirectUrl)
+            }
         })
         .catch(e => {
-            console.log(e)
-            console.log(e.message)
             errorMessage(e.message)
         })
 }

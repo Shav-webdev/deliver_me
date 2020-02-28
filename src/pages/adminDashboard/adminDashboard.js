@@ -8,6 +8,8 @@ import {connect} from "react-redux"
 import {getCompanies, getUsers} from "../../redux/actions";
 import axios from "axios";
 import { Table } from 'antd';
+import {getCookie} from "../registration/services/cookies";
+import history from "../../routes/history";
 
 const {Header, Sider, Content} = Layout;
 
@@ -36,6 +38,7 @@ class AdminDashboard extends Component {
         axios.get(`${url}`)
             .then(res => {
                 console.log(res.data);
+                console.log(this.props)
                 if (data === "users"){
                     this.props.getUsers(res.data);
                 }else if (data === "companies") {
@@ -44,14 +47,20 @@ class AdminDashboard extends Component {
                 successMessage(`Data loaded.`);
             })
             .catch(e => {
-                console.log(e)
+                console.log(e);
                 console.log(e.message);
                 errorMessage(e.message)
             })
     }
 
     componentDidMount() {
-        this.getData();
+        if (getCookie("token")){
+            history.push("/admin/dashboard");
+            console.log(getCookie("token"));
+        }else {
+            history.push("/")
+        }
+
     }
      usersColumn = [
         { title: 'Name', dataIndex: 'name', key:"name"},
@@ -79,7 +88,7 @@ class AdminDashboard extends Component {
                 <Layout style={{minHeight: "100vh"}}>
                     <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                         <div className="logo"/>
-                        <Menu onSelect={this.onMenuSelect} theme="dark" mode="inline" defaultSelectedKeys={['users']}>
+                        <Menu onSelect={this.onMenuSelect} theme="dark" mode="inline" defaultSelectedKeys={['']}>
                             <Menu.Item key="users">
                                 <Icon type="team"/>
                                 <span>Users</span>
