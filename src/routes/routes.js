@@ -23,7 +23,6 @@ export default function Routes() {
                     <AppRoute path="/register/company" layout={registerLayout} component={WrappedRegisterAsCompany}/>
                     <AppRoute path="/admin/dashboard" layout={adminDashboardLayout} component={AdminDashboard}/>
                     <AppRoute path="/admin" layout={registerLayout} component={WrappedAdminLoginForm}/>
-                
                     <AppRoute path="/register/courier" layout={registerLayout} component={WrappedRegisterAsCourier}/>
                     <AppRoute path="*" layout={notFoundLayout} component={PageNotFound}/>
                 </Switch>
