@@ -18,6 +18,16 @@ class AdminDashboard extends Component {
         super(props);
         this.state = {
             collapsed: false,
+            users: [],
+            companies: [],
+            usersColumn : [
+                { title: 'Name', dataIndex: 'name', key:"name"},
+                { title: 'Last name', dataIndex: 'last_name', key:"last_name"},
+                { title: 'Email', dataIndex: 'email', key:"email"},
+                { title: 'Phone', dataIndex: 'phone', key:"phone"},
+                { title: 'Address', dataIndex: 'address', key:"address"},
+            ],
+            isUpdated:false,
         };
         this.onMenuSelect = this.onMenuSelect.bind(this);
         this.getData = this.getData.bind(this);
@@ -38,50 +48,43 @@ class AdminDashboard extends Component {
         axios.get(`${url}`)
             .then(res => {
                 console.log(res.data);
-                console.log(this.props)
+                console.log(this.props);
                 if (data === "users"){
-                    this.props.getUsers(res.data);
+                    this.setState({
+                        users: res.data,
+                    });
+                    // this.props.getUsers(res.data);
                 }else if (data === "companies") {
-                    this.props.getCompanies(res.data);
+                    this.setState({
+                        companies: res.data,
+                    });
+                    // this.props.getCompanies(res.data);
                 }
                 successMessage(`Data loaded.`);
             })
             .catch(e => {
-                console.log(e);
-                console.log(e.message);
-                errorMessage(e.message)
+                errorMessage(e.response.data.message)
             })
     }
 
     componentDidMount() {
         if (getCookie("token")){
             history.push("/admin/dashboard");
-            console.log(getCookie("token"));
         }else {
             history.push("/")
         }
 
     }
-     usersColumn = [
-        { title: 'Name', dataIndex: 'name', key:"name"},
-        { title: 'Last name', dataIndex: 'last_name', key:"last_name"},
-        { title: 'Email', dataIndex: 'email', key:"email"},
-        { title: 'Phone', dataIndex: 'phone', key:"phone"},
-        { title: 'Address', dataIndex: 'address', key:"address"},
-    ];
 
     render() {
-        const { companies, users } = this.props;
+        const { companies, users } = this.state;
 
-        const companiesColumn = Object.keys(companies);
-        const companiesData = companies;
-
-
-        const usersData = users;
-        console.log(companiesColumn)
-        console.log(companiesData)
-        console.log(usersData)
-        //console.log(usersColumn)
+        console.log(companies)
+        console.log(users)
+        // console.log(companiesColumn)
+        // console.log(companiesData)
+        // console.log(usersData)
+        // console.log(usersColumn)
 
         return (
             <Router>
@@ -119,8 +122,8 @@ class AdminDashboard extends Component {
                         >
                             <Route exact path="/admin/dashboard/users">
                                 <Table
-                                    column={this.usersColumn}
-                                    dataSource={users}
+                                    column={this.state.usersColumn}
+                                    dataSource={this.state.users}
                                     rowKey="id"
                                 />
                             </Route>
