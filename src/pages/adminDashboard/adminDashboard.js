@@ -1,45 +1,5 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-<<<<<<< HEAD
-import { getCompanies } from '../registration/services/services';
-
-const columns = [
-    {
-
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Last name',
-        dataIndex: 'lastName',
-    },
-    {
-        title: 'phone',
-        dataIndex: 'phone',
-    },
-    {
-        title: 'Tax Number',
-        dataIndex: 'taxNumber'
-    },
-    {
-        title: 'Photo',
-        dataIndex: 'photo'
-    },
-    {
-        title: 'User Type',
-        dataIndex: 'userType'
-    },
-    {
-        activity: 'Activity',
-        dataIndex: 'activity'
-    }
-];
-
-
-const dataSource = [];
-=======
 import "./adminDashboard.css"
 import { Layout, Menu, Icon } from 'antd';
 
@@ -55,7 +15,6 @@ export default class AdminDashboard extends Component {
             collapsed: !this.state.collapsed,
         });
     };
->>>>>>> ae207a8d6fdb5635e60653e685017d0bd8ba9af3
 
     render() {
         const columns = [
