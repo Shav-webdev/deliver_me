@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Icon, Input, Button, Typography } from 'antd';
+import {Form, Icon, Input, Button, Typography} from 'antd';
 import './adminLoginForm.css';
 import {signIn} from '../registration/services/services';
 
@@ -8,6 +8,7 @@ const {Title} = Typography;
 const url = 'https://thawing-ravine-80499.herokuapp.com/admin';
 
 class AdminLoginForm extends React.Component {
+
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {

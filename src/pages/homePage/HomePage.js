@@ -7,7 +7,7 @@ import {WrappedLoginForm} from "../../containers/login/login";
 export default function HomePage() {
     return (
         <div className="login_section_wrapper">
-            <div className="description_content_wrapper">
+            <div className="description_content_wrapper" style={{marginBottom: "1.5rem"}}>
                 <div className="description_wrapper">
                     <h1>Deliver.me for you</h1>
                     <p className="description_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -15,10 +15,10 @@ export default function HomePage() {
                     </p>
                 </div>
                 <div className="buttons_wrapper">
-                    <Button href="/register/company" type="primary" shape="round">
+                    <Button style={{margin: ".5rem auto"}} href="/register/company" type="primary" shape="round">
                         Sign up as Company
                     </Button>
-                    <Button href="/register/courier" type="primary" shape="round">
+                    <Button style={{margin: ".5rem auto"}} href="/register/courier" type="primary" shape="round">
                         Sign up Courier
                     </Button>
                 </div>
