@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import {Form, Input, Select, Button, Typography, Row, Col} from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 import {signUp} from "../services/services";
+import history from "../../../routes/history";
 
 const {Option} = Select;
 const {Title} = Typography;
@@ -13,12 +14,12 @@ class RegisterAsCompany extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        let url = "http://192.168.3.189:4000/sign-up-company";
+        let url = "https://thawing-ravine-80499.herokuapp.com/sign-up-company";
         const {validateFields, setFieldsValue} = this.props.form;
         validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                //signUp(url, values);
+                signUp(url, values);
                 console.log(this.props.form);
                 setFieldsValue({
                     prefix: "374",
@@ -32,6 +33,8 @@ class RegisterAsCompany extends React.Component {
                 })
             }
         });
+
+        history.push('/');
     };
 
     render() {
