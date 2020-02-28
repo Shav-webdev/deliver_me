@@ -5,10 +5,13 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
+import ErrorBoundary from "./containers/errorBoundary/errorBoundary";
 const app = (
-    <Provider store={store}>
-        <App/>
-    </Provider>
+    <ErrorBoundary>
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    </ErrorBoundary>
 );
 
 ReactDOM.render(app, document.getElementById('root'));

@@ -2,28 +2,18 @@ import React from "react";
 import {Form, Icon, Input, Button, Radio} from 'antd';
 import './login.css'
 import {signIn} from "../../pages/registration/services/services";
-import {getCookie} from "../../pages/registration/services/cookies";
-import history from "../../routes/history";
 
 class LoginForm extends React.Component {
-
-
     handleSubmit = e => {
         e.preventDefault();
         const {validateFields, setFieldsValue} = this.props.form;
         validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 let url =(values["signInAs"] === "courier") ?
                     "https://thawing-ravine-80499.herokuapp.com/login-user"
                     :"https://thawing-ravine-80499.herokuapp.com/login-company";
 
-                signIn(url, values);
-                let tokenCookie = getCookie('token');
-                if (tokenCookie) {
-                    console.log(tokenCookie);
-                    history.push('/profile');
-                }
+                signIn(url, values, "/profile");
 
                 console.log(this.props.form);
                 setFieldsValue({
@@ -94,9 +84,6 @@ class LoginForm extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item>
-                        {/*<a className="login-form-forgot" href="">*/}
-                        {/*    Forgot password*/}
-                        {/*</a>*/}
                         <Button type="primary" htmlType="submit" className="login-form-button">
                             Log in
                         </Button>

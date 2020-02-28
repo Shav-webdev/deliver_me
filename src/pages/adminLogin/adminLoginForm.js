@@ -1,10 +1,11 @@
 import React from "react";
 import { Form, Icon, Input, Button, Typography } from 'antd';
 import './adminLoginForm.css';
-import { signIn } from '../registration/services/services';
+import {signIn} from '../registration/services/services';
+
 
 const {Title} = Typography;
-const url = 'http://192.168.3.189:4000/admin';
+const url = 'https://thawing-ravine-80499.herokuapp.com/admin';
 
 class AdminLoginForm extends React.Component {
     handleSubmit = e => {
@@ -13,7 +14,7 @@ class AdminLoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 console.log(values);
-                signIn(url, values);
+                signIn(url, values, "/admin/dashboard");
             }
         });
     };
