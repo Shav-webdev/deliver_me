@@ -1,6 +1,6 @@
 import React from "react";
 import AppRoute from "./approute";
-import {BrowserRouter as Router, Switch} from "react-router-dom";
+import {Router, Switch} from "react-router-dom";
 import defaultLayout from "../hoc/layout/defaultLayout/defaultLayout";
 import PageNotFound from "../pages/404/pageNotFound";
 import notFoundLayout from "../hoc/layout/notFoundLayout";
@@ -11,12 +11,13 @@ import {WrappedRegisterAsCompany} from "../pages/registration/registerAsCompany/
 import {WrappedRegisterAsCourier} from "../pages/registration/registerAsCourier";
 import { WrappedAdminLoginForm } from "../pages/adminLogin/adminLoginForm";
 import  AdminDashboard  from "../pages/adminDashboard/adminDashboard";
+import history from "./history";
 
 
 export default function Routes() {
     return (
         <>
-            <Router>
+            <Router history={history}>
                 <Switch>
                     <AppRoute exact path="/" layout={defaultLayout} component={HomePage}/>
                     <AppRoute path="/register/company" layout={registerLayout} component={WrappedRegisterAsCompany}/>

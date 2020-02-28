@@ -15,8 +15,8 @@ class LoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 let url =(values["signInAs"] === "courier") ?
-                    "http://192.168.3.189:4000/login-user"
-                    :"http://192.168.3.189:4000/login-company";
+                    "https://thawing-ravine-80499.herokuapp.com/login-user"
+                    :"https://thawing-ravine-80499.herokuapp.com/login-company";
 
                 signIn(url, values);
                 let tokenCookie = getCookie('token');
