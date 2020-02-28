@@ -2,7 +2,7 @@ import React from "react";
 import Button from "antd/es/button";
 import 'antd/dist/antd.css';
 import "./HomePage.css"
-import {WrappedLoginForm} from "../../containers/login/login";
+import LoginForm from "../../containers/login/login";
 
 export default function HomePage() {
     return (
@@ -24,7 +24,7 @@ export default function HomePage() {
                 </div>
             </div>
             <>
-                <WrappedLoginForm />
+                <LoginForm />
             </>
         </div>
     )
