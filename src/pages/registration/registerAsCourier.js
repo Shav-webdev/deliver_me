@@ -19,13 +19,16 @@ import { signUp } from "./services/services";
 const { Option } = Select;
 const { Title } = Typography;
 
+
+const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+        onSuccess("ok");
+    }, 0);
+};
+
 const params = {
     name: 'file',
-    action: '',
-    headers: {
-        authorization: 'authorization-text',
-        'Content-Type': 'application/x-ww-form-urlencoded'
-    },
+    type: 'fileList',
 
     onChange(info) {
         if (info.file.status !== 'uploading') {
@@ -63,6 +66,7 @@ class RegisterAsCourier extends React.Component {
     }
 
     handleChange = (event) => {
+        console.log(event);
         const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfeoo5iog/upload';
         const CLOUDINARY_UPLOAD_PRESET = 'lvxujt8u';
         const formData = new FormData();
@@ -70,12 +74,16 @@ class RegisterAsCourier extends React.Component {
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
 
+
         return axios.post(CLOUDINARY_URL, formData)
             .then((res) => {
                 this.setState({ imageurl: res.data.url });
+                console.log(this.state);
                 return res.data.url;
             })
             .catch(e => console.log(e.message));
+
+
     }
 
     render() {
@@ -210,20 +218,19 @@ class RegisterAsCourier extends React.Component {
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
-                            <Form.Item label="Upload Passport photo">
-                                {getFieldDecorator('passportURL', {
+                            <Form.Item label="Upload Passport photo" required>
+                                {getFieldDecorator('dragger', {
+                                    valuePropName: 'file',
                                     rules: [
                                         {
                                             required: true,
-                                            message: 'Please upload a photo!'
+                                            message: 'Please Upload Photo!'
                                         }
                                     ],
                                 })
-                                    (<Upload {...params} onChange={(e) => this.handleChange(e)}>
-                                        <Button >
-                                            <Icon type="upload" /> Click to Upload
-                                    </Button>
-                                    </Upload>)},
+                                    (<Upload.Dragger {...params} onChange={e => this.handleChange(e)} customRequest={dummyRequest}>                                       
+                                            <Icon type="upload" /> Click to Upload                        
+                                    </Upload.Dragger>)}
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
