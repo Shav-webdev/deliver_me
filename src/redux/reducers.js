@@ -5,9 +5,18 @@ import {CURRENT_USER} from "./constants";
 import {GET_COMPANIES} from "./constants";
 import {GET_USERS} from "./constants";
 
+const initialState = {
+    users: [],
+    companies: [],
+    currentUser: {
 
+    },
+    currentCompany:{
 
-function currentCompany(state = {}, action) {
+    }
+}
+
+function currentCompany(state = initialState.currentCompany, action) {
     switch (action.type) {
         case CURRENT_COMPANY:
             return {
@@ -18,7 +27,7 @@ function currentCompany(state = {}, action) {
     }
 }
 
-function currentUser(state = {}, action) {
+function currentUser(state = initialState.currentUser, action) {
     switch (action.type) {
         case CURRENT_USER:
             return {
@@ -29,7 +38,7 @@ function currentUser(state = {}, action) {
     }
 }
 
-function companies(state = [], action) {
+function companies(state = initialState.companies, action) {
     switch (action.type) {
         case GET_COMPANIES:
             return [
@@ -40,7 +49,7 @@ function companies(state = [], action) {
     }
 }
 
-function users(state = [], action) {
+function users(state = initialState.users, action) {
     switch (action.type) {
         case GET_USERS:
             return [
