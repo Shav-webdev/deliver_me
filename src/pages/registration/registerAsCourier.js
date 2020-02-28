@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 import { signUp } from "./services/services";
+import history from "../../routes/history";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -26,23 +27,6 @@ const dummyRequest = ({ file, onSuccess }) => {
     }, 0);
 };
 
-const params = {
-    name: 'file',
-    type: 'fileList',
-
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
-
-
 class RegisterAsCourier extends React.Component {
     state = {
         imageurl: ''
@@ -50,7 +34,7 @@ class RegisterAsCourier extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        let url = "http://192.168.3.189:4000/sign-up-user";
+        let url = "https://thawing-ravine-80499.herokuapp.com/sign-up-user";
 
 
         this.props.form.validateFields((err, values) => {
@@ -60,29 +44,43 @@ class RegisterAsCourier extends React.Component {
                     values.passportURL = this.state.imageurl;
                     console.log(values.image);
                     signUp(url, values);
+                    this.props.form.setFieldsValue({
+                        prefix: "374",
+                        name: "",
+                        lastName: "",
+                        email: "",
+                        password: "",
+                        address: "",
+                        phone: "",
+                        passportURL: ""                        
+                    })
                 }
             });
         });
+
+        history.push('/');
     }
 
     handleChange = (event) => {
-        console.log(event);
-        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfeoo5iog/upload';
-        const CLOUDINARY_UPLOAD_PRESET = 'lvxujt8u';
-        const formData = new FormData();
-        formData.append('file', event.file.originFileObj);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        if (event.file.status === 'done') {
+            console.log(event);
+            const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfeoo5iog/upload';
+            const CLOUDINARY_UPLOAD_PRESET = 'lvxujt8u';
+            const formData = new FormData();
+            formData.append('file', event.file.originFileObj);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
 
 
-        return axios.post(CLOUDINARY_URL, formData)
-            .then((res) => {
-                this.setState({ imageurl: res.data.url });
-                console.log(this.state);
-                return res.data.url;
-            })
-            .catch(e => console.log(e.message));
-
+            return axios.post(CLOUDINARY_URL, formData)
+                .then((res) => {
+                    this.setState({ imageurl: res.data.url });
+                    message.success(`${event.file.name} file uploaded successfully`);
+                    console.log(this.state);
+                    return res.data.url;
+                })
+                .catch(e => console.log(e.message));
+        }
 
     }
 
@@ -228,8 +226,8 @@ class RegisterAsCourier extends React.Component {
                                         }
                                     ],
                                 })
-                                    (<Upload.Dragger {...params} onChange={e => this.handleChange(e)} customRequest={dummyRequest}>                                       
-                                            <Icon type="upload" /> Click to Upload                        
+                                    (<Upload.Dragger onChange={e => this.handleChange(e)} customRequest={dummyRequest}>
+                                        <Icon type="upload" /> Click to Upload
                                     </Upload.Dragger>)}
                             </Form.Item>
                         </Col>
@@ -241,7 +239,7 @@ class RegisterAsCourier extends React.Component {
                             </Form.Item>
                             <Col sm={21}>
                                 <Form.Item {...tailFormItemLayout}>
-                                    <Button href="/login" type="link">
+                                    <Button href="/" type="link">
                                         Already have an account? Sign in
                                     </Button>
                                 </Form.Item>
