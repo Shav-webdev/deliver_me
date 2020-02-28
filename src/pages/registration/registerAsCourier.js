@@ -42,13 +42,11 @@ class RegisterAsCourier extends React.Component {
                 if (!err) {
                     console.log('Received values of form: ', values);
                     values.passportURL = this.state.imageurl;
-                    console.log(values.image);
                     signUp(url, values);
+                    history.push('/');
                 }
             });
         });
-
-        history.push('/');
     }
 
     handleChange = (event) => {
