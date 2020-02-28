@@ -1,32 +1,76 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import "./adminDashboard.css"
+import { Layout, Menu, Icon } from 'antd';
 
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'last name',
-        dataIndex: 'lastName',
-    },
-    {
-        title: 'phone',
-        dataIndex: 'phone',
-    },
-];
-
-
-
-const dataSource = [];
+const { Header, Sider, Content } = Layout;
 
 export default class AdminDashboard extends Component {
-    
+    state = {
+        collapsed: false,
+    };
+
+    toggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    };
+
     render() {
+        const columns = [
+            {
+                title: 'Name',
+                dataIndex: 'name',
+            },
+            {
+                title: 'last name',
+                dataIndex: 'lastName',
+            },
+            {
+                title: 'phone',
+                dataIndex: 'phone',
+            },
+        ];
+
         return (
-            <div>
-                <Table dataSource={dataSource} columns={columns} />;
-            </div>
-        )
+            <Layout style={{minHeight: "100vh"}}>
+                <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+                    <div className="logo" />
+                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                        <Menu.Item key="1">
+                            <Icon type="user" />
+                            <span>nav 1</span>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                            <Icon type="video-camera" />
+                            <span>nav 2</span>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <Icon type="upload" />
+                            <span>nav 3</span>
+                        </Menu.Item>
+                    </Menu>
+                </Sider>
+                <Layout>
+                    <Header style={{ background: '#fff', padding: 0 }}>
+                        <Icon
+                            className="trigger"
+                            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                            onClick={this.toggle}
+                        />
+                    </Header>
+                    <Content
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            background: '#fff',
+                            minHeight: 280,
+                        }}
+                    >
+                        <Table columns={columns} />;
+                    </Content>
+                </Layout>
+            </Layout>
+        );
     }
 }

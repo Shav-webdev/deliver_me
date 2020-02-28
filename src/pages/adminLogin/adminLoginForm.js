@@ -21,7 +21,7 @@ class AdminLoginForm extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className='login_wrapper'>
+            <div className='admin-login_wrapper'>
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
                         <Title level={3}>Sign In</Title>
