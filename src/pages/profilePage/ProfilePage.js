@@ -1,10 +1,22 @@
 import React from "react";
 import { Layout, Menu, Breadcrumb } from 'antd';
 import './profilePage.css'
+import {getCookie} from "../registration/services/cookies";
+import history from "../../routes/history";
 
 const { Header, Content, Footer } = Layout;
 
 export default class ProfilePage extends React.Component{
+
+    componentDidMount() {
+        if (getCookie("token")){
+            history.push("/admin/dashboard");
+            console.log(getCookie("token"));
+        }else {
+            history.push("/")
+        }
+    }
+
     render() {
         return (
             <Layout className="layout" style={{minHeight:"100vh"}}>
