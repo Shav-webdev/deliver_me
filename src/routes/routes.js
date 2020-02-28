@@ -12,6 +12,7 @@ import {WrappedRegisterAsCourier} from "../pages/registration/registerAsCourier"
 import { WrappedAdminLoginForm } from "../pages/adminLogin/adminLoginForm";
 import  AdminDashboard  from "../pages/adminDashboard/adminDashboard";
 import history from "./history";
+import ProfilePage from "../pages/profilePage/ProfilePage";
 
 
 export default function Routes() {
@@ -22,6 +23,7 @@ export default function Routes() {
                     <AppRoute exact path="/" layout={defaultLayout} component={HomePage}/>
                     <AppRoute path="/register/company" layout={registerLayout} component={WrappedRegisterAsCompany}/>
                     <AppRoute path="/admin/dashboard" layout={adminDashboardLayout} component={AdminDashboard}/>
+                    <AppRoute path="/profile" layout={adminDashboardLayout} component={ProfilePage}/>
                     <AppRoute path="/admin" layout={registerLayout} component={WrappedAdminLoginForm}/>
                     <AppRoute path="/register/courier" layout={registerLayout} component={WrappedRegisterAsCourier}/>
                     <AppRoute path="*" layout={notFoundLayout} component={PageNotFound}/>
