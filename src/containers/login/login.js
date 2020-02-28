@@ -4,14 +4,16 @@ import './login.css'
 import {signIn} from "../../pages/registration/services/services";
 
 class LoginForm extends React.Component {
+
     handleSubmit = e => {
         e.preventDefault();
         const {validateFields, setFieldsValue} = this.props.form;
         validateFields((err, values) => {
             if (!err) {
-                let url =(values["signInAs"] === "courier") ?
+
+                let url = (values["signInAs"] === "courier") ?
                     "https://thawing-ravine-80499.herokuapp.com/login-user"
-                    :"https://thawing-ravine-80499.herokuapp.com/login-company";
+                    : "https://thawing-ravine-80499.herokuapp.com/login-company";
 
                 signIn(url, values, "/profile");
 
@@ -21,9 +23,11 @@ class LoginForm extends React.Component {
                     password: "",
                     signInAs: ""
                 })
+
             }
         });
     };
+
 
     render() {
         const {getFieldDecorator} = this.props.form;
