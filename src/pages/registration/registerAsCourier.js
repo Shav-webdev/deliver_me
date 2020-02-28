@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import FormItem from "antd/lib/form/FormItem";
 import { signUp } from "./services/services";
+import history from "../../routes/history";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -56,6 +57,8 @@ class RegisterAsCourier extends React.Component {
                 }
             });
         });
+
+        history.push('/');
     }
 
     handleChange = (event) => {
