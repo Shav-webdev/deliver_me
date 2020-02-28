@@ -44,16 +44,6 @@ class RegisterAsCourier extends React.Component {
                     values.passportURL = this.state.imageurl;
                     console.log(values.image);
                     signUp(url, values);
-                    this.props.form.setFieldsValue({
-                        prefix: "374",
-                        name: "",
-                        lastName: "",
-                        email: "",
-                        password: "",
-                        address: "",
-                        phone: "",
-                        passportURL: ""                        
-                    })
                 }
             });
         });
@@ -216,7 +206,7 @@ class RegisterAsCourier extends React.Component {
                             </Form.Item>
                         </Col>
                         <Col sm={24}>
-                            <Form.Item label="Upload Passport photo" required>
+                            <Form.Item label="Upload Passport photo">
                                 {getFieldDecorator('dragger', {
                                     valuePropName: 'file',
                                     rules: [
@@ -226,7 +216,7 @@ class RegisterAsCourier extends React.Component {
                                         }
                                     ],
                                 })
-                                    (<Upload.Dragger onChange={e => this.handleChange(e)} customRequest={dummyRequest}>
+                                    (<Upload.Dragger onChange={e => this.handleChange(e)} customRequest={dummyRequest} accept='.jpg, .jpeg, .png'>
                                         <Icon type="upload" /> Click to Upload
                                     </Upload.Dragger>)}
                             </Form.Item>
