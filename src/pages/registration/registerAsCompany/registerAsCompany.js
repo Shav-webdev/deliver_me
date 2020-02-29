@@ -31,10 +31,10 @@ class RegisterAsCompany extends React.Component {
                     taxNumber: "",
                     activity: ""
                 })
+                
+                history.push('/');
             }
         });
-
-        history.push('/');
     };
 
     render() {
