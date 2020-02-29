@@ -2,9 +2,17 @@ import React from "react";
 import { Form, Icon, Input, Button, Radio } from "antd";
 import "./login.css";
 import { signIn } from "../../pages/registration/services/services";
+import Spinner from "../../components/spiner/spinner";
 
 class LoginForm extends React.Component {
+  state = {
+    loading: false
+  };
+
   handleSubmit = e => {
+    this.setState({
+      loading: true
+    });
     e.preventDefault();
     const { validateFields, setFieldsValue } = this.props.form;
     validateFields((err, values) => {
@@ -15,8 +23,9 @@ class LoginForm extends React.Component {
             : "https://thawing-ravine-80499.herokuapp.com/login-company";
 
         signIn(url, values, "/profile");
-
-        console.log(this.props.form);
+        this.setState({
+          loading: false
+        });
         setFieldsValue({
           email: "",
           password: "",
@@ -27,6 +36,9 @@ class LoginForm extends React.Component {
   };
 
   render() {
+    if (this.state.loading) {
+      return <Spinner />;
+    }
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="login_wrapper">
