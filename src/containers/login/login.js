@@ -53,9 +53,7 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
 
-    let url = "courier"
-      ? "https://thawing-ravine-80499.herokuapp.com/login-company"
-      : "https://thawing-ravine-80499.herokuapp.com/login-user";
+    let url = "https://thawing-ravine-80499.herokuapp.com/login";
 
     const data = {
       email,
@@ -83,7 +81,7 @@ function LoginForm() {
   return (
     <div className="login_wrapper">
       <h2>Sign in</h2>
-      <Form onSubmit={handleSubmit} className="login-form">
+      <Form onSubmit={e => handleSubmit(e)} className="login-form">
         <Form.Item
           validateStatus={showEmailValidText ? "error" : "success"}
           hasFeedback={showEmailValidText}
