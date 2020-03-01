@@ -21,19 +21,19 @@ function LoginForm() {
     setLoading(true);
     e.preventDefault();
 
-    // if (!err) {
-    //
-    //     let url = (values["signInAs"] === "courier") ?
-    //         "https://thawing-ravine-80499.herokuapp.com/login-user"
-    //         : "https://thawing-ravine-80499.herokuapp.com/login-company";
-    //
-    //     signIn(url, values, "/profile");
-    //     this.setState({
-    //         loading:false,
-    //     })
-    //
-    //
-    // }
+    let url = "courier"
+      ? "https://thawing-ravine-80499.herokuapp.com/login-user"
+      : "https://thawing-ravine-80499.herokuapp.com/login-company";
+
+    const data = {
+      email,
+      password
+    };
+
+    setTimeout(() => {
+      signIn(url, data, "/profile");
+      setLoading(false);
+    }, 1000);
   };
 
   if (loading) {

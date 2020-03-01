@@ -9,7 +9,7 @@ import registerLayout from "../hoc/layout/registerLayout/registerLayout";
 import adminDashboardLayout from "../hoc/layout/adminDashboardLayout/adminDashboardLayout";
 import { WrappedRegisterAsCompany } from "../pages/registration/registerAsCompany/registerAsCompany";
 import { WrappedRegisterAsCourier } from "../pages/registration/registerAsCourier";
-import { WrappedAdminLoginForm } from "../pages/adminLogin/adminLoginForm";
+import AdminLoginForm from "../pages/adminLogin/adminLoginForm";
 import AdminDashboard from "../pages/adminDashboard/adminDashboard";
 import history from "./history";
 import ProfilePage from "../pages/profilePage/ProfilePage";
@@ -43,7 +43,7 @@ export default function Routes() {
           <AppRoute
             path="/admin"
             layout={registerLayout}
-            component={WrappedAdminLoginForm}
+            component={AdminLoginForm}
           />
           <AppRoute
             path="/register/courier"
