@@ -9,6 +9,11 @@ export function validatePassword(password) {
   return re.test(String(password));
 }
 
+export function validateAdminPassword(password) {
+  let re = /^[0-9a-zA-Z]{8,32}$/;
+  return re.test(String(password));
+}
+
 export function validateName(name) {
   let re = /^[a-zA-Z]{2,16}$/;
   return re.test(String(name));
