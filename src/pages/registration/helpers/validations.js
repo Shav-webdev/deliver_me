@@ -20,7 +20,7 @@ export function validateName(name) {
 }
 
 export function validateAddress(address) {
-  let re = /[a-zA-z0-9]+\s\d+/g;
+  let re = /^[a-zA-z0-9]+\s\d+/g;
   return re.test(String(address));
 }
 
