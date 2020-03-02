@@ -51,7 +51,7 @@ class AdminDashboard extends Component {
     axios
       .get(`${url}`)
       .then(res => {
-        console.log(res.data);
+        console.log("table data" , res.data);
         console.log(this.props);
         if (data === "users") {
           this.setState({
