@@ -7,8 +7,8 @@ import notFoundLayout from "../hoc/layout/notFoundLayout";
 import HomePage from "../pages/homePage/HomePage";
 import registerLayout from "../hoc/layout/registerLayout/registerLayout";
 import adminDashboardLayout from "../hoc/layout/adminDashboardLayout/adminDashboardLayout";
-import { WrappedRegisterAsCompany } from "../pages/registration/registerAsCompany/registerAsCompany";
-import { WrappedRegisterAsCourier } from "../pages/registration/registerAsCourier";
+import RegisterAsCompany from "../pages/registration/registerAsCompany/registerAsCompany";
+import RegisterAsCourier from "../pages/registration/registerAsCourier";
 import AdminLoginForm from "../pages/adminLogin/adminLoginForm";
 import AdminDashboard from "../pages/adminDashboard/adminDashboard";
 import history from "./history";
@@ -28,7 +28,7 @@ export default function Routes() {
           <AppRoute
             path="/register/company"
             layout={registerLayout}
-            component={WrappedRegisterAsCompany}
+            component={RegisterAsCompany}
           />
           <AppRoute
             path="/admin/dashboard"
@@ -48,9 +48,13 @@ export default function Routes() {
           <AppRoute
             path="/register/courier"
             layout={registerLayout}
-            component={WrappedRegisterAsCourier}
+            component={RegisterAsCourier}
           />
-          <AppRoute path="*" layout={notFoundLayout} component={PageNotFound} />
+          <AppRoute
+              path="*"
+              layout={notFoundLayout}
+              component={PageNotFound}
+          />
         </Switch>
       </Router>
     </>
