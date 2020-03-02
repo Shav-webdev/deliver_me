@@ -6,6 +6,7 @@ import PageNotFound from "../pages/404/pageNotFound";
 import notFoundLayout from "../hoc/layout/notFoundLayout";
 import HomePage from "../pages/homePage/HomePage";
 import registerLayout from "../hoc/layout/registerLayout/registerLayout";
+import profileLayout from "../hoc/layout/profileLayout/profileLayout";
 import adminDashboardLayout from "../hoc/layout/adminDashboardLayout/adminDashboardLayout";
 import RegisterAsCompany from "../pages/registration/registerAsCompany/registerAsCompany";
 import { WrappedRegisterAsCourier } from "../pages/registration/registerAsCourier";
@@ -13,6 +14,11 @@ import AdminLoginForm from "../pages/adminLogin/adminLoginForm";
 import AdminDashboard from "../pages/adminDashboard/adminDashboard";
 import history from "./history";
 import ProfilePage from "../pages/profilePage/ProfilePage";
+import {Layout} from "antd";
+import LoginForm from "../containers/login/login";
+
+const {Header, Sider, Content, Footer} = Layout;
+
 
 export default function Routes() {
   return (
@@ -36,9 +42,18 @@ export default function Routes() {
             component={AdminDashboard}
           />
           <AppRoute
-            path="/profile"
-            layout={adminDashboardLayout}
+
+            path="/profile/company"
+            layout={profileLayout}
+            component={ProfilePage }
+            profile="company"
+
+          />
+          <AppRoute
+            path="/profile/user"
+            layout={profileLayout}
             component={ProfilePage}
+            profile="user"
           />
           <AppRoute
             path="/admin"

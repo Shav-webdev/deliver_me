@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { Form, Icon, Input, Button } from "antd";
 import "./login.css";
 import { signIn } from "../../pages/registration/services/services";
@@ -7,8 +7,10 @@ import {
   validateEmail,
   validatePassword
 } from "../../pages/registration/helpers/validations";
+import {connect} from "react-redux";
+import {currentCompany} from "../../redux/actions";
 
-function LoginForm() {
+function LoginForm(props) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(null);
@@ -69,11 +71,15 @@ function LoginForm() {
       } else if (!isPasswordValid) {
         setShowPasswordValidText(true);
       } else {
-        signIn(url, data, "/profile");
+        signIn(url, data);
       }
       setLoading(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    console.log(props)
+  })
 
   if (loading) {
     return <Spinner />;
@@ -127,4 +133,14 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+function mapDispatchToProps(dispatch) {
+  return {
+    currentCompany: (company) => {
+      dispatch(currentCompany(company))
+    },
+
+  }
+}
+
+
+export default connect(null, mapDispatchToProps)(LoginForm);

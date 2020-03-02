@@ -1,53 +1,47 @@
-import { combineReducers } from 'redux'
-import { } from './constants'
-import {CURRENT_COMPANY} from "./constants";
-import {CURRENT_USER} from "./constants";
-import {GET_COMPANIES} from "./constants";
-import {GET_USERS} from "./constants";
+import {combineReducers} from 'redux'
+import {
+    CURRENT_COMPANY,
+    CURRENT_USER,
+    GET_COMPANIES,
+    GET_USERS
+} from "./constants";
+
 
 const initialState = {
-    users: [],
-    companies: [],
-    currentUser: {
-
+    users: {
+        currentUser: {},
+        allUsers: []
     },
-    currentCompany:{
+    companies: {
+        currentCompany: {},
+        allCompanies: [],
+    },
 
-    }
-}
 
-function currentCompany(state = initialState.currentCompany, action) {
-    switch (action.type) {
-        case CURRENT_COMPANY:
-            return {
-                ...state, ...action.company
-            };
-        default:
-            return state;
-    }
-}
-
-function currentUser(state = initialState.currentUser, action) {
-    switch (action.type) {
-        case CURRENT_USER:
-            return {
-                ...state, ...action.user
-            };
-        default:
-            return state;
-    }
 }
 
 function companies(state = initialState.companies, action) {
     switch (action.type) {
+        case CURRENT_COMPANY:
+            console.log("hbhjb",  action.company)
+            return {
+                ...state,
+                currentCompany: {
+                    ...action.company
+                }
+            };
         case GET_COMPANIES:
-            return [
-                ...action.companies
-            ];
+            return {
+                ...state,
+                allCompanies: [
+                    ...action.companies
+                ]
+            };
         default:
             return state;
     }
 }
+
 
 function users(state = initialState.users, action) {
     switch (action.type) {
@@ -61,8 +55,6 @@ function users(state = initialState.users, action) {
 }
 
 const deliveryStore = combineReducers({
-    currentCompany,
-    currentUser,
     companies,
     users
 });
