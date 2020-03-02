@@ -1,63 +1,130 @@
-import React from "react";
-import {Form, Icon, Input, Button, Typography} from 'antd';
-import './adminLoginForm.css';
-import {signIn} from '../registration/services/services';
+import React, { useCallback, useState } from "react";
+import { Form, Icon, Input, Button, Typography } from "antd";
+import "./adminLoginForm.css";
+import { signIn } from "../registration/services/services";
+import Spinner from "../../components/spiner/spinner";
+import {
+  validateEmail,
+  validateAdminPassword
+} from "../registration/helpers/validations";
 
+const { Title } = Typography;
 
-const {Title} = Typography;
-const url = 'https://thawing-ravine-80499.herokuapp.com/admin';
+function AdminLoginForm(props) {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(null);
+  const [showEmailValidText, setShowEmailValidText] = useState(false);
+  const [showPasswordValidText, setShowPasswordValidText] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(null);
 
-class AdminLoginForm extends React.Component {
+  const handleEmailChange = useCallback(e => {
+    let email = e.target.value;
+    setEmail(email);
+    setShowEmailValidText(false);
+  }, []);
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-                console.log(values);
-                signIn(url, values, "/admin/dashboard");
-            }
-        });
-    };
-
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <div className='admin-login_wrapper'>
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                    <Form.Item>
-                        <Title level={3}>Sign In</Title>
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('email', {
-                            rules: [{ required: true, message: 'Please input your username!' }],
-                        })(
-                            <Input
-                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="email"
-                            />,
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('password', {
-                            rules: [{ required: true, message: 'Please input your Password!' }],
-                        })(
-                            <Input
-                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                type="password"
-                                placeholder="Password"
-                            />,
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
-        );
+  const onHandleEmailValidate = () => {
+    if (validateEmail(email)) {
+      setIsEmailValid(true);
+      setShowEmailValidText(false);
+    } else {
+      setIsEmailValid(false);
+      setShowEmailValidText(true);
     }
+  };
+
+  const onHandlePasswordValidate = () => {
+    if (validateAdminPassword(password)) {
+      setIsPasswordValid(true);
+      setShowPasswordValidText(false);
+    } else {
+      setIsPasswordValid(false);
+      setShowPasswordValidText(true);
+    }
+  };
+
+  const handlePasswordChange = useCallback(e => {
+    let pass = e.target.value;
+    setPassword(pass);
+    setShowPasswordValidText(false);
+  }, []);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setLoading(true);
+    const data = {
+      email,
+      password
+    };
+    const url = "https://thawing-ravine-80499.herokuapp.com/admin";
+    setTimeout(() => {
+      if (!isEmailValid && !isPasswordValid) {
+        setShowEmailValidText(true);
+        setShowPasswordValidText(true);
+      } else if (!isEmailValid) {
+        setShowEmailValidText(true);
+      } else if (!isPasswordValid) {
+        setShowPasswordValidText(true);
+      } else {
+        signIn(url, data, "/admin/dashboard");
+      }
+      setLoading(false);
+    }, 1000);
+  };
+  if (loading) {
+    return <Spinner />;
+  }
+  return (
+    <div className="admin-login_wrapper">
+      <Form onSubmit={e => handleSubmit(e)} className="login-form">
+        <Form.Item>
+          <Title level={3}>Sign In</Title>
+        </Form.Item>
+        <Form.Item
+          validateStatus={showEmailValidText ? "error" : "success"}
+          hasFeedback={showEmailValidText}
+          help={showEmailValidText ? "The input is not valid E-mail!" : ""}
+        >
+          <Input
+            onChange={e => handleEmailChange(e)}
+            onBlur={onHandleEmailValidate}
+            value={email}
+            placeholder="Email"
+            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={showPasswordValidText ? "error" : "success"}
+          hasFeedback={showPasswordValidText}
+          help={
+            showPasswordValidText
+              ? "Password should contain at least 8 characters"
+              : ""
+          }
+        >
+          <Input
+            onChange={e => handlePasswordChange(e)}
+            onBlur={onHandlePasswordValidate}
+            value={password}
+            type="password"
+            placeholder="Password"
+            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Log in
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
 }
 
-export const WrappedAdminLoginForm = Form.create({ name: 'admin_login' })(AdminLoginForm);
+export default AdminLoginForm;
