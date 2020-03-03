@@ -1,24 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Icon, Layout, message, Upload } from 'antd'
+import React, { useEffect, useState, useCallback } from 'react'
+import {
+  Button,
+  Icon,
+  Layout,
+  Typography,
+  message,
+  Upload,
+  Form,
+  Input,
+  Avatar,
+  DatePicker,
+} from 'antd'
 import './profilePage.css'
 import { getCookie } from '../registration/services/cookies'
 import history from '../../routes/history'
 import { currentCompany } from '../../redux/actions'
 import { connect } from 'react-redux'
 import List from 'antd/es/list'
-import { Avatar } from 'antd'
 import company_avatar from '../../assets/images/company_avatar.png'
 import axios from 'axios'
 import Popover from 'antd/es/popover'
 import { logOut } from '../registration/services/services'
 import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
+import moment from 'moment'
+import { store } from '../../redux/store'
+const { Title } = Typography
+const { TextArea } = Input
+const { RangePicker } = DatePicker
 
 const { Header, Sider } = Layout
 
 function ProfilePage(props) {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
+  const [points, setPoints] = useState('')
+  const [takeAddress, setTakeAddress] = useState('')
+  const [deliverAddress, setDeliverAddress] = useState('')
+  const [orderDescription, setOrderDescription] = useState('')
+  const [comment, setComment] = useState('')
+  const [orderStartTime, setOrderStartTime] = useState('')
+  const [orderEndTime, setOrderEndTime] = useState('')
 
   const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
@@ -73,6 +95,79 @@ function ProfilePage(props) {
     </div>
   )
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    console.log(props.currentCompany)
+    const order = {
+      points: points,
+      take_address: takeAddress,
+      deliver_address: deliverAddress,
+      order_description: orderDescription,
+      comment: comment,
+      order_start_time: orderStartTime,
+      order_end_time: orderEndTime,
+    }
+
+    const data = {
+      companyId: props.currentCompany.id,
+      order: order,
+    }
+
+    console.log(data)
+
+    const url = 'https://thawing-ravine-80499.herokuapp.com/create-order'
+
+    axios
+      .post(url, data)
+      .then(res => {
+        setPoints('')
+        setTakeAddress('')
+        setDeliverAddress('')
+        setOrderDescription('')
+        setOrderStartTime('')
+        setOrderEndTime('')
+        console.log(res)
+        setComment('')
+      })
+      .catch(e => console.log(e.message))
+  }
+
+  const handlePointsChange = useCallback(e => {
+    const orderPoint = e.target.value
+    setPoints(orderPoint)
+    console.log(e.target.value)
+  }, [])
+
+  const handleTakeAddressChange = useCallback(e => {
+    const orderTakeAddress = e.target.value
+    setTakeAddress(orderTakeAddress)
+    console.log(e.target.value)
+  }, [])
+  const handleDeliverAddressChange = useCallback(e => {
+    const orderDeliverAddress = e.target.value
+    setDeliverAddress(orderDeliverAddress)
+    console.log(e.target.value)
+  }, [])
+
+  const handleOrderDescriptionChange = useCallback(e => {
+    const orderDescriptionField = e.target.value
+    setOrderDescription(orderDescriptionField)
+    console.log(e.target.value)
+  }, [])
+
+  const handleOrderCommentChange = useCallback(e => {
+    const orderCommentField = e.target.value
+    setComment(orderCommentField)
+    console.log(e.target.value)
+  }, [])
+
+  const onTimeChangeChange = (dates, dateStrings) => {
+    console.log('From: ', dates[0], ', to: ', dates[1])
+    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1])
+    setOrderStartTime(dateStrings[0])
+    setOrderEndTime(dateStrings[1])
+  }
+
   const { currentCompany } = props
 
   return (
@@ -95,18 +190,19 @@ function ProfilePage(props) {
         </div>
         <div style={{ textAlign: 'center', padding: '.5rem 1.5rem' }}>
           <h2>Profile information</h2>
-          {Object.keys(currentCompany)
-            .filter(el => el.id)
-            .map(el => {
-              return (
-                <List key={el}>
-                  <List.Item>
-                    <strong>{`${el} :`}</strong>
-                    {` ${currentCompany[el]}`}
-                  </List.Item>
-                </List>
-              )
-            })}
+          {Object.keys(currentCompany).map(el => {
+            return (
+              <List key={el}>
+                <List.Item>
+                  <strong>{`${el} :`}</strong>
+                  <span
+                    style={{
+                      wordBreak: 'break-all',
+                    }}>{` ${currentCompany[el]}`}</span>
+                </List.Item>
+              </List>
+            )
+          })}
         </div>
         <div style={{ textAlign: 'center' }}>
           <Button onClick={handleCreateOrderClick}>Create order</Button>
@@ -128,13 +224,15 @@ function ProfilePage(props) {
             <Menu.Item key="2">Active orders</Menu.Item>
             <Menu.Item key="3">Completed orders</Menu.Item>
           </Menu>
-          <Popover
-            placement="bottomRight"
-            content={content}
-            title="Profile settings"
-            trigger="click">
-            <Avatar src={avatarUrl ? avatarUrl : company_avatar} />
-          </Popover>
+          <div>
+            <Popover
+              placement="bottomRight"
+              content={content}
+              title="Profile settings"
+              trigger="click">
+              <Avatar src={avatarUrl ? avatarUrl : company_avatar} />
+            </Popover>
+          </div>
         </Header>
       </Layout>
       <Modal
@@ -142,9 +240,80 @@ function ProfilePage(props) {
         visible={visible}
         onOk={modalHandleOk}
         onCancel={modalHandleCancel}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Form onSubmit={e => handleSubmit(e)} className="login-form">
+          <Form.Item>
+            <Title level={3}>Request options</Title>
+          </Form.Item>
+          <Form.Item>
+            <Input
+              onChange={e => handlePointsChange(e)}
+              value={points}
+              placeholder="Point"
+              prefix={
+                <Icon
+                  type="DollarOutlined"
+                  style={{ color: 'rgba(0,0,0,.25)' }}
+                />
+              }
+            />
+          </Form.Item>
+          <Form.Item>
+            <Input
+              onChange={e => handleTakeAddressChange(e)}
+              value={takeAddress}
+              placeholder="Take address"
+              prefix={
+                <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+            />
+          </Form.Item>
+          <Form.Item>
+            <Input
+              onChange={e => handleDeliverAddressChange(e)}
+              value={deliverAddress}
+              placeholder="Deliver address"
+              prefix={
+                <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+            />
+          </Form.Item>
+          <Form.Item>
+            <TextArea
+              onChange={e => handleOrderDescriptionChange(e)}
+              value={orderDescription}
+              placeholder="Order Description"
+            />
+          </Form.Item>
+          <Form.Item>
+            <RangePicker
+              ranges={{
+                Today: [moment(), moment()],
+                'This Month': [
+                  moment().startOf('month'),
+                  moment().endOf('month'),
+                ],
+              }}
+              showTime
+              format="YYYY/MM/DD HH:mm:ss"
+              onChange={onTimeChangeChange}
+            />
+          </Form.Item>
+          <Form.Item>
+            <TextArea
+              onChange={e => handleOrderCommentChange(e)}
+              value={comment}
+              placeholder="Your comment"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button">
+              Create order
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   )

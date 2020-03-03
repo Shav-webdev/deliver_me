@@ -44,6 +44,8 @@ export function signIn(url, data) {
       }
     })
     .catch(e => {
+      console.log(e.response)
+
       errorMessage(e.response.data.message)
     })
 }

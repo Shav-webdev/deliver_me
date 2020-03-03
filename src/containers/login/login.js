@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Form, Icon, Input, Button } from 'antd'
 import './login.css'
 import { signIn } from '../../pages/registration/services/services'
@@ -46,7 +46,7 @@ function LoginForm(props) {
   }
 
   const handlePasswordChange = useCallback(e => {
-    let pass = e.target.value
+    const pass = e.target.value
     setPassword(pass)
     setShowPasswordValidText(false)
   }, [])
