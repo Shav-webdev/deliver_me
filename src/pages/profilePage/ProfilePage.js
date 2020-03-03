@@ -25,6 +25,10 @@ import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
 import moment from 'moment'
 import { store } from '../../redux/store'
+import signInAsUser from '../../redux/reducer/signInAsUser.reducers'
+import { signInAs } from '../../redux/thunk'
+import Spinner from '../../components/spiner/spinner'
+
 const { Title } = Typography
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -113,8 +117,6 @@ function ProfilePage(props) {
       order: order,
     }
 
-    console.log(data)
-
     const url = 'https://thawing-ravine-80499.herokuapp.com/create-order'
 
     axios
@@ -168,7 +170,10 @@ function ProfilePage(props) {
     setOrderEndTime(dateStrings[1])
   }
 
-  const { currentCompany } = props
+  const { signInAsCompany } = props
+  const { signInLoading, signInAsCompanyData } = signInAsCompany
+  console.log(signInAsCompany)
+  console.log(signInAsCompanyData)
 
   return (
     <>
@@ -176,7 +181,11 @@ function ProfilePage(props) {
         <div style={{ textAlign: 'center' }}>
           <Avatar
             shape="square"
-            src={avatarUrl ? avatarUrl : company_avatar}
+            src={
+              signInAsCompanyData.avatar
+                ? signInAsCompanyData.avatar
+                : company_avatar
+            }
             size={128}
           />
           <Upload.Dragger
@@ -190,19 +199,23 @@ function ProfilePage(props) {
         </div>
         <div style={{ textAlign: 'center', padding: '.5rem 1.5rem' }}>
           <h2>Profile information</h2>
-          {Object.keys(currentCompany).map(el => {
-            return (
-              <List key={el}>
-                <List.Item>
-                  <strong>{`${el} :`}</strong>
-                  <span
-                    style={{
-                      wordBreak: 'break-all',
-                    }}>{` ${currentCompany[el]}`}</span>
-                </List.Item>
-              </List>
-            )
-          })}
+          {signInLoading ? (
+            <Spinner />
+          ) : (
+            Object.keys(signInAsCompanyData).map(el => {
+              return (
+                <List key={el}>
+                  <List.Item>
+                    <strong>{`${el} :`}</strong>
+                    <span
+                      style={{
+                        wordBreak: 'break-all',
+                      }}>{` ${signInAsCompanyData[el]}`}</span>
+                  </List.Item>
+                </List>
+              )
+            })
+          )}
         </div>
         <div style={{ textAlign: 'center' }}>
           <Button onClick={handleCreateOrderClick}>Create order</Button>
@@ -230,7 +243,13 @@ function ProfilePage(props) {
               content={content}
               title="Profile settings"
               trigger="click">
-              <Avatar src={avatarUrl ? avatarUrl : company_avatar} />
+              <Avatar
+                src={
+                  signInAsCompanyData.avatar
+                    ? signInAsCompanyData.avatar
+                    : company_avatar
+                }
+              />
             </Popover>
           </div>
         </Header>
@@ -319,19 +338,21 @@ function ProfilePage(props) {
   )
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
+  console.log(state)
+  const { users, companies, signInAsCompany, signInAsUser } = state
   return {
-    currentCompany: state.companies.currentCompany,
-    allCompanies: state.companies.allCompanies,
+    users,
+    companies,
+    signInAsCompany,
+    signInAsUser,
   }
 }
-
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
-    addCurrentCompany: company => {
-      dispatch(currentCompany(company))
+    signInAs: data => {
+      dispatch(signInAs(data))
     },
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)

@@ -35,21 +35,23 @@ export function signIn(url, data) {
         history.push('/')
       } else {
         if (res.data.type === 'company') {
-          store.dispatch(currentCompany(res.data))
+          store.dispatch(currentCompany(res.data.data))
           history.push('/profile/company')
         } else if (res.data.type === 'user') {
-          store.dispatch(currentUser(res.data))
+          store.dispatch(currentUser(res.data.data))
           history.push('/profile/user')
+        } else {
+          history.push('/admin/dashboard')
         }
       }
     })
     .catch(e => {
-      console.log(e.response)
+      console.log(e)
 
+      console.log(e.response)
       errorMessage(e.response.data.message)
     })
 }
-
 export function logOut() {
   eraseCookie('token')
   history.push('/')
