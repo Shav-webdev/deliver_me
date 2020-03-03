@@ -12,8 +12,8 @@ const { Column } = Table;
 
 const defaultState = {
   collapsed: false,
-  isUpdated: false
-};
+  isUpdated: false,
+}
 export default function AdminBoard(props) {
   const [users, setUser] = useState([]);
   const [companies, setCompany] = useState([]);
@@ -41,9 +41,9 @@ export default function AdminBoard(props) {
     console.log(state.collapsed);
     setState({
       ...state,
-      collapsed: !state.collapsed
-    });
-  };
+      collapsed: !state.collapsed,
+    })
+  }
 
   const remove = e => {
     const id = e.target.id;
@@ -70,9 +70,8 @@ export default function AdminBoard(props) {
             theme="dark"
             mode="inline"
             key
-            defaultSelectedKeys={["users"]}
-            inlineCollapsed={state.collapsed}
-          >
+            defaultSelectedKeys={['users']}
+            inlineCollapsed={state.collapsed}>
             <Menu.Item key="users">
               <Icon type="team" />
               <span>Users</span>
@@ -101,7 +100,7 @@ export default function AdminBoard(props) {
           </Header>
           <Content
             style={{
-              margin: "24px 16px",
+              margin: '24px 16px',
               padding: 24,
               background: "#fff",
               minHeight: 280

@@ -1,30 +1,28 @@
-import axios from "axios";
-import {getCookie, setCookie} from "./cookies";
-import {message} from "antd";
-import history from "../../../routes/history";
-import {store} from "../../../redux/store";
-import {CURRENT_COMPANY} from "../../../redux/constants";
-import {currentCompany, currentUser} from "../../../redux/actions";
+import axios from 'axios'
+import { eraseCookie, getCookie, setCookie } from './cookies'
+import { message } from 'antd'
+import history from '../../../routes/history'
+import { store } from '../../../redux/store'
+import { currentCompany, currentUser } from '../../../redux/actions'
 
-export const successMessage = (msg = "") => {
-    message.success(msg);
-};
-
-export const errorMessage = (msg = "") => {
-    message.error(msg);
-};
-
-export function signUp(url, data) {
-    axios
-        .post(`${url}`, data)
-        .then(res => {
-            successMessage(`${res.data.message}, please login for continue`);
-        })
-        .catch(e => {
-            errorMessage(`Error.${e.response.data.message}`);
-        });
+export const successMessage = (msg = '') => {
+  message.success(msg)
 }
 
+export const errorMessage = (msg = '') => {
+  message.error(msg)
+}
+
+export function signUp(url, data) {
+  axios
+    .post(`${url}`, data)
+    .then(res => {
+      successMessage(`${res.data.message}, please login for continue`)
+    })
+    .catch(e => {
+      errorMessage(`Error.${e.response.data.message}`)
+    })
+}
 
 export function signIn(url, data) {
     axios
