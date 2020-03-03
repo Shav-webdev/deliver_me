@@ -77,10 +77,6 @@ function LoginForm(props) {
     }, 1000)
   }
 
-  useEffect(() => {
-    console.log(props)
-  })
-
   if (loading) {
     return <Spinner />
   }
@@ -91,8 +87,7 @@ function LoginForm(props) {
         <Form.Item
           validateStatus={showEmailValidText ? 'error' : 'success'}
           hasFeedback={showEmailValidText}
-          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}
-        >
+          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
           <Input
             onChange={e => handleEmailChange(e)}
             onBlur={onHandleEmailValidate}
@@ -108,8 +103,7 @@ function LoginForm(props) {
             showPasswordValidText
               ? 'Password should contain at least 8 characters, one digit, one lower, one upper case'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePasswordChange(e)}
             onBlur={onHandlePasswordValidate}
@@ -123,8 +117,7 @@ function LoginForm(props) {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
-          >
+            className="login-form-button">
             Log in
           </Button>
         </Form.Item>

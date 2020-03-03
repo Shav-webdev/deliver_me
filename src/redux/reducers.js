@@ -20,7 +20,7 @@ const initialState = {
 function companies(state = initialState.companies, action) {
   switch (action.type) {
     case CURRENT_COMPANY:
-      console.log('hbhjb', action.company)
+      console.log('company', action.company)
       return {
         ...state,
         currentCompany: {
@@ -40,7 +40,7 @@ function companies(state = initialState.companies, action) {
 function users(state = initialState.users, action) {
   switch (action.type) {
     case CURRENT_USER:
-      console.log('hbhjb', action.company)
+      console.log('user', action.company)
       return {
         ...state,
         currentUser: {

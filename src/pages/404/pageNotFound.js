@@ -12,8 +12,7 @@ export default function PageNotFound() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-      }}
-    >
+      }}>
       <img src={notFoundPic} alt="Page not found" />
       <Button href="/" type="primary" shape="round">
         Home
