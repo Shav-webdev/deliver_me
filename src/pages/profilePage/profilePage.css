@@ -10,3 +10,10 @@
     margin: 16px 24px 16px 0;
     float: left;
 }
+
+.user_info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
