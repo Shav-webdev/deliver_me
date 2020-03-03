@@ -42,7 +42,7 @@ export const getUsersRequest = () => ({
     type: REMOVE_USER_SUCCSESS,
     payload: data
   })
-  export const removeUSERFailure = () => ({
+  export const removeUserFailure = () => ({
     type: REMOVE_USER_FAILURE
   })
 

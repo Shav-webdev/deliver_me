@@ -248,8 +248,7 @@ function RegisterAsCompany() {
             showNameValidText
               ? 'The input should contain at min 2 max 16 characters'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleNameChange(e)}
             onBlur={onHandleNameValidate}
@@ -262,8 +261,7 @@ function RegisterAsCompany() {
           label="E-mail"
           validateStatus={showEmailValidText ? 'error' : 'success'}
           hasFeedback={showEmailValidText}
-          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}
-        >
+          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
           <Input
             onChange={e => handleEmailChange(e)}
             onBlur={onHandleEmailValidate}
@@ -280,8 +278,7 @@ function RegisterAsCompany() {
             showPasswordValidText
               ? 'Password should contain at least 8 characters, one digit, one lower, one upper case'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePasswordChange(e)}
             onBlur={onHandlePasswordValidate}
@@ -299,8 +296,7 @@ function RegisterAsCompany() {
             showAddressValidText
               ? 'Address should contain at least one digit, one lower, one upper case, space'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleAddressChange(e)}
             onBlur={onHandleAddressValidate}
@@ -319,8 +315,7 @@ function RegisterAsCompany() {
             showPhoneNumValidText
               ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePhoneNumChange(e)}
             onBlur={onHandlePhoneNumValidate}
@@ -338,8 +333,7 @@ function RegisterAsCompany() {
             showTaxNumValidText
               ? 'Tax number should contain only 8 digit either'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleTaxNumChange(e)}
             onBlur={onHandleTaxNumValidate}
@@ -355,8 +349,7 @@ function RegisterAsCompany() {
             showActivityValidText
               ? 'Activity should contain at min 2 max 16 characters'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleActivityChange(e)}
             onBlur={onHandleActivityValidate}
@@ -370,8 +363,7 @@ function RegisterAsCompany() {
             style={{ marginTop: '1rem' }}
             type="primary"
             htmlType="submit"
-            shape="round"
-          >
+            shape="round">
             Register
           </Button>
         </Form.Item>

@@ -18,7 +18,7 @@ export const createCompanyThunk = (data) => async (dispatch) => {
   try {
     if (data.id) {
       const response = await api.deleteUpdateCompany(data.id).put({ ...data })
-      if (response.statusText !== "OK") {
+      if (response.status !== 201) {
         throw new Error('Cannot update Company')
       }
       dispatch(editCompanySuccsess(response.data))
@@ -28,7 +28,7 @@ export const createCompanyThunk = (data) => async (dispatch) => {
       });
       dispatch(createCompanySuccsess(response.data))
       dispatch(getCompaniesThunk())
-      if (response.statusText !== "OK") {
+      if (response.status !== 201) {
         throw new Error('Cannot create Company')
       }
     }

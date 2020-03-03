@@ -85,8 +85,7 @@ function AdminLoginForm(props) {
         <Form.Item
           validateStatus={showEmailValidText ? 'error' : 'success'}
           hasFeedback={showEmailValidText}
-          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}
-        >
+          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
           <Input
             onChange={e => handleEmailChange(e)}
             onBlur={onHandleEmailValidate}
@@ -102,8 +101,7 @@ function AdminLoginForm(props) {
             showPasswordValidText
               ? 'Password should contain at least 8 characters'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePasswordChange(e)}
             onBlur={onHandlePasswordValidate}
@@ -117,8 +115,7 @@ function AdminLoginForm(props) {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
-          >
+            className="login-form-button">
             Log in
           </Button>
         </Form.Item>

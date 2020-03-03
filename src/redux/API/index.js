@@ -1,7 +1,7 @@
 import axios from "axios";
 import EndpointFactory from "axios-endpoints";
 const axiosInstance = axios.create({
-  baseURL: "https://thawing-ravine-80499.herokuapp.com/api/",
+  baseURL: "https://thawing-ravine-80499.herokuapp.com/",
   responseType: "json"
 });
 const Endpoint = EndpointFactory(axiosInstance);

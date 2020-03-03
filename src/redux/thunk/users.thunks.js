@@ -18,7 +18,8 @@ export const createUserThunk = (data) => async (dispatch) => {
   try {
     if (data.id) {
       const response = await api.deleteUpdateUser(data.id).put({ ...data })
-      if (response.statusText !== "OK") {
+      console.log(response)
+      if (response.status !== 201) {
         throw new Error('Cannot update User')
       }
       dispatch(editUserSuccsess(response.data))
@@ -27,8 +28,8 @@ export const createUserThunk = (data) => async (dispatch) => {
         ...data
       });
       dispatch(createUserSuccsess(response.data))
-      dispatch(getUsersThunk())
-      if (response.statusText !== "OK") {
+      await dispatch(getUsersThunk())
+      if (response.status !== 201) {
         throw new Error('Cannot create User')
       }
     }
