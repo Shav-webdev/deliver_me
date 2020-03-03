@@ -42,6 +42,8 @@ export function signIn(url, data) {
                 } else if (res.data.data.type === "user") {
                     store.dispatch(currentUser(res.data.data));
                     history.push("/profile/user");
+                }else{
+                    history.push("/admin/dashboard");
                 }
             }
         })
