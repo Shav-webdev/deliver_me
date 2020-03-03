@@ -34,11 +34,11 @@ export function signIn(url, data) {
         errorMessage('Something went wrong, please sign in again')
         history.push('/')
       } else {
-        if (res.data.data.type === 'company') {
-          store.dispatch(currentCompany(res.data.data))
+        if (res.data.type === 'company') {
+          store.dispatch(currentCompany(res.data));
           history.push('/profile/company')
-        } else if (res.data.data.type === 'user') {
-          store.dispatch(currentUser(res.data.data))
+        } else if (res.data.type === 'user') {
+          store.dispatch(currentUser(res.data));
           history.push('/profile/user')
         }
       }

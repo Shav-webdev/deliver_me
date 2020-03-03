@@ -48,6 +48,7 @@ function ProfilePage(props) {
   };
 
   useEffect(() => {
+
     if (!getCookie("token")) {
       history.push("/");
     }
@@ -73,6 +74,7 @@ function ProfilePage(props) {
     </div>
   );
 
+
   const { currentCompany } = props;
 
   return (
@@ -96,7 +98,7 @@ function ProfilePage(props) {
         </div>
         <div style={{ textAlign: "center", padding: ".5rem 1.5rem" }}>
           <h2>Profile information</h2>
-          {Object.keys(currentCompany).map(el => {
+          {Object.keys(currentCompany).filter(el => el.id).map(el => {
             return (
               <List key={el}>
                 <List.Item>

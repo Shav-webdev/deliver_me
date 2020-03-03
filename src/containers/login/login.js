@@ -77,10 +77,6 @@ function LoginForm(props) {
     }, 1000)
   }
 
-  useEffect(() => {
-    console.log(props)
-  })
-
   if (loading) {
     return <Spinner />
   }
