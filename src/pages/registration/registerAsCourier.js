@@ -257,8 +257,7 @@ function RegisterAsCourier() {
             showNameValidText
               ? 'The input should contain at min 2 max 16 characters'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleNameChange(e)}
             onBlur={onHandleNameValidate}
@@ -275,8 +274,7 @@ function RegisterAsCourier() {
             showNameValidText
               ? 'The input should contain at min 2 max 16 characters'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleLastNameChange(e)}
             onBlur={onHandleLastNameValidate}
@@ -289,8 +287,7 @@ function RegisterAsCourier() {
           label="E-mail"
           validateStatus={showEmailValidText ? 'error' : 'success'}
           hasFeedback={showEmailValidText}
-          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}
-        >
+          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
           <Input
             onChange={e => handleEmailChange(e)}
             onBlur={onHandleEmailValidate}
@@ -307,8 +304,7 @@ function RegisterAsCourier() {
             showPasswordValidText
               ? 'Password should contain at least 8 characters, one digit, one lower, one upper case'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePasswordChange(e)}
             onBlur={onHandlePasswordValidate}
@@ -326,8 +322,7 @@ function RegisterAsCourier() {
             showAddressValidText
               ? 'Address should contain at least one digit, one lower, one upper case, space'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handleAddressChange(e)}
             onBlur={onHandleAddressValidate}
@@ -346,8 +341,7 @@ function RegisterAsCourier() {
             showPhoneNumValidText
               ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
               : ''
-          }
-        >
+          }>
           <Input
             onChange={e => handlePhoneNumChange(e)}
             onBlur={onHandlePhoneNumValidate}
@@ -359,13 +353,11 @@ function RegisterAsCourier() {
         </Form.Item>
         <Form.Item
           label="Upload Passport photo"
-          rules={[{ required: true, message: 'Please upload an image!' }]}
-        >
+          rules={[{ required: true, message: 'Please upload an image!' }]}>
           <Upload.Dragger
             onChange={e => handleImageChange(e)}
             customRequest={dummyRequest}
-            accept=".jpg, .jpeg, .png"
-          >
+            accept=".jpg, .jpeg, .png">
             <Icon type="upload" /> Click to Upload
           </Upload.Dragger>
         </Form.Item>
@@ -375,8 +367,7 @@ function RegisterAsCourier() {
             style={{ marginTop: '1rem' }}
             type="primary"
             htmlType="submit"
-            shape="round"
-          >
+            shape="round">
             Register
           </Button>
         </Form.Item>

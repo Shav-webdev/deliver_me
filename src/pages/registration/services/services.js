@@ -35,10 +35,10 @@ export function signIn(url, data) {
         history.push('/')
       } else {
         if (res.data.type === 'company') {
-          store.dispatch(currentCompany(res.data));
+          store.dispatch(currentCompany(res.data))
           history.push('/profile/company')
         } else if (res.data.type === 'user') {
-          store.dispatch(currentUser(res.data));
+          store.dispatch(currentUser(res.data))
           history.push('/profile/user')
         }
       }
