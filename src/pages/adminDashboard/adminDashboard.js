@@ -1,170 +1,211 @@
-import React, { Component } from "react";
+import React, { useCallback, useState, useEffect } from "react";
+import { Table } from 'antd';
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-// import DataTable from '../../components/dataTable/dataTable';
-import "./adminDashboard.css";
-import { Layout, Menu, Icon } from "antd";
-import {
-  errorMessage,
-  successMessage
-} from "../registration/services/services";
-import { connect } from "react-redux";
-import { getCompanies, getUsers } from "../../redux/actions";
-import axios from "axios";
-import { Table } from "antd";
-import { getCookie } from "../registration/services/cookies";
-import history from "../../routes/history";
-
+import { Layout, Menu, Icon ,Button} from "antd";
+import axios from "axios"
+import {MenuUnfoldOutline} from '@ant-design/icons';
+import {MenuFoldOutline} from '@ant-design/icons';
+import './adminDashboard.css'
+import { errorMessage } from '../registration/services/services';
 const { Header, Sider, Content } = Layout;
+const { Column } = Table;
 
-class AdminDashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      collapsed: false,
-      users: [],
-      companies: [],
-      usersColumn: [
-        { title: "Name", dataIndex: "name", key: "name" },
-        { title: "Last name", dataIndex: "last_name", key: "last_name" },
-        { title: "Email", dataIndex: "email", key: "email" },
-        { title: "Phone", dataIndex: "phone", key: "phone" },
-        { title: "Address", dataIndex: "address", key: "address" }
-      ],
-      isUpdated: false
-    };
-    this.onMenuSelect = this.onMenuSelect.bind(this);
-    this.getData = this.getData.bind(this);
-  }
 
-  onMenuSelect = ({ key }) => {
-    this.getData(`${key}`);
+const defaultState = {
+  collapsed: false,
+  isUpdated: false
+};
+export default function AdminBoard(props) {
+  const [users, setUser] = useState([]);
+  const [companies, setCompany] = useState([]);
+  const [state, setState] = useState(defaultState);
+  const [menuItem, setMenuItem] = useState('users');
+
+  const USER_URL = 'https://thawing-ravine-80499.herokuapp.com/users';
+  const COMPANY_URL = 'https://thawing-ravine-80499.herokuapp.com/companies';
+  useEffect(() => {
+   
+    axios.get(USER_URL)
+      .then(({ data }) => {
+        console.log(data)
+        setUser(data)
+      });
+    axios.get(COMPANY_URL)
+      .then(({ data }) => {
+        setCompany(data);
+      })
+  }, [])
+
+
+  const onMenuSelect = e => {
+    console.log(e.key)
+    setMenuItem(e.key);
   };
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
+
+
+  const toggle = () => {
+    console.log(state.collapsed)
+    setState({
+      ...state,
+      collapsed: !state.collapsed
     });
   };
 
-  getData(data = "users") {
-    let url = `https://thawing-ravine-80499.herokuapp.com/${data}`;
-    axios
-      .get(`${url}`)
-      .then(res => {
-        console.log("table data" , res.data);
-        console.log(this.props);
-        if (data === "users") {
-          this.setState({
-            users: res.data
-          });
-          // this.props.getUsers(res.data);
-        } else if (data === "companies") {
-          this.setState({
-            companies: res.data
-          });
-          // this.props.getCompanies(res.data);
-        }
-        successMessage(`Data loaded.`);
-      })
-      .catch(e => {
-        errorMessage(e.response.data.message);
-      });
+  const remove=(e)=>{
+    console.log(e.target.id)
+    const id = e.target.id
+    axios.delete(`${USER_URL}/${id}`)
+    .then(res=>{
+      const filtered = users.filter((el)=>el.id!==id)
+      console.log(filtered)
+      console.log(users)
+      setUser(filtered)
+    console.log(state)
+  })
   }
 
-  componentDidMount() {
-    if (getCookie("token")) {
-      history.push("/admin/dashboard");
-    } else {
-      history.push("/");
-    }
-  }
-
-  render() {
-    const { companies, users } = this.state;
-
-    console.log(companies);
-    console.log(users);
-    // console.log(companiesColumn)
-    // console.log(companiesData)
-    // console.log(usersData)
-    // console.log(usersColumn)
-
-    return (
-      <Router>
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-            <div className="logo" />
-            <Menu
-              onSelect={this.onMenuSelect}
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={[""]}
-            >
-              <Menu.Item key="users">
-                <Icon type="team" />
-                <span>Users</span>
-                <Link to="/admin/dashboard/users" />
-              </Menu.Item>
-              <Menu.Item key="companies">
-                <Icon type="shop" />
-                <span>Companies</span>
-                <Link to="/admin/dashboard/companies" />
-              </Menu.Item>
-            </Menu>
-          </Sider>
-          <Layout>
-            <Header style={{ background: "#fff", padding: 0 }}>
-              <Icon
-                className="trigger"
-                type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-                onClick={this.toggle}
-              />
-            </Header>
-            <Content
-              style={{
-                margin: "24px 16px",
-                padding: 24,
-                background: "#fff",
-                minHeight: 280
-              }}
-            >
-              <Route exact path="/admin/dashboard/users">
-                <Table
-                  column={this.state.usersColumn}
-                  dataSource={this.state.users}
-                  rowKey="id"
-                />
-              </Route>
-              <Route path="/admin/dashboard/companies">
-                <Table
-                // dataSource={companies}
-                // rowKey="id"
-                />
-              </Route>
-            </Content>
-          </Layout>
+  return (
+    <div>
+      <Layout >
+        <Sider trigger={null} collapsible collapsed={state.collapsed}>
+          <div className="logo" />
+          <Menu
+            onSelect={onMenuSelect}
+            theme="dark"
+            mode="inline"
+            key
+            defaultSelectedKeys={["users"]}
+            inlineCollapsed={state.collapsed}
+          >
+            <Menu.Item key="users">
+              <Icon type="team" />
+              <span>Users</span>
+              <Link to="/admin/dashboard/users" />
+            </Menu.Item>
+            <Menu.Item key="companies">
+              <Icon type="shop" />
+              <span>Companies</span>
+              <Link to="/admin/dashboard/companies" />
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header style={{ background: "#fff", padding: 0 }}>
+          {state.collapsed ? <Button onClick={toggle} className='trigger'>Open</Button> :
+      
+           <Button onClick={toggle} className='trigger'>X</Button>}
+         {/* {state.collapsed ?<Icon
+              onClick={toggle}
+              type="menu-unfold"/>:
+            <Icon
+              onClick={toggle}
+              type="menu-fold"   
+            / > 
+         } */}
+         Welcome to dashboard
+          </Header>
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              background: "#fff",
+              minHeight: 280
+            }}
+          >
+        
+              {console.log("tttt",users)}
+    {menuItem==='users'?<Table dataSource={users}>
+    
+    <Column title="Name" dataIndex="name" key="name" />
+    <Column title="Last Name" dataIndex="lastName" key="lastName" />
+    <Column title="Phone" dataIndex="phone" key="phone" />
+    <Column title="Email" dataIndex="email" key="email" />
+    <Column title="Address" dataIndex="address" key="address" />
+    <Column title="Photo"  key="passportURL"
+     render={(text, record) => (
+         <a link={record.passportURL}>{record.passportURL}</a>
+    )} />
+    <Column title="Approved" key="approved" 
+     render={(text, record) => (
+      record.approved?"Yes":"No"  
+ )} />
+    <Column title="Accept" key="accept"
+      render={(text, record) => (
+        <span>
+           <Button type='primary'>Accept</Button>
+        </span>
+      )}
+      />
+      <Column title="Decline" key="decline"
+      render={(text, record) => (
+        <span>
+           <Button>Decline</Button>
+        </span>
+      )}
+      />
+       <Column title="Edit" key="edit"
+           render={(text, record) => (
+             <span>
+               <Button>Edit</Button>
+             </span>
+           )}
+         />
+    <Column title="Delete" key="delete"
+      render={(text, record) =>
+        (
+        <span>
+          <Button type="danger" id={record.id} onClick={remove}>Delete</Button>
+        </span>
+      )}
+    />
+  </Table>:<Table dataSource={companies}>
+         <Column title="Name" dataIndex="name" key="name" />
+         <Column title="TaxNumber" dataIndex="taxNumber" key="taxNumber" />
+         <Column title="Phone" dataIndex="phone" key="phone" />
+         <Column title="Email" dataIndex="email" key="email" />
+         <Column title="Address" dataIndex="address" key="address" />
+         <Column title="Activity" dataIndex="activity" key="activity" />
+         <Column title="Approved" key="approved" 
+            render={(text, record) => (
+              record.approved?"Yes":"No"  
+        )} />
+         <Column title="Accept" key="accept"
+           render={(text, record) => (
+             <span>
+                <Button type='primary'>Accept</Button>
+             </span>
+           )}
+           />
+           <Column title="Decline" key="decline"
+           render={(text, record) => (
+             <span>
+              {console.log(record,text)}
+                <Button>Decline</Button>
+             </span>
+           )}
+           />
+           <Column title="Edit" key="edit"
+           render={(text, record) => (
+             <span>
+               <Button>Edit</Button>
+             </span>
+           )}
+         />
+         <Column title="Delete" key="delete"
+           render={(text, record) => (
+             <span>
+                <Button type="danger" id={record.id} onClick={remove}>Delete</Button>
+             </span>
+           )}
+         />
+       </Table>}
+         
+          </Content>
         </Layout>
-      </Router>
-    );
-  }
+      </Layout>
+     
+      
+    </div>
+  )
 }
-
-const mapStateToProps = state => {
-  return {
-    users: state.users,
-    companies: state.companies
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getCompanies: companies => {
-      dispatch(getCompanies(companies));
-    },
-    getUsers: users => {
-      dispatch(getUsers(users));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);
