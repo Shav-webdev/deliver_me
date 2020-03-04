@@ -1,21 +1,46 @@
 #components-layout-demo-custom-trigger .trigger {
-    font-size: 18px;
-    line-height: 64px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: color 0.3s;
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
 #components-layout-demo-custom-trigger .trigger:hover {
-    color: #1890ff;
+  color: #1890ff;
 }
-
 .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
+  width: 90% !important;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
 }
-.ant-table-wrapper{
-    overflow-x: auto !important;
-    height: 100% !important;
+.ant-table-wrapper {
+  overflow-x: auto !important;
+  height: 100% !important;
+}
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  text-align: center;
+  white-space: nowrap;
+  padding: 10px 10px;
+}
+.typography_text {
+  color: #fff;
+  text-align: center;
+  margin: 10px auto;
+}
+.typography_header {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.header_welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0;
+}
+.trigger{
+  font-size: 20px;
 }

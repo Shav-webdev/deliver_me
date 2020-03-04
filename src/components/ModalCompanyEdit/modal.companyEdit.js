@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { Modal } from 'antd'
-import { Input } from 'antd'
-import { Avatar } from 'antd'
-import './modal.userEdit.css'
+import { Modal, Input, Avatar } from 'antd'
+import './modal.companyEdit.css'
 const defaultState = {
   name: '',
-  lastName: '',
+  taxNumber: '',
   phone: '',
   address: '',
   avatar: '',
+  amount: 0,
+  addMoney: 0,
 }
-export const ModalUserEdit = ({
+export const ModalCompanyEdit = ({
   handleCancel,
-  handleOk,
   visible,
-  modalUser,
-  updateUser,
+  modalCompany,
+  updateCompany,
 }) => {
-  const [state, setState] = useState(modalUser)
-  const { name, lastName, address, phone, avatar } = state
+  const [state, setState] = useState(modalCompany)
+  const { name, taxNumber, avatar, address, phone, amount, addMoney } = state
   useEffect(() => {
     setState({
       ...state,
-      ...modalUser,
+      ...modalCompany,
     })
-  }, [modalUser])
+  }, [modalCompany])
 
   const handleInputChange = ({ target: { name, value } }) => {
     setState({
@@ -33,7 +32,7 @@ export const ModalUserEdit = ({
     })
   }
   const handleSubmit = () => {
-    updateUser(state)
+    updateCompany({ ...state, amount: Number(state.addMoney) + Number(amount) })
     handleCancel()
     setState(defaultState)
   }
@@ -41,7 +40,7 @@ export const ModalUserEdit = ({
   return (
     <div>
       <Modal
-        title="EDIT USER"
+        title="EDIT COMPANY"
         visible={visible}
         okText="Update"
         onOk={handleSubmit}
@@ -49,35 +48,44 @@ export const ModalUserEdit = ({
         <Avatar src={avatar} size={64} />
         <Input
           addonAfter="Name"
+          className="input_margin"
           name="name"
           onChange={handleInputChange}
           value={name}
-          className="input_margin"
           placeholder="Name"
         />
         <Input
-          addonAfter="LastName"
-          name="lastName"
+          addonAfter="TaxNumber"
           className="input_margin"
+          name="taxNumber"
           onChange={handleInputChange}
-          value={lastName}
-          placeholder="Last Name"
+          value={taxNumber}
+          placeholder="TaxNumber"
         />
         <Input
           addonAfter="Phone"
-          name="phone"
           className="input_margin"
+          name="phone"
           onChange={handleInputChange}
           value={phone}
           placeholder="Phone"
         />
         <Input
           addonAfter="Address"
+          className="input_margin"
           name="address"
           onChange={handleInputChange}
           value={address}
-          className="input_margin"
           placeholder="Address"
+        />
+        <Input
+          type="number"
+          addonAfter="Add money"
+          name="addMoney"
+          value={addMoney}
+          onChange={handleInputChange}
+          className="input_margin input_money"
+          defaultValue={0}
         />
       </Modal>
     </div>

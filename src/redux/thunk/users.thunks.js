@@ -16,6 +16,7 @@ export const getUsersThunk = () => async (dispatch) => {
 
 export const createUserThunk = (data) => async (dispatch) => {
   try {
+    console.log(data.id)
     if (data.id) {
       const response = await api.deleteUpdateUser(data.id).put({ ...data })
       console.log(response)
@@ -27,8 +28,9 @@ export const createUserThunk = (data) => async (dispatch) => {
       const response = await api.users.post({
         ...data
       });
-      dispatch(createUserSuccsess(response.data))
-      await dispatch(getUsersThunk())
+       dispatch(createUserSuccsess(response.data))
+       console.log("gettingusers")
+       dispatch(getUsersThunk())
       if (response.status !== 201) {
         throw new Error('Cannot create User')
       }
