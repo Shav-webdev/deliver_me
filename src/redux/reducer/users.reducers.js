@@ -46,15 +46,9 @@ export default function usersReducer(state = initialState, action) {
       )
       return {
         ...state,
-<<<<<<< HEAD
-        usersData: [...lastData, action.payload]
-      };
-    case "EDIT_USER_FAILURE":
-=======
         editData: [...lastData, action.payload],
       }
     case 'EDIT_USER_FAILURE':
->>>>>>> develop
       return {
         ...state,
       }
