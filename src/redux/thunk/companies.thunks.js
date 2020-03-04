@@ -7,6 +7,12 @@ import {
   editCompanySuccsess,
   removeCompanyFailure,
   removeCompanySuccsess,
+  createOrderRequest,
+  createOrderSuccsess,
+  createOrderFailure,
+  signInAsCompanyRequest,
+  signInAsCompanySuccess,
+  signInAsCompanyFailure,
 } from '../action'
 
 export const getCompaniesThunk = () => async dispatch => {
@@ -52,5 +58,31 @@ export const removeCompanyThunk = id => async dispatch => {
     dispatch(getCompaniesThunk())
   } catch (error) {
     dispatch(removeCompanyFailure())
+  }
+}
+
+export const createOrder = data => async dispatch => {
+  try {
+    dispatch(createOrderRequest())
+    const response = await api.createOrder.post(data)
+    if (response.status !== 200) {
+      throw new Error('Something went wrong, try again')
+    }
+    dispatch(createOrderSuccsess(response.data))
+  } catch (error) {
+    dispatch(createOrderFailure())
+  }
+}
+
+export const getCompanyByIdThunk = id => async dispatch => {
+  try {
+    dispatch(signInAsCompanyRequest())
+    const response = await api.getCompanyById(id).get(id)
+    if (response.status !== 200) {
+      throw new Error('Something went wrong, try again')
+    }
+    dispatch(signInAsCompanySuccess(response.data))
+  } catch (error) {
+    dispatch(signInAsCompanyFailure())
   }
 }

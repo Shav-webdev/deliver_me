@@ -14,7 +14,6 @@ import {
 import './profilePage.css'
 import { getCookie } from '../registration/services/cookies'
 import history from '../../routes/history'
-import { connect } from 'react-redux'
 import List from 'antd/es/list'
 import company_avatar from '../../assets/images/company_avatar.png'
 import axios from 'axios'
@@ -23,8 +22,15 @@ import { logOut } from '../registration/services/services'
 import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
 import moment from 'moment'
-import { signInAs } from '../../redux/thunk'
 import Spinner from '../../components/spiner/spinner'
+import { connect } from 'react-redux'
+import {
+  createOrder,
+  createCompanyThunk,
+  getCompanyById,
+  getCompanyByIdThunk,
+} from '../../redux/thunk'
+import { getUsersFailure } from '../../redux/action'
 
 const { Title } = Typography
 const { TextArea } = Input
@@ -32,7 +38,12 @@ const { RangePicker } = DatePicker
 
 const { Header, Sider } = Layout
 
-function ProfilePage(props) {
+const ProfilePage = ({
+  createOrder,
+  companies,
+  updateAvatar,
+  getCompanyById,
+}) => {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
   const [points, setPoints] = useState('')
@@ -64,6 +75,14 @@ function ProfilePage(props) {
           setAvatarUrl(res.data.url)
           console.log(res.data.url)
           message.success(`${event.file.name} file uploaded successfully`)
+          console.log({
+            ...companies.signInAsCompanyData,
+            avatar: res.data.url,
+          })
+          updateAvatar({
+            ...companies.signInAsCompanyData,
+            avatar: res.data.url,
+          })
           return res.data.url
         })
         .catch(e => console.log(e.message))
@@ -71,9 +90,11 @@ function ProfilePage(props) {
   }
 
   useEffect(() => {
-    if (!getCookie('token')) {
+    if (!getCookie('token') && !getCookie('id')) {
       history.push('/')
     }
+
+    getCompanyById(getCookie('id'))
     // eslint-disable-next-line no-useless-escape
   }, [])
 
@@ -98,78 +119,52 @@ function ProfilePage(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log(props.currentCompany)
-    const order = {
-      points: points,
-      take_address: takeAddress,
-      deliver_address: deliverAddress,
-      order_description: orderDescription,
-      comment: comment,
-      order_start_time: orderStartTime,
-      order_end_time: orderEndTime,
-    }
-
     const data = {
-      companyId: props.currentCompany.id,
-      order: order,
+      companyId: companies.signInAsCompanyData.id,
+      order: {
+        points: points,
+        take_address: takeAddress,
+        deliver_address: deliverAddress,
+        order_description: orderDescription,
+        comment: comment,
+        order_start_time: orderStartTime,
+        order_end_time: orderEndTime,
+      },
     }
-
-    const url = 'https://thawing-ravine-80499.herokuapp.com/create-order'
-
-    axios
-      .post(url, data)
-      .then(res => {
-        setPoints('')
-        setTakeAddress('')
-        setDeliverAddress('')
-        setOrderDescription('')
-        setOrderStartTime('')
-        setOrderEndTime('')
-        console.log(res)
-        setComment('')
-      })
-      .catch(e => console.log(e.message))
   }
 
   const handlePointsChange = useCallback(e => {
     const orderPoint = e.target.value
     setPoints(orderPoint)
-    console.log(e.target.value)
   }, [])
 
   const handleTakeAddressChange = useCallback(e => {
     const orderTakeAddress = e.target.value
     setTakeAddress(orderTakeAddress)
-    console.log(e.target.value)
   }, [])
   const handleDeliverAddressChange = useCallback(e => {
     const orderDeliverAddress = e.target.value
     setDeliverAddress(orderDeliverAddress)
-    console.log(e.target.value)
   }, [])
 
   const handleOrderDescriptionChange = useCallback(e => {
     const orderDescriptionField = e.target.value
     setOrderDescription(orderDescriptionField)
-    console.log(e.target.value)
   }, [])
 
   const handleOrderCommentChange = useCallback(e => {
     const orderCommentField = e.target.value
     setComment(orderCommentField)
-    console.log(e.target.value)
   }, [])
 
   const onTimeChangeChange = (dates, dateStrings) => {
-    console.log('From: ', dates[0], ', to: ', dates[1])
-    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1])
     setOrderStartTime(dateStrings[0])
     setOrderEndTime(dateStrings[1])
   }
 
-  const { companies } = props
   const { signInLoading, signInAsCompanyData } = companies
-  console.log(signInAsCompanyData)
+
+  const { id, name, taxNumber, address, phone, email } = signInAsCompanyData
 
   return (
     <>
@@ -198,23 +193,34 @@ function ProfilePage(props) {
           {signInLoading ? (
             <Spinner />
           ) : (
-            Object.keys(signInAsCompanyData).map(el => {
-              return (
-                <List key={el}>
-                  <List.Item>
-                    <strong>{`${el} :`}</strong>
-                    <span
-                      style={{
-                        wordBreak: 'break-all',
-                      }}>{` ${signInAsCompanyData[el]}`}</span>
-                  </List.Item>
-                </List>
-              )
-            })
+            <List key={id}>
+              <List.Item>
+                <strong>Name:</strong>
+                <span>{`${name}`}</span>
+              </List.Item>
+              <List.Item>
+                <strong>Address:</strong>
+                <span>{`${address}`}</span>
+              </List.Item>
+              <List.Item>
+                <strong>Tax Number:</strong>
+                <span>{`${taxNumber}`}</span>
+              </List.Item>
+              <List.Item>
+                <strong>Phone number:</strong>
+                <span>{`${phone}`}</span>
+              </List.Item>
+              <List.Item>
+                <strong>Email:</strong>
+                <span>{`${email}`}</span>
+              </List.Item>
+            </List>
           )}
         </div>
         <div style={{ textAlign: 'center' }}>
-          <Button onClick={handleCreateOrderClick}>Create order</Button>
+          <Button type="primary" onClick={handleCreateOrderClick}>
+            Create order
+          </Button>
         </div>
       </Sider>
       <Layout>
@@ -335,19 +341,19 @@ function ProfilePage(props) {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-  const { users, companies, signInAsCompany, signInAsUser } = state
+  const { users, companies } = state
   return {
     users,
     companies,
-    signInAsCompany,
-    signInAsUser,
   }
 }
+
 const mapDispatchToProps = dispatch => {
   return {
-    signInAs: data => {
-      dispatch(signInAs(data))
+    getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
+    createOrder: data => dispatch(createOrder(data)),
+    updateAvatar: data => {
+      dispatch(createCompanyThunk(data))
     },
   }
 }

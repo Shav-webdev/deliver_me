@@ -14,6 +14,9 @@ import {
   SIGN_IN_AS_COMPANY_REQUEST,
   SIGN_IN_AS_COMPANY_SUCCESS,
   SIGN_IN_AS_COMPANY_FAILURE,
+  CREATE_ORDER_REQUEST,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAILURE,
 } from './constants'
 
 export const getCompaniesRequest = () => ({
@@ -69,4 +72,14 @@ export const signInAsCompanySuccess = data => ({
 })
 export const signInAsCompanyFailure = () => ({
   type: SIGN_IN_AS_COMPANY_FAILURE,
+})
+export const createOrderRequest = () => ({
+  type: CREATE_ORDER_REQUEST,
+})
+export const createOrderSuccsess = data => ({
+  type: CREATE_ORDER_SUCCESS,
+  payload: data,
+})
+export const createOrderFailure = () => ({
+  type: CREATE_ORDER_FAILURE,
 })
