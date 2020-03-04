@@ -1,6 +1,14 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { Table } from 'antd'
-import { Layout, Menu, Icon, Button } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Table, Typography, Popover } from 'antd'
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  EditFilled,
+  CheckCircleFilled,
+  CloseCircleFilled,
+  DeleteFilled,
+} from '@ant-design/icons'
+import { Layout, Menu, Icon } from 'antd'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import './adminDashboard.css'
@@ -12,8 +20,11 @@ import {
   createUserThunk,
   createCompanyThunk,
 } from '../../redux/thunk'
+import history from '../../routes/history'
 import { errorMessage } from '../registration/services/services'
-import ModalUserEdit from '../../components/ModalUserEdit/modal.userEdit'
+import { ModalUserEdit } from '../../components/ModalUserEdit'
+import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
+import CountRequestInfo from '../../components/CountRequestInfo/CountRequestInfo'
 const { Header, Sider, Content } = Layout
 const { Column } = Table
 
@@ -32,43 +43,56 @@ function AdminBoard({
   updateCompany,
 }) {
   const { usersData, gettingUsers } = users
-  const { companiesData, gettingCompanies } = companies
+  const { companiesData } = companies
   const [state, setState] = useState(defaultState)
   const [menuItem, setMenuItem] = useState('users')
-  const [modalState, setModalState] = useState({ visible: false })
+  const [modalState, setModalState] = useState({
+    visibleUser: false,
+    visibleCompnay: false,
+  })
   const [modalUser, setModalUser] = useState({})
+  const [modalCompany, setModalCompany] = useState({})
+
   useEffect(() => {
     getUsers()
     getCompanies()
   }, [])
 
-  const showModalUser = ({ target: { id } }) => {
-    const user = usersData.filter(el => el.id === id)
+  const showModalUser = user => {
     setModalState({
-      visible: true,
+      ...modalState,
+      visibleUser: true,
     })
-    setModalUser(...user)
+    setModalUser(user)
+  }
+  const showModalCompany = company => {
+    setModalState({
+      ...modalState,
+      visibleCompany: true,
+    })
+    setModalCompany(company)
   }
 
   const handleOk = e => {
-    console.log(e)
-    console.log('modalOK')
     setModalState({
-      visible: false,
+      ...modalState,
+      visibleUser: false,
     })
   }
 
   const handleCancel = e => {
-    console.log(e)
-    console.log('modalCANCEL')
     setModalState({
-      visible: false,
+      ...state,
+      visibleUser: false,
     })
   }
 
   const onMenuSelect = e => {
-    console.log(e.key)
-    setMenuItem(e.key)
+    if (e.key !== 'signOut') {
+      setMenuItem(e.key)
+    } else {
+      history.push('./admin')
+    }
   }
 
   const toggle = () => {
@@ -78,41 +102,40 @@ function AdminBoard({
     })
   }
 
-  const handleRemoveUser = ({ target: { id } }) => {
+  const handleRemoveUser = id => {
     removeUser(id)
   }
-  const handleRemoveCompany = ({ target: { id } }) => {
+  const handleRemoveCompany = id => {
     removeCompany(id)
   }
-  const handleAcceptUser = ({ target: { id } }) => {
-    const user = usersData.filter(el => el.id === id)
-    user[0].approved = 'accepted'
-    updateUser(...user)
+  const handleAcceptUser = user => {
+    updateUser({ ...user, approved: 'accepted' })
   }
-  const handleAcceptCompany = ({ target: { id } }) => {
-    const company = companiesData.filter(el => el.id === id)
-    company[0].approved = 'accepted'
-    updateCompany(...company)
+  const handleAcceptCompany = company => {
+    updateCompany({ ...company, approved: 'accepted' })
   }
 
-  const handleDeclineUser = ({ target: { id } }) => {
-    const user = usersData.filter(el => el.id === id)
-    user[0].approved = 'declined'
-    updateUser(...user)
+  const handleDeclineUser = user => {
+    updateUser({ ...user, approved: 'declined' })
   }
-  const handleDeclineCompany = ({ target: { id } }) => {
-    const company = companiesData.filter(el => el.id === id)
-    company[0].approved = 'declined'
-    updateCompany(...company)
+  const handleDeclineCompany = company => {
+    updateCompany({ ...company, approved: 'declined' })
   }
   return (
     <div>
       <ModalUserEdit
         handleCancel={handleCancel}
         handleOk={handleOk}
-        visible={modalState.visible}
+        visible={modalState.visibleUser}
         modalUser={modalUser}
         updateUser={updateUser}
+      />
+      <ModalCompanyEdit
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        visible={modalState.visibleCompany}
+        modalCompany={modalCompany}
+        updateCompany={updateCompany}
       />
       <Layout>
         <Sider
@@ -120,8 +143,7 @@ function AdminBoard({
           style={{ minHeight: '100vh' }}
           collapsible
           collapsed={state.collapsed}>
-          <div className="logo" />
-          {console.log(users)}
+          <Typography className="typography_text">Deliver.me</Typography>
           <Menu
             onSelect={onMenuSelect}
             theme="dark"
@@ -137,34 +159,43 @@ function AdminBoard({
               <Icon type="shop" />
               <span>Companies</span>
             </Menu.Item>
+            <Menu.Item key="signOut">
+              <Icon type="LogoutOutlined" />
+              <span>Sign Out</span>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }}>
+          <Header className="header_welcome">
             {state.collapsed ? (
-              <Button onClick={toggle} className="trigger">
-                Open
-              </Button>
+              <MenuUnfoldOutlined onClick={toggle} className="trigger" />
             ) : (
-              <Button onClick={toggle} className="trigger">
-                X
-              </Button>
+              <MenuFoldOutlined onClick={toggle} className="trigger" />
             )}
-            Welcome to dashboard
+            <Typography className="typography_header">
+              Welcome to dashboard
+            </Typography>
+            <CountRequestInfo
+              data={menuItem === 'users' ? usersData : companiesData}
+            />
           </Header>
           <Content
             style={{
-              margin: '24px 16px',
-              padding: 24,
+              margin: '15px 15px',
+              padding: 10,
               background: '#fff',
               minHeight: 280,
             }}>
-            {console.log('tttt', users)}
-            {menuItem === 'users' ? (
-              gettingUsers ? (
+            {menuItem === 'users' &&
+              (gettingUsers ? (
                 <Spinner />
               ) : (
-                <Table dataSource={usersData}>
+                // usersData.sort((a, b) => a.approved - b.approved),
+                <Table
+                  pagination={{
+                    pageSize: 9,
+                  }}
+                  dataSource={usersData}>
                   <Column title="Name" dataIndex="name" key="name" />
                   <Column
                     title="Last Name"
@@ -178,79 +209,88 @@ function AdminBoard({
                     title="Photo"
                     key="passportURL"
                     render={(text, record) => (
-                      <img
-                        style={{ height: '20px' }}
-                        src={record.passportURL}></img>
+                      <Popover
+                        placement="leftBottom"
+                        content={
+                          <img
+                            style={{ height: '300px' }}
+                            src={record.passportURL}></img>
+                        }
+                        title={record.name + ' ' + record.lastName}>
+                        <img
+                          style={{ height: '20px' }}
+                          src={record.passportURL}></img>
+                      </Popover>
                     )}
                   />
                   <Column
-                    title="Approved"
+                    title="Status"
                     key="approved"
                     render={(text, record) => record.approved}
                   />
                   <Column
-                    title="Accept"
+                    title=""
                     key="accept"
                     render={(text, record) => (
                       <span>
-                        <Button
-                          id={record.id}
-                          onClick={handleAcceptUser}
-                          type={`primary ${
-                            record.approved === 'accepted' ? 'disabled' : ''
-                          }`}>
-                          Accept
-                        </Button>
+                        <CheckCircleFilled
+                          onClick={() => handleAcceptUser(record)}
+                          style={{
+                            color: 'orange',
+                            display: `${
+                              record.approved === 'accepted' ? 'none' : 'block'
+                            }`,
+                          }}
+                        />
                       </span>
                     )}
                   />
                   <Column
-                    title="Decline"
+                    title=""
                     key="decline"
                     render={(text, record) => (
                       <span>
-                        <Button
-                          id={record.id}
-                          type={`${
-                            record.approved === 'declined'
-                              ? 'prymary disabled'
-                              : ''
-                          }`}
-                          onClick={handleDeclineUser}>
-                          Decline
-                        </Button>
+                        <CloseCircleFilled
+                          style={{
+                            color: 'red',
+                            display: `${
+                              record.approved === 'declined' ? 'none' : 'block'
+                            }`,
+                          }}
+                          onClick={() => handleDeclineUser(record)}
+                        />
                       </span>
                     )}
                   />
                   <Column
-                    title="Edit"
+                    title=""
                     key="edit"
                     render={(text, record) => (
                       <span>
-                        <Button id={record.id} onClick={showModalUser}>
-                          Edit
-                        </Button>
+                        <EditFilled onClick={() => showModalUser(record)} />
                       </span>
                     )}
                   />
                   <Column
-                    title="Delete"
+                    title=""
                     key="delete"
                     render={(text, record) => (
                       <span>
-                        <Button
-                          type="danger"
-                          id={record.id}
-                          onClick={handleRemoveUser}>
-                          Delete
-                        </Button>
+                        <DeleteFilled
+                          onClick={() => handleRemoveUser(record.id)}
+                        />
                       </span>
                     )}
                   />
                 </Table>
-              )
-            ) : (
-              <Table dataSource={companiesData}>
+              ))}
+            {menuItem === 'companies' && (
+              // (companiesData.sort((a, b) => a.approved - b.approved),
+              <Table
+                pagination={{
+                  pageSize: 9,
+                }}
+                dataSource={companiesData}>
                 <Column title="Name" dataIndex="name" key="name" />
                 <Column
                   title="TaxNumber"
@@ -262,64 +302,67 @@ function AdminBoard({
                 <Column title="Address" dataIndex="address" key="address" />
                 <Column title="Activity" dataIndex="activity" key="activity" />
                 <Column
-                  title="Approved"
+                  title="Amount"
+                  key="amount"
+                  render={(text, record) => record.amount}
+                />
+                <Column
+                  title="Status"
                   key="approved"
                   render={(text, record) => record.approved}
                 />
                 <Column
-                  title="Accept"
+                  style={{ textAlign: 'center' }}
+                  title=""
                   key="accept"
                   render={(text, record) => (
                     <span>
-                      <Button
-                        id={record.id}
-                        onClick={handleAcceptCompany}
-                        type={`primary ${
-                          record.approved === 'accepted' ? 'disabled' : ''
-                        }`}>
-                        Accept
-                      </Button>
+                      <CheckCircleFilled
+                        onClick={() => handleAcceptCompany(record)}
+                        style={{
+                          color: 'orange',
+                          display: `${
+                            record.approved === 'accepted' ? 'none' : 'block'
+                          }`,
+                        }}
+                      />
                     </span>
                   )}
                 />
                 <Column
-                  title="Decline"
+                  title=""
                   key="decline"
                   render={(text, record) => (
                     <span>
-                      <Button
-                        id={record.id}
-                        type={`primary ${
-                          record.approved === 'declined'
-                            ? 'prymary disabled'
-                            : ''
-                        }`}
-                        onClick={handleDeclineCompany}>
-                        Decline
-                      </Button>
+                      <CloseCircleFilled
+                        style={{
+                          color: 'red',
+                          display: `${
+                            record.approved === 'declined' ? 'none' : 'block'
+                          }`,
+                        }}
+                        onClick={() => handleDeclineCompany(record)}
+                      />
                     </span>
                   )}
                 />
                 <Column
-                  title="Edit"
+                  title=""
                   key="edit"
                   render={(text, record) => (
                     <span>
-                      <Button>Edit</Button>
+                      <EditFilled onClick={() => showModalCompany(record)} />
                     </span>
                   )}
                 />
                 <Column
-                  title="Delete"
+                  title=""
                   key="delete"
                   render={(text, record) => (
                     <span>
-                      <Button
-                        type="danger"
-                        id={record.id}
-                        onClick={handleRemoveCompany}>
-                        Delete
-                      </Button>
+                      <DeleteFilled
+                        onClick={() => handleRemoveCompany(record.id)}
+                      />
                     </span>
                   )}
                 />

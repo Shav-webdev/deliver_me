@@ -59,19 +59,17 @@ function LoginForm({ signInAs }) {
       password,
     }
 
-    setTimeout(() => {
-      if (!isEmailValid && !isPasswordValid) {
-        setShowEmailValidText(true)
-        setShowPasswordValidText(true)
-      } else if (!isEmailValid) {
-        setShowEmailValidText(true)
-      } else if (!isPasswordValid) {
-        setShowPasswordValidText(true)
-      } else {
-        signInAs(data)
-      }
-      setLoading(false)
-    }, 1000)
+    if (!isEmailValid && !isPasswordValid) {
+      setShowEmailValidText(true)
+      setShowPasswordValidText(true)
+    } else if (!isEmailValid) {
+      setShowEmailValidText(true)
+    } else if (!isPasswordValid) {
+      setShowPasswordValidText(true)
+    } else {
+      signInAs(data)
+    }
+    setLoading(false)
   }
 
   if (loading) {
