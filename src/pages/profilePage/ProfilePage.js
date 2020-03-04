@@ -14,7 +14,6 @@ import {
 import './profilePage.css'
 import { getCookie } from '../registration/services/cookies'
 import history from '../../routes/history'
-import { currentCompany } from '../../redux/actions'
 import { connect } from 'react-redux'
 import List from 'antd/es/list'
 import company_avatar from '../../assets/images/company_avatar.png'
@@ -24,8 +23,6 @@ import { logOut } from '../registration/services/services'
 import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
 import moment from 'moment'
-import { store } from '../../redux/store'
-import signInAsUser from '../../redux/reducer/signInAsUser.reducers'
 import { signInAs } from '../../redux/thunk'
 import Spinner from '../../components/spiner/spinner'
 
@@ -170,9 +167,8 @@ function ProfilePage(props) {
     setOrderEndTime(dateStrings[1])
   }
 
-  const { signInAsCompany } = props
-  const { signInLoading, signInAsCompanyData } = signInAsCompany
-  console.log(signInAsCompany)
+  const { companies } = props
+  const { signInLoading, signInAsCompanyData } = companies
   console.log(signInAsCompanyData)
 
   return (
@@ -355,4 +351,5 @@ const mapDispatchToProps = dispatch => {
     },
   }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)

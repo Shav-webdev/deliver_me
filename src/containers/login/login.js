@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux'
 import { signInAs } from '../../redux/thunk'
 
-function LoginForm(props) {
+function LoginForm({ signInAs }) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(null)
@@ -51,12 +51,8 @@ function LoginForm(props) {
   }, [])
 
   const handleSubmit = e => {
-    console.log(props)
-
     e.preventDefault()
     setLoading(true)
-
-    // let url = 'https://thawing-ravine-80499.herokuapp.com/login'
 
     const data = {
       email,
@@ -72,8 +68,7 @@ function LoginForm(props) {
       } else if (!isPasswordValid) {
         setShowPasswordValidText(true)
       } else {
-        console.log(props)
-        props.signInAs(data)
+        signInAs(data)
       }
       setLoading(false)
     }, 1000)
