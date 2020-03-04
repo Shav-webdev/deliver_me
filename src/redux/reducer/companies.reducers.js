@@ -2,6 +2,9 @@ import {
   SIGN_IN_AS_COMPANY_REQUEST,
   SIGN_IN_AS_COMPANY_SUCCESS,
   SIGN_IN_AS_COMPANY_FAILURE,
+  CREATE_ORDER_REQUEST,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -9,6 +12,8 @@ const initialState = {
   companiesData: [],
   signInLoading: false,
   signInAsCompanyData: {},
+  createOrderLoading: false,
+  orderData: {},
 }
 
 export default function companiesReducer(state = initialState, action) {
@@ -71,6 +76,7 @@ export default function companiesReducer(state = initialState, action) {
         signInLoading: true,
       }
     case SIGN_IN_AS_COMPANY_SUCCESS:
+      console.log('action', action.payload)
       return {
         ...state,
         signInLoading: false,
@@ -80,6 +86,22 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         signInLoading: false,
+      }
+    case CREATE_ORDER_REQUEST:
+      return {
+        ...state,
+        createOrderLoading: true,
+      }
+    case CREATE_ORDER_SUCCESS:
+      return {
+        ...state,
+        createOrderLoading: false,
+        orderData: action.payload,
+      }
+    case CREATE_ORDER_FAILURE:
+      return {
+        ...state,
+        createOrderLoading: false,
       }
     default:
       return state
