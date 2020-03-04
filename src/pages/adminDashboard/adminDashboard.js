@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { Table } from 'antd'
 import { Layout, Menu, Icon, Button } from 'antd'
+import { FastBackwardOutlined } from '@ant-design/icons-react'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import './adminDashboard.css'
@@ -193,14 +194,15 @@ function AdminBoard({
                     key="accept"
                     render={(text, record) => (
                       <span>
-                        <Button
+                        {/* <Button
                           id={record.id}
                           onClick={handleAcceptUser}
                           type={`primary ${
                             record.approved === 'accepted' ? 'disabled' : ''
                           }`}>
                           Accept
-                        </Button>
+                        </Button> */}
+                        <FastBackwardOutlined />
                       </span>
                     )}
                   />
