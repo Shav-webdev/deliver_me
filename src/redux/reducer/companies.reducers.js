@@ -51,15 +51,9 @@ export default function companiesReducer(state = initialState, action) {
       )
       return {
         ...state,
-<<<<<<< HEAD
-        companiesData: [...lastData, action.payload]
-      };
-    case "EDIT_COMPANY_FAILURE":
-=======
         editData: [...lastData, action.payload],
       }
     case 'EDIT_COMPANY_FAILURE':
->>>>>>> develop
       return {
         ...state,
       }
