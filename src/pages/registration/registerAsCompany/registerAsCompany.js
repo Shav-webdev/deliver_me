@@ -246,7 +246,7 @@ function RegisterAsCompany() {
           hasFeedback={showNameValidText}
           help={
             showNameValidText
-              ? 'The input should contain at min 2 max 16 characters'
+              ? 'Name should contain at least two characters'
               : ''
           }>
           <Input
@@ -294,7 +294,7 @@ function RegisterAsCompany() {
           hasFeedback={showAddressValidText}
           help={
             showAddressValidText
-              ? 'Address should contain at least one digit, one lower, one upper case, space'
+              ? 'Address should contain at least two characters'
               : ''
           }>
           <Input
@@ -347,7 +347,7 @@ function RegisterAsCompany() {
           hasFeedback={showActivityValidText}
           help={
             showActivityValidText
-              ? 'Activity should contain at min 2 max 16 characters'
+              ? 'Activity should contain at least two characters'
               : ''
           }>
           <Input
