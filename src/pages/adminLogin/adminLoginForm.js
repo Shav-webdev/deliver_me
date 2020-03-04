@@ -1,16 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import { Form, Icon, Input, Button, Typography } from 'antd'
 import './adminLoginForm.css'
-import { signIn } from '../registration/services/services'
 import Spinner from '../../components/spiner/spinner'
 import {
   validateEmail,
   validateAdminPassword,
 } from '../registration/helpers/validations'
+import { connect } from 'react-redux'
+import { signInAs } from '../../redux/thunk'
 
 const { Title } = Typography
 
-function AdminLoginForm(props) {
+function AdminLoginForm({ signInAs }) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(null)
@@ -58,7 +59,7 @@ function AdminLoginForm(props) {
       email,
       password,
     }
-    const url = 'https://thawing-ravine-80499.herokuapp.com/admin'
+
     setTimeout(() => {
       if (!isEmailValid && !isPasswordValid) {
         setShowEmailValidText(true)
@@ -68,7 +69,7 @@ function AdminLoginForm(props) {
       } else if (!isPasswordValid) {
         setShowPasswordValidText(true)
       } else {
-        signIn(url, data, '/admin/dashboard')
+        signInAs(data)
       }
       setLoading(false)
     }, 1000)
@@ -124,4 +125,12 @@ function AdminLoginForm(props) {
   )
 }
 
-export default AdminLoginForm
+const mapDispatchToProps = dispatch => {
+  return {
+    signInAs: data => {
+      dispatch(signInAs(data))
+    },
+  }
+}
+
+export default connect(null, mapDispatchToProps)(AdminLoginForm)

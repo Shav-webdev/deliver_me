@@ -1,16 +1,15 @@
-import React, { useCallback,useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Form, Icon, Input, Button } from 'antd'
 import './login.css'
-import { signIn } from '../../pages/registration/services/services'
 import Spinner from '../../components/spiner/spinner'
 import {
   validateEmail,
   validatePassword,
 } from '../../pages/registration/helpers/validations'
 import { connect } from 'react-redux'
-import { currentCompany } from '../../redux/actions'
+import { signInAs } from '../../redux/thunk'
 
-function LoginForm(props) {
+function LoginForm({ signInAs }) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(null)
@@ -46,7 +45,7 @@ function LoginForm(props) {
   }
 
   const handlePasswordChange = useCallback(e => {
-    let pass = e.target.value
+    const pass = e.target.value
     setPassword(pass)
     setShowPasswordValidText(false)
   }, [])
@@ -54,8 +53,6 @@ function LoginForm(props) {
   const handleSubmit = e => {
     e.preventDefault()
     setLoading(true)
-
-    let url = 'https://thawing-ravine-80499.herokuapp.com/login'
 
     const data = {
       email,
@@ -71,7 +68,7 @@ function LoginForm(props) {
       } else if (!isPasswordValid) {
         setShowPasswordValidText(true)
       } else {
-        signIn(url, data)
+        signInAs(data)
       }
       setLoading(false)
     }, 1000)
@@ -126,10 +123,19 @@ function LoginForm(props) {
   )
 }
 
-function mapDispatchToProps(dispatch) {
+// const mapStateToProps = state => {
+//   console.log(state)
+//   const { users, companies } = state
+//   return {
+//     users,
+//     companies,
+//   }
+// }
+
+const mapDispatchToProps = dispatch => {
   return {
-    currentCompany: company => {
-      dispatch(currentCompany(company))
+    signInAs: data => {
+      dispatch(signInAs(data))
     },
   }
 }

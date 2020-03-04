@@ -1,1 +1,1 @@
-export * from './modal.userEdit';
+export * from './modal.userEdit'
