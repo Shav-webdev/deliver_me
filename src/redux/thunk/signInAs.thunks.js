@@ -17,17 +17,18 @@ export const signInAs = data => async dispatch => {
       throw new Error('Something went wrong, try again')
     }
     if (response.data.type === 'company') {
-      console.log('company response', response)
-      console.log('company response data', response.data)
       dispatch(signInAsCompanySuccess(response.data))
       setCookie('token', `${response.data.token}`)
       history.push('/profile/company')
     } else if (response.data.type === 'user') {
-      console.log('userresponse', response)
-      console.log('userresponse data', response.data)
       dispatch(signInAsUserSuccess(response.data))
       setCookie('token', `${response.data.token}`)
       history.push('/profile/user')
+    } else {
+      console.log('adminresponse data', response.data)
+      dispatch(signInAsUserSuccess(response.data))
+      setCookie('token', `${response.data.token}`)
+      history.push('/admin/dashboard')
     }
   } catch (error) {
     dispatch(signInAsCompanyFailure())

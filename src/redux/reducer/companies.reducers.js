@@ -1,6 +1,14 @@
+import {
+  SIGN_IN_AS_COMPANY_REQUEST,
+  SIGN_IN_AS_COMPANY_SUCCESS,
+  SIGN_IN_AS_COMPANY_FAILURE,
+} from '../action/constants'
+
 const initialState = {
   gettingCompanies: false,
   companiesData: [],
+  signInLoading: false,
+  signInAsCompanyData: {},
 }
 
 export default function companiesReducer(state = initialState, action) {
@@ -56,6 +64,22 @@ export default function companiesReducer(state = initialState, action) {
     case 'REMOVE_COMPANY_FAILURE':
       return {
         ...state,
+      }
+    case SIGN_IN_AS_COMPANY_REQUEST:
+      return {
+        ...state,
+        signInLoading: true,
+      }
+    case SIGN_IN_AS_COMPANY_SUCCESS:
+      return {
+        ...state,
+        signInLoading: false,
+        signInAsCompanyData: action.payload,
+      }
+    case SIGN_IN_AS_COMPANY_FAILURE:
+      return {
+        ...state,
+        signInLoading: false,
       }
     default:
       return state
