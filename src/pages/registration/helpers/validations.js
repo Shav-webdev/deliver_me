@@ -15,13 +15,11 @@ export function validateAdminPassword(password) {
 }
 
 export function validateName(name) {
-  let re = /^[a-zA-Z]{2,16}$/
-  return re.test(String(name))
+  return name.length >= 2 && name.length < 32
 }
 
 export function validateAddress(address) {
-  let re = /^[a-zA-z0-9]+\s\d+/g
-  return re.test(String(address))
+  return address.length >= 2 && address.length < 32
 }
 
 export function validatePhoneNumber(number) {
@@ -35,6 +33,5 @@ export function validateTaxNumber(number) {
 }
 
 export function validateActivity(activity) {
-  let re = /^[a-zA-Z0-9]{2,16}$/
-  return re.test(String(activity))
+  return activity.length >= 2 && activity.length < 32
 }
