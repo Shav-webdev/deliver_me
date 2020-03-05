@@ -46,7 +46,7 @@ export default function usersReducer(state = initialState, action) {
       )
       return {
         ...state,
-        editData: [...lastData, action.payload],
+        usersData: [...lastData, action.payload],
       }
     case 'EDIT_USER_FAILURE':
       return {
