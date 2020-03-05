@@ -35,6 +35,18 @@ import {
 } from '../../redux/thunk'
 import { getUsersFailure } from '../../redux/action'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
+import allOrdersIcon from '../../assets/images/allOrdersIcon.svg'
+import doneOrdersIcon from '../../assets/images/doneOrdersIcon.svg'
+import logo from '../../assets/images/logo.svg'
+import {
+  validateEmail,
+  validateName,
+  validateAddress,
+  validatePhoneNumber,
+  validateTaxNumber,
+  validateActivity,
+} from '../../pages/registration/helpers/validations'
 
 const { Title } = Typography
 const { TextArea } = Input
@@ -48,9 +60,16 @@ const ProfilePage = ({
   updateAvatar,
   getCompanyById,
   createOrder,
+  updateCompanyData,
   getCompanyAllOrders,
   getingCompanyAllOrders,
 }) => {
+  const [companyName, setCompanyName] = useState('')
+  const [companyEmail, setCompanyEmail] = useState('')
+  const [companyAddress, setCompanyAddress] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [companyTaxNumber, setCompanyTaxNumber] = useState('')
+  const [companyActivity, setCompanyActivity] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
   const [points, setPoints] = useState('')
@@ -61,6 +80,19 @@ const ProfilePage = ({
   const [orderStartTime, setOrderStartTime] = useState('')
   const [orderEndTime, setOrderEndTime] = useState('')
   const [collapsed, setCollapsed] = useState(false)
+  const [isEmailValid, setIsEmailValid] = useState(null)
+  const [isNameValid, setIsNameValid] = useState(null)
+  const [isAddressValid, setIsAddressValid] = useState(null)
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(null)
+  const [isTaxNumberValid, setIsTaxNumberValid] = useState(null)
+  const [isActivityValid, setIsActivityValid] = useState(null)
+  const [showEmailValidText, setShowEmailValidText] = useState(false)
+  const [showNameValidText, setShowNameValidText] = useState(false)
+  const [showAddressValidText, setShowAddressValidText] = useState(false)
+  const [showPhoneNumValidText, setShowPhoneNumValidText] = useState(false)
+  const [showTaxNumValidText, setShowTaxNumValidText] = useState(false)
+  const [showActivityValidText, setShowActivityValidText] = useState(false)
+  const [isInputsEditable, setIsInputsEditable] = useState(false)
 
   const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
@@ -133,7 +165,7 @@ const ProfilePage = ({
     </div>
   )
 
-  const handleSubmit = () => {
+  const handleCreateOrderSubmit = () => {
     const data = {
       companyId: companies.signInAsCompanyData.id,
       order: {
@@ -146,8 +178,6 @@ const ProfilePage = ({
         order_end_time: orderEndTime,
       },
     }
-    console.log(data)
-
     createOrder(data)
     setVisible(false)
   }
@@ -181,6 +211,149 @@ const ProfilePage = ({
     setOrderEndTime(dateStrings[1])
   }
 
+  const handleEmailChange = useCallback(e => {
+    const email = e.target.value
+    setCompanyEmail(email)
+    setShowEmailValidText(false)
+  }, [])
+
+  const onHandleEmailValidate = () => {
+    if (validateEmail(companyEmail)) {
+      setIsEmailValid(true)
+      setShowEmailValidText(false)
+    } else {
+      setIsEmailValid(false)
+      setShowEmailValidText(true)
+    }
+  }
+
+  const handleNameChange = useCallback(e => {
+    const name = e.target.value
+    setCompanyName(name)
+    setShowNameValidText(false)
+  }, [])
+
+  const onHandleNameValidate = () => {
+    if (validateName(companyName)) {
+      setIsNameValid(true)
+      setShowNameValidText(false)
+    } else {
+      setIsNameValid(false)
+      setShowNameValidText(true)
+    }
+  }
+
+  const handleAddressChange = useCallback(e => {
+    const address = e.target.value
+    setCompanyAddress(address)
+    setShowAddressValidText(false)
+  }, [])
+
+  const onHandleAddressValidate = () => {
+    if (validateAddress(companyAddress)) {
+      setIsAddressValid(true)
+      setShowAddressValidText(false)
+    } else {
+      setIsAddressValid(false)
+      setShowAddressValidText(true)
+    }
+  }
+
+  const handlePhoneNumChange = useCallback(e => {
+    let number = e.target.value
+    setPhoneNumber(number)
+    setShowPhoneNumValidText(false)
+  }, [])
+
+  const onHandlePhoneNumValidate = () => {
+    if (validatePhoneNumber(phoneNumber)) {
+      setIsPhoneNumberValid(true)
+      setShowPhoneNumValidText(false)
+    } else {
+      setIsPhoneNumberValid(false)
+      setShowPhoneNumValidText(true)
+    }
+  }
+
+  const handleTaxNumChange = useCallback(e => {
+    let number = e.target.value
+    setCompanyTaxNumber(number)
+    setShowTaxNumValidText(false)
+  }, [])
+
+  const onHandleTaxNumValidate = () => {
+    if (validateTaxNumber(companyTaxNumber)) {
+      setIsTaxNumberValid(true)
+      setShowTaxNumValidText(false)
+    } else {
+      setIsTaxNumberValid(false)
+      setShowTaxNumValidText(true)
+    }
+  }
+
+  const handleActivityChange = useCallback(e => {
+    let activityValue = e.target.value
+    setCompanyActivity(activityValue)
+    setShowActivityValidText(false)
+  }, [])
+
+  const onHandleActivityValidate = () => {
+    if (validateActivity(companyActivity)) {
+      setIsActivityValid(true)
+      setShowActivityValidText(false)
+    } else {
+      setIsActivityValid(false)
+      setShowActivityValidText(true)
+    }
+  }
+
+  const handleEditInfoBtnClick = () => {
+    setIsInputsEditable(true)
+  }
+
+  const handleSaveInfoBtnClick = () => {
+    const data = {
+      id,
+      name: companyName,
+      email: companyEmail,
+      address: companyAddress,
+      phone: phoneNumber,
+      taxNumber: companyTaxNumber,
+      activity: companyActivity,
+    }
+
+    if (
+      !isNameValid &&
+      !isEmailValid &&
+      !isAddressValid &&
+      !isActivityValid &&
+      !isPhoneNumberValid &&
+      !isTaxNumberValid
+    ) {
+      setShowNameValidText(true)
+      setShowEmailValidText(true)
+      setShowAddressValidText(true)
+      setShowPhoneNumValidText(true)
+      setShowTaxNumValidText(true)
+      setShowActivityValidText(true)
+    } else if (!isNameValid) {
+      setShowNameValidText(true)
+    } else if (!isEmailValid) {
+      setShowEmailValidText(true)
+    } else if (!isAddressValid) {
+      setShowAddressValidText(true)
+    } else if (!isPhoneNumberValid) {
+      setShowPhoneNumValidText(true)
+    } else if (!isTaxNumberValid) {
+      setShowTaxNumValidText(true)
+    } else if (!isActivityValid) {
+      setShowActivityValidText(true)
+    } else {
+      updateCompanyData(data)
+      setIsInputsEditable(false)
+    }
+  }
+
   const { signInLoading, signInAsCompanyData, companyAllOrders } = companies
 
   const {
@@ -190,6 +363,7 @@ const ProfilePage = ({
     address,
     phone,
     email,
+    activity,
     approved,
     amount,
   } = signInAsCompanyData
@@ -197,49 +371,57 @@ const ProfilePage = ({
   return (
     <Router>
       <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="logo">Deliver.me</div>
+        <Sider
+          className="theme_bg_color"
+          trigger={null}
+          collapsible
+          collapsed={collapsed}>
+          <div className="logo">
+            <img src={logo} alt="deliver.me" />
+          </div>
           <Menu
             theme="dark"
+            className="sidebar_menu_wrapper"
             mode="inline"
-            defaultSelectedKeys={['1']}
-            style={{
-              lineHeight: '64px',
-              minHeight: '100vh',
-              backgroundImage:
-                'linear-gradient(rgb(36, 77, 125), rgb(89, 36, 36)',
-            }}>
+            defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <Link to="/profile/company/" />
-              <span>My orders</span>
+              <Link to="/profile/company/">
+                <span className="menu_item_icon">
+                  <img src={allOrdersIcon} alt="All orders" />
+                </span>
+                <span>My orders</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/profile/company/active_orders" />
-              <span>Active orders</span>
+              <Link to="/profile/company/active_orders">
+                <span className="menu_item_icon">
+                  <img src={activeOrdersIcon} alt="All orders" />
+                </span>
+                <span>Active orders</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/profile/company/completed_orders" />
-              <span>Completed orders</span>
+              <Link to="/profile/company/completed_orders">
+                <span className="menu_item_icon">
+                  <img src={doneOrdersIcon} alt="Completed orders" />
+                </span>
+                <span>Completed orders</span>
+              </Link>
             </Menu.Item>
-            <Menu.Item key="4"></Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background company_profile_header">
-            {React.createElement(
-              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-              {
-                className: 'trigger',
-                onClick: toggle,
-              }
-            )}
-
-            <div
-              style={{
-                width: '20%',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}>
+            <div>
+              {React.createElement(
+                collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                {
+                  className: 'company_profile_trigger',
+                  onClick: toggle,
+                }
+              )}
+            </div>
+            <div className="header_btns_wrapper">
               <Button type="primary" onClick={handleCreateOrderClick}>
                 Create order
               </Button>
@@ -249,6 +431,7 @@ const ProfilePage = ({
                 title="Profile settings"
                 trigger="click">
                 <Avatar
+                  size="large"
                   src={
                     signInAsCompanyData.avatar
                       ? signInAsCompanyData.avatar
@@ -299,54 +482,177 @@ const ProfilePage = ({
                 )}
               </List>
             </Route>
-
-            <Route path="/profile/company/active_orders"> </Route>
+            <Route path="/profile/company/active_orders">
+              <List className="company_orders_list_wrapper" style={{}}>
+                {getingCompanyAllOrders ? (
+                  <Spinner />
+                ) : (
+                  companyAllOrders
+                    .filter(el => el.state === 'active')
+                    .map(el => {
+                      return (
+                        <List.Item className="orders_list_item" key={el.id}>
+                          <div>
+                            <p>
+                              <strong>Order :</strong>
+                              {el.order_description}
+                            </p>
+                            <p>
+                              <strong>Money :</strong>
+                              {el.points}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Take address :</strong>
+                              {el.take_address}
+                            </p>
+                            <p>
+                              <strong>Deliver address :</strong>
+                              {el.deliver_address}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Status :</strong>
+                              {el.state}
+                            </p>
+                          </div>
+                        </List.Item>
+                      )
+                    })
+                )}
+              </List>
+            </Route>
             <Route path="/profile/company/completed_orders"> </Route>
             <Route path="/profile/company/profile_info">
               <div className="company_profile_section_wrapper">
                 {signInLoading ? (
                   <Spinner />
                 ) : (
-                  <Form
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-evenly',
-                      flexWrap: 'wrap',
-                      maxWidth: 700,
-                      width: '100%',
-                    }}>
-                    <Form.Item label="Name">
-                      <Input disabled value={name} />
+                  <Form className="company_info_form">
+                    <Form.Item
+                      label="Name"
+                      validateStatus={showNameValidText ? 'error' : 'success'}
+                      hasFeedback={showNameValidText}
+                      help={
+                        showNameValidText
+                          ? 'Name should contain at least two characters'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handleNameChange(e)}
+                        onBlur={onHandleNameValidate}
+                        value={isInputsEditable ? companyName : name}
+                      />
                     </Form.Item>
-                    <Form.Item label="E-mail">
-                      <Input disabled value={email} />
+                    <Form.Item
+                      label="E-mail"
+                      validateStatus={showEmailValidText ? 'error' : 'success'}
+                      hasFeedback={showEmailValidText}
+                      help={
+                        showEmailValidText
+                          ? 'The input is not valid E-mail!'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handleEmailChange(e)}
+                        onBlur={onHandleEmailValidate}
+                        value={isInputsEditable ? companyEmail : email}
+                      />
                     </Form.Item>
-                    <Form.Item label="Status">
-                      <Input disabled value={approved} />
+                    <Form.Item
+                      label="Address"
+                      validateStatus={
+                        showAddressValidText ? 'error' : 'success'
+                      }
+                      hasFeedback={showAddressValidText}
+                      help={
+                        showAddressValidText
+                          ? 'Address should contain at least two characters'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handleAddressChange(e)}
+                        onBlur={onHandleAddressValidate}
+                        value={isInputsEditable ? companyAddress : address}
+                      />
                     </Form.Item>
-                    <Form.Item label="Amount">
-                      <Input disabled value={amount} />
+                    <Form.Item
+                      label="Phone Number"
+                      validateStatus={
+                        showPhoneNumValidText ? 'error' : 'success'
+                      }
+                      hasFeedback={showPhoneNumValidText}
+                      help={
+                        showPhoneNumValidText
+                          ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handlePhoneNumChange(e)}
+                        onBlur={onHandlePhoneNumValidate}
+                        value={isInputsEditable ? phoneNumber : phone}
+                      />
                     </Form.Item>
-
-                    <Form.Item label="Address">
-                      <Input disabled value={address} />
+                    <Form.Item
+                      label="Tax Number"
+                      validateStatus={showTaxNumValidText ? 'error' : 'success'}
+                      hasFeedback={showTaxNumValidText}
+                      help={
+                        showTaxNumValidText
+                          ? 'Tax number should contain only 8 digit either'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handleTaxNumChange(e)}
+                        onBlur={onHandleTaxNumValidate}
+                        value={isInputsEditable ? companyTaxNumber : taxNumber}
+                      />
                     </Form.Item>
-                    <Form.Item label="Phone Number">
-                      <Input disabled value={phone} />
-                    </Form.Item>
-                    <Form.Item label="Tax Number">
-                      <Input disabled value={taxNumber} />
+                    <Form.Item
+                      label="Activity"
+                      validateStatus={
+                        showActivityValidText ? 'error' : 'success'
+                      }
+                      hasFeedback={showActivityValidText}
+                      help={
+                        showActivityValidText
+                          ? 'Activity should contain at least two characters'
+                          : ''
+                      }>
+                      <Input
+                        disabled={!isInputsEditable}
+                        onChange={e => handleActivityChange(e)}
+                        onBlur={onHandleActivityValidate}
+                        value={isInputsEditable ? companyActivity : activity}
+                      />
                     </Form.Item>
                   </Form>
                 )}
-                <Avatar
-                  size={128}
-                  src={
-                    signInAsCompanyData.avatar
-                      ? signInAsCompanyData.avatar
-                      : company_avatar
-                  }
-                />
+                <div>
+                  <Avatar
+                    size={128}
+                    src={
+                      signInAsCompanyData.avatar
+                        ? signInAsCompanyData.avatar
+                        : company_avatar
+                    }
+                  />
+                  <div>
+                    <Button type="primary" onClick={handleEditInfoBtnClick}>
+                      Edit
+                    </Button>
+                    <Button type="primary" onClick={handleSaveInfoBtnClick}>
+                      Save
+                    </Button>
+                  </div>
+                </div>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <Upload.Dragger
@@ -363,15 +669,13 @@ const ProfilePage = ({
         </Layout>
         <Modal
           title="Create Request"
+          style={{ top: 20 }}
           visible={visible}
           okText="Create order"
-          onOk={handleSubmit}
+          onOk={handleCreateOrderSubmit}
           onCancel={modalHandleCancel}>
           <Form className="login-form">
-            <Form.Item>
-              <Title level={3}>Request options</Title>
-            </Form.Item>
-            <Form.Item>
+            <Form.Item label="Point">
               <Input
                 onChange={e => handlePointsChange(e)}
                 value={points}
@@ -384,7 +688,7 @@ const ProfilePage = ({
                 }
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="Take address">
               <Input
                 onChange={e => handleTakeAddressChange(e)}
                 value={takeAddress}
@@ -397,7 +701,7 @@ const ProfilePage = ({
                 }
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="Deliver address">
               <Input
                 onChange={e => handleDeliverAddressChange(e)}
                 value={deliverAddress}
@@ -410,14 +714,14 @@ const ProfilePage = ({
                 }
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="Description">
               <TextArea
                 onChange={e => handleOrderDescriptionChange(e)}
                 value={orderDescription}
-                placeholder="Order Description"
+                placeholder="Description"
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="Order time range">
               <RangePicker
                 ranges={{
                   Today: [moment(), moment()],
@@ -431,11 +735,11 @@ const ProfilePage = ({
                 onChange={onTimeChangeChange}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="Comment">
               <TextArea
                 onChange={e => handleOrderCommentChange(e)}
                 value={comment}
-                placeholder="Your comment"
+                placeholder="Comment"
               />
             </Form.Item>
           </Form>
@@ -456,6 +760,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    updateCompanyData: id => dispatch(createCompanyThunk(id)),
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
     createOrder: data => dispatch(createOrderThunk(data)),
     getCompanyAllOrders: id => dispatch(getCompanyAllOrdersThunk(id)),
