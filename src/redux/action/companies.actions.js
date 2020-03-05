@@ -17,6 +17,15 @@ import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
   CREATE_ORDER_FAILURE,
+  GET_COMPANY_ALL_ORDERS_REQUEST,
+  GET_COMPANY_ALL_ORDERS_SUCCESS,
+  GET_COMPANY_ALL_ORDERS_FAILURE,
+  GET_COMPANY_ACTIVE_ORDERS_REQUEST,
+  GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_COMPLETED_ORDERS_REQUEST,
+  GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
+  GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 } from './constants'
 
 export const getCompaniesRequest = () => ({
@@ -82,4 +91,37 @@ export const createOrderSuccsess = data => ({
 })
 export const createOrderFailure = () => ({
   type: CREATE_ORDER_FAILURE,
+})
+
+export const getCompanyAllOrdersRequest = () => ({
+  type: GET_COMPANY_ALL_ORDERS_REQUEST,
+})
+export const getCompanyAllOrdersSuccess = data => ({
+  type: GET_COMPANY_ALL_ORDERS_SUCCESS,
+  payload: data,
+})
+export const getCompanyAllOrdersFailure = () => ({
+  type: GET_COMPANY_ALL_ORDERS_FAILURE,
+})
+
+export const getCompanyActiveOrdersRequest = () => ({
+  type: GET_COMPANY_ACTIVE_ORDERS_REQUEST,
+})
+export const getCompanyActiveOrdersSuccess = data => ({
+  type: GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
+  payload: data,
+})
+export const getCompanyActiveOrdersFailure = () => ({
+  type: GET_COMPANY_ACTIVE_ORDERS_FAILURE,
+})
+
+export const getCompanyCompletedOrdersRequest = () => ({
+  type: GET_COMPANY_COMPLETED_ORDERS_REQUEST,
+})
+export const getCompanyCompletedOrdersSuccess = data => ({
+  type: GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
+  payload: data,
+})
+export const getCompanyCompletedOrdersFailure = () => ({
+  type: GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 })
