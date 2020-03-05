@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import {
   Button,
   Icon,
@@ -10,6 +11,7 @@ import {
   Input,
   Avatar,
   DatePicker,
+  Card,
 } from 'antd'
 import './profilePage.css'
 import { getCookie } from '../registration/services/cookies'
@@ -25,10 +27,10 @@ import moment from 'moment'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import {
-  createOrder,
+  createOrderThunk,
   createCompanyThunk,
-  getCompanyById,
   getCompanyByIdThunk,
+  getCompanyAllOrdersThunk,
 } from '../../redux/thunk'
 import { getUsersFailure } from '../../redux/action'
 
@@ -36,13 +38,14 @@ const { Title } = Typography
 const { TextArea } = Input
 const { RangePicker } = DatePicker
 
-const { Header, Sider } = Layout
+const { Header, Sider, Content } = Layout
 
 const ProfilePage = ({
-  createOrder,
   companies,
   updateAvatar,
   getCompanyById,
+  getCompanyAllOrders,
+  getingCompanyAllOrders,
 }) => {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
@@ -93,8 +96,10 @@ const ProfilePage = ({
     if (!getCookie('token') && !getCookie('id')) {
       history.push('/')
     }
+    const companyId = getCookie('id')
 
-    getCompanyById(getCookie('id'))
+    getCompanyById(companyId)
+    getCompanyAllOrders(companyId)
     // eslint-disable-next-line no-useless-escape
   }, [])
 
@@ -162,12 +167,21 @@ const ProfilePage = ({
     setOrderEndTime(dateStrings[1])
   }
 
-  const { signInLoading, signInAsCompanyData } = companies
+  const { signInLoading, signInAsCompanyData, companyAllOrders } = companies
 
-  const { id, name, taxNumber, address, phone, email } = signInAsCompanyData
+  const {
+    id,
+    name,
+    taxNumber,
+    address,
+    phone,
+    email,
+    approved,
+    amount,
+  } = signInAsCompanyData
 
   return (
-    <>
+    <Router>
       <Sider theme="light" width={300}>
         <div style={{ textAlign: 'center' }}>
           <Avatar
@@ -214,6 +228,14 @@ const ProfilePage = ({
                 <strong>Email:</strong>
                 <span>{`${email}`}</span>
               </List.Item>
+              <List.Item>
+                <strong>Status:</strong>
+                <span>{`${approved}`}</span>
+              </List.Item>
+              <List.Item>
+                <strong>Amount:</strong>
+                <span>{`${amount}`}</span>
+              </List.Item>
             </List>
           )}
         </div>
@@ -235,9 +257,18 @@ const ProfilePage = ({
             mode="horizontal"
             defaultSelectedKeys={['1']}
             style={{ lineHeight: '64px' }}>
-            <Menu.Item key="1">My orders</Menu.Item>
-            <Menu.Item key="2">Active orders</Menu.Item>
-            <Menu.Item key="3">Completed orders</Menu.Item>
+            <Menu.Item key="1">
+              <Link to="/profile/company/orders" />
+              My orders
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/profile/company/active_orders" />
+              Active orders
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/profile/company/completed_orders" />
+              Completed orders
+            </Menu.Item>
           </Menu>
           <div>
             <Popover
@@ -255,6 +286,69 @@ const ProfilePage = ({
             </Popover>
           </div>
         </Header>
+        <Content>
+          <Route exact path="/profile/company/orders">
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {getingCompanyAllOrders ? (
+                <Spinner />
+              ) : (
+                companyAllOrders.map(el => {
+                  return (
+                    <Card
+                      key={el.id}
+                      title={el.order_description}
+                      bordered={false}
+                      cover={<img alt="example" src={el.icon} />}
+                      style={{ width: 300, margin: '.5rem' }}>
+                      <p>
+                        <strong>Company name :</strong>
+                        {el.company_name}
+                      </p>
+                      <p>
+                        <strong>Company phone number :</strong>
+                        {el.company_phone}
+                      </p>
+                      <p>
+                        <strong>Company email :</strong>
+                        {el.company_email}
+                      </p>
+                      <p>
+                        <strong>Deliver address :</strong>
+                        {el.deliver_address}
+                      </p>
+                      <p>
+                        <strong>Deliver status :</strong>
+                        {el.state}
+                      </p>
+                      <p>
+                        <strong>Order created at :</strong>
+                        {el.order_create_time}
+                      </p>
+                      <p>
+                        <strong>Order start time :</strong>
+                        {el.order_start_time}
+                      </p>
+                      <p>
+                        <strong>Order end time :</strong>
+                        {el.order_end_time}
+                      </p>
+                      <p>
+                        <strong>Comment :</strong>
+                        {el.comment}
+                      </p>
+                      <p>
+                        <strong>Money :</strong>
+                        {el.points}
+                      </p>
+                    </Card>
+                  )
+                })
+              )}
+            </div>
+          </Route>
+          <Route path="/profile/company/active_orders"> </Route>
+          <Route path="/profile/company/completed_orders"> </Route>
+        </Content>
       </Layout>
       <Modal
         title="Create Request"
@@ -336,11 +430,12 @@ const ProfilePage = ({
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </Router>
   )
 }
 
 const mapStateToProps = state => {
+  console.log(state)
   const { users, companies } = state
   return {
     users,
@@ -351,7 +446,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
-    createOrder: data => dispatch(createOrder(data)),
+    createOrder: data => dispatch(createOrderThunk(data)),
+    getCompanyAllOrders: id => dispatch(getCompanyAllOrdersThunk(id)),
     updateAvatar: data => {
       dispatch(createCompanyThunk(data))
     },

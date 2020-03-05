@@ -5,6 +5,15 @@ import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
   CREATE_ORDER_FAILURE,
+  GET_COMPANY_ALL_ORDERS_REQUEST,
+  GET_COMPANY_ALL_ORDERS_SUCCESS,
+  GET_COMPANY_ALL_ORDERS_FAILURE,
+  GET_COMPANY_ACTIVE_ORDERS_REQUEST,
+  GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_COMPLETED_ORDERS_REQUEST,
+  GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
+  GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -14,6 +23,12 @@ const initialState = {
   signInAsCompanyData: {},
   createOrderLoading: false,
   orderData: {},
+  getingCompanyAllOrders: false,
+  companyAllOrders: [],
+  getingCompanyActiveOrders: false,
+  companyActiveOrders: [],
+  getingCompanyCompletedOrders: false,
+  companyCompletedOrders: [],
 }
 
 export default function companiesReducer(state = initialState, action) {
@@ -102,6 +117,57 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         createOrderLoading: false,
+      }
+
+    case GET_COMPANY_ALL_ORDERS_REQUEST:
+      return {
+        ...state,
+        getingCompanyAllOrders: true,
+      }
+    case GET_COMPANY_ALL_ORDERS_SUCCESS:
+      return {
+        ...state,
+        getingCompanyAllOrders: false,
+        companyAllOrders: action.payload,
+      }
+    case GET_COMPANY_ALL_ORDERS_FAILURE:
+      return {
+        ...state,
+        getingCompanyAllOrders: false,
+      }
+
+    case GET_COMPANY_ACTIVE_ORDERS_REQUEST:
+      return {
+        ...state,
+        getingCompanyActiveOrders: true,
+      }
+    case GET_COMPANY_ACTIVE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        getingCompanyActiveOrders: false,
+        companyActiveOrders: action.payload,
+      }
+    case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
+      return {
+        ...state,
+        getingCompanyActiveOrders: false,
+      }
+
+    case GET_COMPANY_COMPLETED_ORDERS_REQUEST:
+      return {
+        ...state,
+        getingCompanyCompletedOrders: true,
+      }
+    case GET_COMPANY_COMPLETED_ORDERS_SUCCESS:
+      return {
+        ...state,
+        getingCompanyCompletedOrders: false,
+        companyCompletedOrders: action.payload,
+      }
+    case GET_COMPANY_COMPLETED_ORDERS_FAILURE:
+      return {
+        ...state,
+        getingCompanyCompletedOrders: false,
       }
     default:
       return state

@@ -10,6 +10,7 @@ export default {
   companies: new Endpoint('companies'),
   login: new Endpoint('login'),
   createOrder: new Endpoint('create-order'),
+  getCompanyOrders: id => new Endpoint(`company-orders/${id}`),
   getUserById: id => new Endpoint('users/' + id),
   getCompanyById: id => new Endpoint(`companies/${id}`),
   deleteUpdateUser: id => new Endpoint('users/' + id),
