@@ -239,11 +239,6 @@ const ProfilePage = ({
             </List>
           )}
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <Button type="primary" onClick={handleCreateOrderClick}>
-            Create order
-          </Button>
-        </div>
       </Sider>
       <Layout>
         <Header
@@ -258,7 +253,7 @@ const ProfilePage = ({
             defaultSelectedKeys={['1']}
             style={{ lineHeight: '64px' }}>
             <Menu.Item key="1">
-              <Link to="/profile/company/orders" />
+              <Link to="/profile/company/" />
               My orders
             </Menu.Item>
             <Menu.Item key="2">
@@ -269,8 +264,17 @@ const ProfilePage = ({
               <Link to="/profile/company/completed_orders" />
               Completed orders
             </Menu.Item>
+            <Menu.Item key="4"></Menu.Item>
           </Menu>
-          <div>
+          <div
+            style={{
+              width: '50%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
+            <Button type="primary" onClick={handleCreateOrderClick}>
+              Create order
+            </Button>
             <Popover
               placement="bottomRight"
               content={content}
