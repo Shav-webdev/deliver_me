@@ -25,6 +25,8 @@ export const ModalUserEdit = ({
   modalUser,
   updateUser,
   removeUser,
+  usersData,
+  setUserData,
 }) => {
   const [state, setState] = useState(modalUser)
   const { id, name, lastName, address, phone, avatar, approved } = state
@@ -44,7 +46,9 @@ export const ModalUserEdit = ({
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        removeUser(id), handleCancel()
+        const filt = usersData.filter(el => el.id != id)
+
+        removeUser(id), handleCancel(), setUserData(filt)
       },
       onCancel() {},
     })
@@ -64,10 +68,12 @@ export const ModalUserEdit = ({
   const handleAcceptUser = () => {
     updateUser({ ...modalUser, approved: 'accepted' })
     setState({ ...state, approved: 'accepted' })
+    setUserData({ ...state, approved: 'accepted' })
   }
   const handleDeclineUser = () => {
     updateUser({ ...modalUser, approved: 'declined' })
     setState({ ...state, approved: 'declined' })
+    setUserData({ ...state, approved: 'declined' })
   }
   const handleRemove = () => {
     removeUser(id)
@@ -94,6 +100,7 @@ export const ModalUserEdit = ({
               style={{
                 fontSize: '30px',
                 color: 'orange',
+                marginLeft: '5px',
                 display: `${approved === 'accepted' ? 'none' : 'block'}`,
               }}
             />
@@ -101,6 +108,7 @@ export const ModalUserEdit = ({
               style={{
                 fontSize: '30px',
                 color: 'red',
+                marginLeft: '5px',
                 display: `${approved === 'declined' ? 'none' : 'block'}`,
               }}
               onClick={handleDeclineUser}
@@ -110,6 +118,8 @@ export const ModalUserEdit = ({
                 onClick={showConfirmRemove}
                 style={{
                   fontSize: '30px',
+                  color: '#595959',
+                  marginLeft: '5px',
                 }}
               />
             </div>

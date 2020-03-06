@@ -1,7 +1,6 @@
 import api from '../API'
 import {
   signInAsCompanyRequest,
-  signInAsCompanySuccess,
   signInAsCompanyFailure,
   signInAsUserSuccess,
 } from '../action'
