@@ -9,6 +9,7 @@ import {
   DeleteFilled,
   ClockCircleOutlined,
 } from '@ant-design/icons'
+import logo from '../../assets/images/logo.svg'
 import { Layout, Menu, Icon } from 'antd'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
@@ -178,7 +179,9 @@ function AdminBoard({
           style={{ minHeight: '100vh' }}
           collapsible
           collapsed={state.collapsed}>
-          <Typography className="typography_text">Deliver.me</Typography>
+         <div className="logo_admin">
+            <img src={logo} style={{width:"90%"}} alt="deliver.me" />
+          </div>
           <Menu
             onSelect={onMenuSelect}
             theme="dark"
@@ -214,7 +217,9 @@ function AdminBoard({
               onChange={handleSearch}
               placeholder="Search"
             />
-            <Typography className="typography_header"></Typography>
+            <Typography className="typography_header">
+              Welcome to dashboard
+            </Typography>
             <CountRequestInfo
               data={menuItem === 'users' ? usersData : companiesData}
             />
