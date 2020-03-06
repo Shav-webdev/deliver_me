@@ -9,10 +9,11 @@
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
 }
-.logo {
-  width: 90% !important;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+.logo_admin {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  height: 60px;
 }
 .ant-table-wrapper {
   overflow-x: auto !important;
@@ -23,6 +24,9 @@
   text-align: center;
   white-space: nowrap;
   padding: 10px 10px;
+}
+.ant-table-tbody > tr:hover{
+  cursor: pointer;
 }
 .typography_text {
   color: #fff;
@@ -44,7 +48,6 @@
 .trigger {
   color: #fff;
 }
-
 
 .search_admin {
   width: 35%;
