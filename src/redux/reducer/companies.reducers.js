@@ -66,7 +66,7 @@ export default function companiesReducer(state = initialState, action) {
       )
       return {
         ...state,
-        editData: [...lastData, action.payload],
+        companiesData: [...lastData, action.payload],
       }
     case 'EDIT_COMPANY_FAILURE':
       return {
