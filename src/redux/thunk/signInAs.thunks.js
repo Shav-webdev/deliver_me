@@ -41,5 +41,6 @@ export const signInAs = data => async dispatch => {
     }
   } catch (error) {
     dispatch(signInAsCompanyFailure())
+    errorMessage('')
   }
 }
