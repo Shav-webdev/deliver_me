@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
+import {socket} from '../../App'
 import axios from 'axios'
 import {
   Form,
@@ -211,7 +212,6 @@ function RegisterAsCourier() {
       signUp(url, data)
       setLoading(true)
       setTimeout(() => {
-        console.log(data)
         history.push('/')
       }, 1000)
     }
