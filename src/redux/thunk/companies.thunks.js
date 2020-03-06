@@ -59,7 +59,7 @@ export const createCompanyThunk = data => async dispatch => {
       }
     }
   } catch (error) {
-    throw new Error(error)
+    errorMessage('Something went wrong, try later')
   }
 }
 
@@ -77,7 +77,6 @@ export const createOrderThunk = data => async dispatch => {
   try {
     dispatch(createOrderRequest())
     const response = await api.createOrder.post(data)
-    console.log('createOrderThunk', response)
     if (response.status > 300) {
       errorMessage('Something went wrong, try again')
       throw new Error('Something went wrong, try again')
@@ -85,7 +84,6 @@ export const createOrderThunk = data => async dispatch => {
     dispatch(createOrderSuccsess(response.data))
     successMessage('Order successfully created !')
   } catch (error) {
-    console.log(error)
     dispatch(createOrderFailure())
   }
 }
@@ -104,25 +102,20 @@ export const getCompanyByIdThunk = id => async dispatch => {
     dispatch(signInAsCompanySuccess(response.data))
     successMessage(`Dear ${response.data.name}, nice to see you again`)
   } catch (error) {
-    console.log(error)
     dispatch(signInAsCompanyFailure())
   }
 }
 
 export const getCompanyAllOrdersThunk = id => async dispatch => {
-  console.log(id)
   try {
     dispatch(getCompanyAllOrdersRequest())
     const response = await api.getCompanyOrders(id).get(id)
-    console.log('getCompanyAllOrdersThunk', response)
     if (response.status > 300) {
       throw new Error('Something went wrong, try again')
     }
-    console.log(response.data)
     dispatch(getCompanyAllOrdersSuccess(response.data))
     successMessage('Orders loaded...')
   } catch (error) {
-    console.log(error)
     dispatch(getCompanyAllOrdersFailure())
   }
 }
