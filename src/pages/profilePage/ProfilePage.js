@@ -408,7 +408,7 @@ const ProfilePage = ({
           trigger={null}
           collapsible
           collapsed={collapsed}>
-          <div className="logo">
+          <div className="company_logo">
             <img src={logo} alt="deliver.me" />
           </div>
           <Menu
