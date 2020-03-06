@@ -7,3 +7,17 @@
 .input_money {
   width: 200px;
 }
+.ant-modal-title{
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+/* .anticon{
+  color: white;
+} */
+.ant-modal-close{
+  color: white;
+}
+.ant-modal-header{
+  background:  linear-gradient(to right,rgb(36, 77, 125), rgb(203, 82, 82));
+}
