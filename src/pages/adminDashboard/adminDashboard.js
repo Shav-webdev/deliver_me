@@ -59,14 +59,24 @@ function AdminBoard({
   const [modalUser, setModalUser] = useState({})
   const [modalCompany, setModalCompany] = useState({})
 
+  const [userData, setUserData] = useState(usersData)
   useEffect(() => {
     getUsers()
     getCompanies()
+<<<<<<< HEAD
     socket.on('update_user_list', (data) => {
       console.log('dataIDEffect-----------', data)
       data.id ? usersData.push(data) : usersData
       console.log('usersDaataEffect++++++++++', usersData)
     })
+=======
+    // socket.on('update_user_list', (data ) => {
+    //   console.log('dataIDEffect', data)
+    //   data.id ? usersData.push(data) : usersData
+    //   console.log('usersDaataEffect', usersData)
+    // })
+    setUserData(usersData)
+>>>>>>> c56ae79a3bffc6f94364d5809d68578dda9cdad6
   }, [])
 
 
@@ -138,6 +148,7 @@ function AdminBoard({
   }
   const handleRemoveCompany = id => {
     removeCompany(id)
+    set
   }
   const handleAcceptUser = user => {
     updateUser({ ...user, approved: 'accepted' })
@@ -156,7 +167,11 @@ function AdminBoard({
   const sorter = key => {
     usersData.sort((a, b) => a.key - b.key)
   }
-
+  let lastIndex = 0
+  const updateIndex = () => {
+    lastIndex++
+    return lastIndex
+  }
   return (
     <div>
       <ModalUserEdit
@@ -166,6 +181,8 @@ function AdminBoard({
         modalUser={modalUser}
         updateUser={updateUser}
         removeUser={removeUser}
+        setUserData={setUserData}
+        usersData={usersData}
       />
       <ModalCompanyEdit
         handleCancel={handleCancel}
@@ -182,7 +199,11 @@ function AdminBoard({
           collapsible
           collapsed={state.collapsed}>
           <div className="logo_admin">
+<<<<<<< HEAD
             <img src={logo} style={{ width: "90%" }} alt="deliver.me" />
+=======
+            <img src={logo} style={{ width: '90%' }} alt="deliver.me" />
+>>>>>>> c56ae79a3bffc6f94364d5809d68578dda9cdad6
           </div>
           <Menu
             onSelect={onMenuSelect}
@@ -190,7 +211,7 @@ function AdminBoard({
             mode="inline"
             key
             defaultSelectedKeys={['users']}
-            inlineCollapsed={state.collapsed}>
+            collapsed={state.collapsed.toString()}>
             <Menu.Item key="users">
               <Icon type="team" />
               <span>Users</span>
@@ -234,6 +255,7 @@ function AdminBoard({
               minHeight: 280,
             }}>
             {menuItem === 'users' &&
+<<<<<<< HEAD
               // socket.on('update_user_list', ({ data }) => {
               //   console.log('dataID', data)
               //   data.id ? usersData.push(data) : usersData
@@ -325,6 +347,115 @@ function AdminBoard({
                             }
                           />
                           {/* <Column
+=======
+              socket.on('update_user_list', data => {
+                // console.log('dataID', data)
+                //setUserData({...usersData,data})
+                usersData.filter(el => el.id != data.id)
+                if (data.id) {
+                  usersData.push(data)
+                }
+
+                //console.log('usersDaata', usersData)
+                setUserData(usersData)
+                //console.log('userRRRRRDaata', userData)
+              }) &&
+              (gettingUsers ? (
+                <Spinner />
+              ) : (
+                //console.log(filtered),
+                ((filtered = filterByValue(
+                  userData.length > 1 ? userData : usersData,
+                  state.search
+                )),
+                (filtered.sort(
+                  (a, b) =>
+                    new Date(a.createdTime).getTime() -
+                    new Date(b.createdTime).getTime()
+                ),
+                (
+                  <Table
+                    rowKey={record => record.id}
+                    onRow={r => ({
+                      onClick: () => showModalUser(r),
+                    })}
+                    pagination={{
+                      pageSize: 9,
+                    }}
+                    dataSource={filtered}>
+                    <Column
+                      key="name"
+                      title="Name"
+                      render={(text, record) => (
+                        <span>
+                          <Typography onClick={() => showModalUser(record)}>
+                            {record.name}
+                          </Typography>
+                        </span>
+                      )}
+                    />
+                    <Column
+                      title="Last Name"
+                      key="lastName"
+                      dataIndex="lastName"
+                    />
+                    <Column title="Phone" dataIndex="phone" key="phone" />
+                    <Column title="Email" dataIndex="email" key="email" />
+                    <Column title="Address" dataIndex="address" key="address" />
+                    <Column
+                      title="Photo"
+                      key="passportURL"
+                      render={(text, record) => (
+                        <Popover
+                          placement="leftBottom"
+                          content={
+                            <img
+                              style={{ height: '300px' }}
+                              src={record.passportURL}></img>
+                          }
+                          title={record.name + ' ' + record.lastName}>
+                          <img
+                            style={{ height: '20px' }}
+                            src={record.passportURL}></img>
+                        </Popover>
+                      )}
+                    />
+                    <Column
+                      title="Status"
+                      key="approved"
+                      render={(text, record) =>
+                        record.approved === 'accepted' ? (
+                          <span>
+                            <CheckCircleFilled
+                              style={{
+                                color: 'orange',
+                                marginRight: '5px',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : record.approved === 'declined' ? (
+                          <span>
+                            <CloseCircleFilled
+                              style={{
+                                color: 'red',
+                                marginRight: '5px',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : (
+                          <span>
+                            <ClockCircleOutlined
+                              style={{ color: '#595959', marginRight: '5px' }}
+                            />{' '}
+                            {record.approved}
+                          </span>
+                        )
+                      }
+                    />
+                    {/* <Column
+>>>>>>> c56ae79a3bffc6f94364d5809d68578dda9cdad6
                       title=""
                       key="accept"
                       render={(text, record) => (
@@ -390,6 +521,7 @@ function AdminBoard({
               (filtered.sort(
                 (a, b) => new Date(a.createdTime) - new Date(b.createdTime)
               ),
+<<<<<<< HEAD
                 (console.log(filtered),
                   (
                     <Table
@@ -411,10 +543,34 @@ function AdminBoard({
                       <Column title="Email" dataIndex="email" key="email" />
                       <Column title="Address" dataIndex="address" key="address" />
                       {/* <Column
+=======
+              (console.log(filtered),
+              (
+                <Table
+                  rowKey={record => record.id}
+                  onRow={r => ({
+                    onClick: () => showModalCompany(r),
+                  })}
+                  pagination={{
+                    pageSize: 9,
+                  }}
+                  dataSource={filtered}>
+                  <Column title="Name" dataIndex="name" key="name" />
+                  <Column
+                    title="TaxNumber"
+                    dataIndex="taxNumber"
+                    key="taxNumber"
+                  />
+                  <Column title="Phone" dataIndex="phone" key="phone" />
+                  <Column title="Email" dataIndex="email" key="email" />
+                  <Column title="Address" dataIndex="address" key="address" />
+                  {/* <Column
+>>>>>>> c56ae79a3bffc6f94364d5809d68578dda9cdad6
                     title="Activity"
                     dataIndex="activity"
                     key="activity"
                   /> */}
+<<<<<<< HEAD
                       <Column
                         title="Amount"
                         key="amount"
@@ -450,6 +606,48 @@ function AdminBoard({
                         }
                       />
                       {/* <Column
+=======
+                  <Column
+                    title="Amount"
+                    key="amount"
+                    render={(text, record) => record.amount}
+                  />
+                  <Column
+                    title="Status"
+                    key="approved"
+                    render={(text, record) =>
+                      record.approved === 'accepted' ? (
+                        <span>
+                          <CheckCircleFilled
+                            style={{
+                              color: 'orange',
+                              marginRight: '5px',
+                            }}
+                          />
+                          {record.approved}
+                        </span>
+                      ) : record.approved === 'declined' ? (
+                        <span>
+                          <CloseCircleFilled
+                            style={{
+                              color: 'red',
+                              marginRight: '5px',
+                            }}
+                          />
+                          {record.approved}
+                        </span>
+                      ) : (
+                        <span>
+                          <ClockCircleOutlined
+                            style={{ color: '#595959', marginRight: '5px' }}
+                          />{' '}
+                          {record.approved}
+                        </span>
+                      )
+                    }
+                  />
+                  {/* <Column
+>>>>>>> c56ae79a3bffc6f94364d5809d68578dda9cdad6
                     style={{ textAlign: 'center' }}
                     title=""
                     key="accept"

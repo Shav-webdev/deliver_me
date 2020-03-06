@@ -35,7 +35,7 @@ export const ModalCompanyEdit = ({
     amount,
     approved,
     addMoney,
-    activity
+    activity,
   } = state
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const ModalCompanyEdit = ({
   return (
     <div>
       <Modal
-        title='EDIT COMPANY'
+        title="EDIT COMPANY"
         visible={visible}
         okText="Update"
         onOk={handleSubmit}
@@ -103,6 +103,7 @@ export const ModalCompanyEdit = ({
               style={{
                 fontSize: '30px',
                 color: 'orange',
+                marginLeft:"5px",
                 display: `${approved === 'accepted' ? 'none' : 'block'}`,
               }}
             />
@@ -110,6 +111,7 @@ export const ModalCompanyEdit = ({
               style={{
                 fontSize: '30px',
                 color: 'red',
+                marginLeft: '5px',
                 display: `${approved === 'declined' ? 'none' : 'block'}`,
               }}
               onClick={handleDeclineCompany}
@@ -118,6 +120,8 @@ export const ModalCompanyEdit = ({
               onClick={showConfirmRemove}
               style={{
                 fontSize: '30px',
+                color: '#595959',
+                marginLeft: '5px',
               }}
             />
           </div>
