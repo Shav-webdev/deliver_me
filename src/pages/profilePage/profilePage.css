@@ -120,9 +120,9 @@
 
 .company_profile_section_wrapper {
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-top: 2rem;
 }
 
@@ -153,4 +153,32 @@
 .company_info_form .ant-form-item-control,
 .company_info_form .ant-form-item-control .ant-form-explain {
   width: 250px;
+}
+
+.company_edit_info_profile {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.company_edit_info_profile button {
+  margin: 0 1rem;
+}
+
+.company_change_avatar_section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.company_change_avatar_section div {
+  margin: 0 1rem 1.5rem;
+}
+
+.company_upload_avatar_wrapper {
+  text-align: center;
+  height: 50px;
 }
