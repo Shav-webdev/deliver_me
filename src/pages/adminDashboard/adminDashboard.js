@@ -59,14 +59,16 @@ function AdminBoard({
   const [modalUser, setModalUser] = useState({})
   const [modalCompany, setModalCompany] = useState({})
 
+  const [userData, setUserData] = useState(usersData)
   useEffect(() => {
     getUsers()
     getCompanies()
-    socket.on('update_user_list', ({ data }) => {
-      console.log('dataIDEffect', data)
-      data.id ? usersData.push(data) : usersData
-      console.log('usersDaataEffect', usersData)
-    })
+    // socket.on('update_user_list', (data ) => {
+    //   console.log('dataIDEffect', data)
+    //   data.id ? usersData.push(data) : usersData
+    //   console.log('usersDaataEffect', usersData)
+    // })
+    setUserData(usersData)
   }, [])
 
   const filterByValue = (array, value) => {
@@ -136,6 +138,7 @@ function AdminBoard({
   }
   const handleRemoveCompany = id => {
     removeCompany(id)
+    set
   }
   const handleAcceptUser = user => {
     updateUser({ ...user, approved: 'accepted' })
@@ -154,7 +157,11 @@ function AdminBoard({
   const sorter = key => {
     usersData.sort((a, b) => a.key - b.key)
   }
-
+  let lastIndex = 0
+  const updateIndex = () => {
+    lastIndex++
+    return lastIndex
+  }
   return (
     <div>
       <ModalUserEdit
@@ -164,6 +171,8 @@ function AdminBoard({
         modalUser={modalUser}
         updateUser={updateUser}
         removeUser={removeUser}
+        setUserData={setUserData}
+        usersData={usersData}
       />
       <ModalCompanyEdit
         handleCancel={handleCancel}
@@ -179,8 +188,8 @@ function AdminBoard({
           style={{ minHeight: '100vh' }}
           collapsible
           collapsed={state.collapsed}>
-         <div className="logo_admin">
-            <img src={logo} style={{width:"90%"}} alt="deliver.me" />
+          <div className="logo_admin">
+            <img src={logo} style={{ width: '90%' }} alt="deliver.me" />
           </div>
           <Menu
             onSelect={onMenuSelect}
@@ -188,7 +197,7 @@ function AdminBoard({
             mode="inline"
             key
             defaultSelectedKeys={['users']}
-            inlineCollapsed={state.collapsed}>
+            collapsed={state.collapsed.toString()}>
             <Menu.Item key="users">
               <Icon type="team" />
               <span>Users</span>
@@ -232,16 +241,26 @@ function AdminBoard({
               minHeight: 280,
             }}>
             {menuItem === 'users' &&
-              socket.on('update_user_list', ({ data }) => {
-                console.log('dataID', data)
-                data.id ? usersData.push(data) : usersData
-                console.log('usersDaata', usersData)
+              socket.on('update_user_list', data => {
+                // console.log('dataID', data)
+                //setUserData({...usersData,data})
+                usersData.filter(el => el.id != data.id)
+                if (data.id) {
+                  usersData.push(data)
+                }
+
+                //console.log('usersDaata', usersData)
+                setUserData(usersData)
+                //console.log('userRRRRRDaata', userData)
               }) &&
               (gettingUsers ? (
                 <Spinner />
               ) : (
-                (console.log(filtered),
-                (filtered = filterByValue(usersData, state.search)),
+                //console.log(filtered),
+                ((filtered = filterByValue(
+                  userData.length > 1 ? userData : usersData,
+                  state.search
+                )),
                 (filtered.sort(
                   (a, b) =>
                     new Date(a.createdTime).getTime() -
@@ -249,7 +268,7 @@ function AdminBoard({
                 ),
                 (
                   <Table
-                    rowKey="users"
+                    rowKey={record => record.id}
                     onRow={r => ({
                       onClick: () => showModalUser(r),
                     })}
@@ -258,6 +277,7 @@ function AdminBoard({
                     }}
                     dataSource={filtered}>
                     <Column
+                      key="name"
                       title="Name"
                       render={(text, record) => (
                         <span>
@@ -302,6 +322,7 @@ function AdminBoard({
                             <CheckCircleFilled
                               style={{
                                 color: 'orange',
+                                marginRight: '5px',
                               }}
                             />
                             {record.approved}
@@ -311,13 +332,17 @@ function AdminBoard({
                             <CloseCircleFilled
                               style={{
                                 color: 'red',
+                                marginRight: '5px',
                               }}
                             />
                             {record.approved}
                           </span>
                         ) : (
                           <span>
-                            <ClockCircleOutlined /> {record.approved}
+                            <ClockCircleOutlined
+                              style={{ color: '#595959', marginRight: '5px' }}
+                            />{' '}
+                            {record.approved}
                           </span>
                         )
                       }
@@ -391,7 +416,7 @@ function AdminBoard({
               (console.log(filtered),
               (
                 <Table
-                  rowKey="companies"
+                  rowKey={record => record.id}
                   onRow={r => ({
                     onClick: () => showModalCompany(r),
                   })}
@@ -427,6 +452,7 @@ function AdminBoard({
                           <CheckCircleFilled
                             style={{
                               color: 'orange',
+                              marginRight: '5px',
                             }}
                           />
                           {record.approved}
@@ -436,13 +462,17 @@ function AdminBoard({
                           <CloseCircleFilled
                             style={{
                               color: 'red',
+                              marginRight: '5px',
                             }}
                           />
                           {record.approved}
                         </span>
                       ) : (
                         <span>
-                          <ClockCircleOutlined /> {record.approved}
+                          <ClockCircleOutlined
+                            style={{ color: '#595959', marginRight: '5px' }}
+                          />{' '}
+                          {record.approved}
                         </span>
                       )
                     }
