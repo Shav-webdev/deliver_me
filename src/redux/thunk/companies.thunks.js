@@ -38,7 +38,9 @@ export const getCompaniesThunk = () => async dispatch => {
 export const createCompanyThunk = data => async dispatch => {
   try {
     if (data.id) {
-      const response = await api.deleteUpdateCompany(data.id).put({ ...data })
+      const response = await api.deleteUpdateCompany(data.id).put({
+        ...data
+      })
       if (response.status !== 201) {
         errorMessage('Cannot update Company')
         throw new Error('Cannot update Company')
@@ -90,6 +92,8 @@ export const createOrderThunk = data => async dispatch => {
 
 export const getCompanyByIdThunk = id => async dispatch => {
   try {
+    console.log(id);
+
     dispatch(signInAsCompanyRequest())
     const response = await api.getCompanyById(id).get(id)
 
