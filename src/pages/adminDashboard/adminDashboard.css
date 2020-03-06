@@ -30,17 +30,31 @@
   margin: 10px auto;
 }
 .typography_header {
-  font-size: 30px;
+  font-size: 5vh;
   text-align: center;
-  margin-bottom: 20px;
+  color: #fff;
 }
 .header_welcome {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
+  background: linear-gradient(to right, rgb(36, 77, 125), rgb(203, 82, 82));
   padding: 0;
 }
 .trigger {
-  font-size: 20px;
+  color: #fff;
+}
+
+
+.search_admin {
+  width: 35%;
+}
+.ant-layout-sider-children {
+  background: linear-gradient(rgb(36, 77, 125), rgb(203, 82, 82));
+}
+.ant-menu-dark.ant-menu-inline,
+.ant-menu-dark.ant-menu-vertical,
+.ant-menu-dark.ant-menu-vertical-left,
+.ant-menu-dark.ant-menu-vertical-right {
+  background: #ffffff00;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Typography, Popover } from 'antd'
+import { Table, Typography, Popover, Input } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -7,11 +7,13 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   DeleteFilled,
+  ClockCircleOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, Icon } from 'antd'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import './adminDashboard.css'
+const { Search } = Input
 import {
   getUsersThunk,
   getCompaniesThunk,
@@ -21,6 +23,7 @@ import {
   createCompanyThunk,
 } from '../../redux/thunk'
 import history from '../../routes/history'
+import { socket } from '../../App'
 import { errorMessage } from '../registration/services/services'
 import { ModalUserEdit } from '../../components/ModalUserEdit'
 import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
@@ -31,7 +34,9 @@ const { Column } = Table
 const defaultState = {
   collapsed: false,
   isUpdated: false,
+  search: '',
 }
+let filtered = []
 function AdminBoard({
   users,
   companies,
@@ -56,7 +61,29 @@ function AdminBoard({
   useEffect(() => {
     getUsers()
     getCompanies()
+    socket.on('update_user_list', ({ data }) => {
+      console.log('dataIDEffect', data)
+      data.id ? usersData.push(data) : usersData
+      console.log('usersDaataEffect', usersData)
+    })
   }, [])
+
+  const filterByValue = (array, value) => {
+    return array.filter(
+      data =>
+        JSON.stringify(data)
+          .toLowerCase()
+          .indexOf(value.toLowerCase()) !== -1
+    )
+  }
+  const handleSearch = () => {
+    setState({
+      ...state,
+      search: event.target.value,
+    })
+
+    //console.log(filterByValue(usersData,state.search))
+  }
 
   const showModalUser = user => {
     setModalState({
@@ -64,6 +91,7 @@ function AdminBoard({
       visibleUser: true,
     })
     setModalUser(user)
+    console.log(modalUser)
   }
   const showModalCompany = company => {
     setModalState({
@@ -91,7 +119,7 @@ function AdminBoard({
     if (e.key !== 'signOut') {
       setMenuItem(e.key)
     } else {
-      history.push('./admin')
+      history.push('/admin')
     }
   }
 
@@ -121,6 +149,11 @@ function AdminBoard({
   const handleDeclineCompany = company => {
     updateCompany({ ...company, approved: 'declined' })
   }
+
+  const sorter = key => {
+    usersData.sort((a, b) => a.key - b.key)
+  }
+
   return (
     <div>
       <ModalUserEdit
@@ -129,6 +162,7 @@ function AdminBoard({
         visible={modalState.visibleUser}
         modalUser={modalUser}
         updateUser={updateUser}
+        removeUser={removeUser}
       />
       <ModalCompanyEdit
         handleCancel={handleCancel}
@@ -136,8 +170,9 @@ function AdminBoard({
         visible={modalState.visibleCompany}
         modalCompany={modalCompany}
         updateCompany={updateCompany}
+        removeCompany={removeCompany}
       />
-      <Layout>
+      <Layout style={{ minWidth: '950px' }}>
         <Sider
           trigger={null}
           style={{ minHeight: '100vh' }}
@@ -172,9 +207,16 @@ function AdminBoard({
             ) : (
               <MenuFoldOutlined onClick={toggle} className="trigger" />
             )}
+            <Search
+              className="search_admin"
+              name="search"
+              value={state.search}
+              onChange={handleSearch}
+              placeholder="Search"
+            />
             <Typography className="typography_header">
               Welcome to dashboard
-            </Typography>
+              </Typography>
             <CountRequestInfo
               data={menuItem === 'users' ? usersData : companiesData}
             />
@@ -187,54 +229,229 @@ function AdminBoard({
               minHeight: 280,
             }}>
             {menuItem === 'users' &&
+              socket.on('update_user_list', ({ data }) => {
+                console.log('dataID', data)
+                data.id ? usersData.push(data) : usersData
+                console.log('usersDaata', usersData)
+              }) &&
               (gettingUsers ? (
                 <Spinner />
               ) : (
-                // usersData.sort((a, b) => a.approved - b.approved),
+                (console.log(filtered),
+                (filtered = filterByValue(usersData, state.search)),
+                (filtered.sort(
+                  (a, b) =>
+                    new Date(a.createdTime).getTime() -
+                    new Date(b.createdTime).getTime()
+                ),
+                (
+                  <Table
+                    rowKey="users"
+                    onRow={r => ({
+                      onClick: () => showModalUser(r),
+                    })}
+                    pagination={{
+                      pageSize: 9,
+                    }}
+                    dataSource={filtered}>
+                    <Column
+                      title="Name"
+                      render={(text, record) => (
+                        <span>
+                          <Typography onClick={() => showModalUser(record)}>
+                            {record.name}
+                          </Typography>
+                        </span>
+                      )}
+                    />
+                    <Column
+                      title="Last Name"
+                      key="lastName"
+                      dataIndex="lastName"
+                    />
+                    <Column title="Phone" dataIndex="phone" key="phone" />
+                    <Column title="Email" dataIndex="email" key="email" />
+                    <Column title="Address" dataIndex="address" key="address" />
+                    <Column
+                      title="Photo"
+                      key="passportURL"
+                      render={(text, record) => (
+                        <Popover
+                          placement="leftBottom"
+                          content={
+                            <img
+                              style={{ height: '300px' }}
+                              src={record.passportURL}></img>
+                          }
+                          title={record.name + ' ' + record.lastName}>
+                          <img
+                            style={{ height: '20px' }}
+                            src={record.passportURL}></img>
+                        </Popover>
+                      )}
+                    />
+                    <Column
+                      title="Status"
+                      key="approved"
+                      render={(text, record) =>
+                        record.approved === 'accepted' ? (
+                          <span>
+                            <CheckCircleFilled
+                              style={{
+                                color: 'orange',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : record.approved === 'declined' ? (
+                          <span>
+                            <CloseCircleFilled
+                              style={{
+                                color: 'red',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : (
+                          <span>
+                            <ClockCircleOutlined /> {record.approved}
+                          </span>
+                        )
+                      }
+                    />
+                    {/* <Column
+                      title=""
+                      key="accept"
+                      render={(text, record) => (
+                        <span>
+                          <CheckCircleFilled
+                            onClick={() => handleAcceptUser(record)}
+                            style={{
+                              color: 'orange',
+                              display: `${
+                                record.approved === 'accepted'
+                                  ? 'none'
+                                  : 'block'
+                              }`,
+                            }}
+                          />
+                        </span>
+                      )}
+                    />
+                    <Column
+                      title=""
+                      key="decline"
+                      render={(text, record) => (
+                        <span>
+                          <CloseCircleFilled
+                            style={{
+                              color: 'red',
+                              display: `${
+                                record.approved === 'declined'
+                                  ? 'none'
+                                  : 'block'
+                              }`,
+                            }}
+                            onClick={() => handleDeclineUser(record)}
+                          />
+                        </span>
+                      )}
+                    />
+                    <Column
+                      title=""
+                      key="edit"
+                      render={(text, record) => (
+                        <span>
+                          <EditFilled onClick={() => showModalUser(record)} />
+                        </span>
+                      )}
+                    />
+                    <Column
+                      title=""
+                      key="delete"
+                      render={(text, record) => (
+                        <span>
+                          <DeleteFilled
+                            onClick={() => handleRemoveUser(record.id)}
+                          />
+                        </span>
+                      )}
+                    /> */}
+                  </Table>
+                )))
+              ))}
+            {menuItem === 'companies' &&
+              (filtered = filterByValue(companiesData, state.search)) &&
+              (filtered.sort(
+                (a, b) => new Date(a.createdTime) - new Date(b.createdTime)
+              ),
+              (console.log(filtered),
+              (
                 <Table
+                  rowKey="companies"
+                  onRow={r => ({
+                    onClick: () => showModalCompany(r),
+                  })}
                   pagination={{
                     pageSize: 9,
                   }}
-                  dataSource={usersData}>
+                  dataSource={filtered}>
                   <Column title="Name" dataIndex="name" key="name" />
                   <Column
-                    title="Last Name"
-                    dataIndex="lastName"
-                    key="lastName"
+                    title="TaxNumber"
+                    dataIndex="taxNumber"
+                    key="taxNumber"
                   />
                   <Column title="Phone" dataIndex="phone" key="phone" />
                   <Column title="Email" dataIndex="email" key="email" />
                   <Column title="Address" dataIndex="address" key="address" />
+                  {/* <Column
+                    title="Activity"
+                    dataIndex="activity"
+                    key="activity"
+                  /> */}
                   <Column
-                    title="Photo"
-                    key="passportURL"
-                    render={(text, record) => (
-                      <Popover
-                        placement="leftBottom"
-                        content={
-                          <img
-                            style={{ height: '300px' }}
-                            src={record.passportURL}></img>
-                        }
-                        title={record.name + ' ' + record.lastName}>
-                        <img
-                          style={{ height: '20px' }}
-                          src={record.passportURL}></img>
-                      </Popover>
-                    )}
+                    title="Amount"
+                    key="amount"
+                    render={(text, record) => record.amount}
                   />
                   <Column
                     title="Status"
                     key="approved"
-                    render={(text, record) => record.approved}
+                    render={(text, record) =>
+                      record.approved === 'accepted' ? (
+                        <span>
+                          <CheckCircleFilled
+                            style={{
+                              color: 'orange',
+                            }}
+                          />
+                          {record.approved}
+                        </span>
+                      ) : record.approved === 'declined' ? (
+                        <span>
+                          <CloseCircleFilled
+                            style={{
+                              color: 'red',
+                            }}
+                          />
+                          {record.approved}
+                        </span>
+                      ) : (
+                        <span>
+                          <ClockCircleOutlined /> {record.approved}
+                        </span>
+                      )
+                    }
                   />
-                  <Column
+                  {/* <Column
+                    style={{ textAlign: 'center' }}
                     title=""
                     key="accept"
                     render={(text, record) => (
                       <span>
                         <CheckCircleFilled
-                          onClick={() => handleAcceptUser(record)}
+                          onClick={() => handleAcceptCompany(record)}
                           style={{
                             color: 'orange',
                             display: `${
@@ -257,7 +474,7 @@ function AdminBoard({
                               record.approved === 'declined' ? 'none' : 'block'
                             }`,
                           }}
-                          onClick={() => handleDeclineUser(record)}
+                          onClick={() => handleDeclineCompany(record)}
                         />
                       </span>
                     )}
@@ -267,7 +484,7 @@ function AdminBoard({
                     key="edit"
                     render={(text, record) => (
                       <span>
-                        <EditFilled onClick={() => showModalUser(record)} />
+                        <EditFilled onClick={() => showModalCompany(record)} />
                       </span>
                     )}
                   />
@@ -277,97 +494,13 @@ function AdminBoard({
                     render={(text, record) => (
                       <span>
                         <DeleteFilled
-                          onClick={() => handleRemoveUser(record.id)}
+                          onClick={() => handleRemoveCompany(record.id)}
                         />
                       </span>
                     )}
-                  />
+                  /> */}
                 </Table>
-              ))}
-            {menuItem === 'companies' && (
-              // (companiesData.sort((a, b) => a.approved - b.approved),
-              <Table
-                pagination={{
-                  pageSize: 9,
-                }}
-                dataSource={companiesData}>
-                <Column title="Name" dataIndex="name" key="name" />
-                <Column
-                  title="TaxNumber"
-                  dataIndex="taxNumber"
-                  key="taxNumber"
-                />
-                <Column title="Phone" dataIndex="phone" key="phone" />
-                <Column title="Email" dataIndex="email" key="email" />
-                <Column title="Address" dataIndex="address" key="address" />
-                <Column title="Activity" dataIndex="activity" key="activity" />
-                <Column
-                  title="Amount"
-                  key="amount"
-                  render={(text, record) => record.amount}
-                />
-                <Column
-                  title="Status"
-                  key="approved"
-                  render={(text, record) => record.approved}
-                />
-                <Column
-                  style={{ textAlign: 'center' }}
-                  title=""
-                  key="accept"
-                  render={(text, record) => (
-                    <span>
-                      <CheckCircleFilled
-                        onClick={() => handleAcceptCompany(record)}
-                        style={{
-                          color: 'orange',
-                          display: `${
-                            record.approved === 'accepted' ? 'none' : 'block'
-                          }`,
-                        }}
-                      />
-                    </span>
-                  )}
-                />
-                <Column
-                  title=""
-                  key="decline"
-                  render={(text, record) => (
-                    <span>
-                      <CloseCircleFilled
-                        style={{
-                          color: 'red',
-                          display: `${
-                            record.approved === 'declined' ? 'none' : 'block'
-                          }`,
-                        }}
-                        onClick={() => handleDeclineCompany(record)}
-                      />
-                    </span>
-                  )}
-                />
-                <Column
-                  title=""
-                  key="edit"
-                  render={(text, record) => (
-                    <span>
-                      <EditFilled onClick={() => showModalCompany(record)} />
-                    </span>
-                  )}
-                />
-                <Column
-                  title=""
-                  key="delete"
-                  render={(text, record) => (
-                    <span>
-                      <DeleteFilled
-                        onClick={() => handleRemoveCompany(record.id)}
-                      />
-                    </span>
-                  )}
-                />
-              </Table>
-            )}
+              )))}
           </Content>
         </Layout>
       </Layout>
