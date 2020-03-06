@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Typography, Popover, Input } from 'antd'
+import { getCookie } from '../registration/services/cookies'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -61,14 +62,14 @@ function AdminBoard({
 
   const [userData, setUserData] = useState(usersData)
   useEffect(() => {
-    getUsers()
-    getCompanies()
-    // socket.on('update_user_list', (data ) => {
-    //   console.log('dataIDEffect', data)
-    //   data.id ? usersData.push(data) : usersData
-    //   console.log('usersDaataEffect', usersData)
-    // })
-    setUserData(usersData)
+    if (!getCookie('token')) {
+      history.push('/admin')
+    }else{
+      getUsers()
+      getCompanies()
+      setUserData(usersData)
+    }
+    
   }, [])
 
   const filterByValue = (array, value) => {
