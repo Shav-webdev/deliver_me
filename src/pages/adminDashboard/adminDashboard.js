@@ -214,7 +214,9 @@ function AdminBoard({
               onChange={handleSearch}
               placeholder="Search"
             />
-            <Typography className="typography_header"></Typography>
+            <Typography className="typography_header">
+              Welcome to dashboard
+              </Typography>
             <CountRequestInfo
               data={menuItem === 'users' ? usersData : companiesData}
             />
