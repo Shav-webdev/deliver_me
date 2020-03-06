@@ -91,7 +91,6 @@ export default function companiesReducer(state = initialState, action) {
         signInLoading: true,
       }
     case SIGN_IN_AS_COMPANY_SUCCESS:
-      console.log('action', action.payload)
       return {
         ...state,
         signInLoading: false,

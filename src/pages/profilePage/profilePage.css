@@ -84,6 +84,16 @@
   padding: 0.5rem 1.5rem;
   border-radius: 5px;
   margin-bottom: 1rem;
+  box-shadow: 1px 2px 4px 0px;
+}
+
+.company_profile_main .orders_list_item:hover {
+  transform: scale(1.03);
+  transition: 0.3s;
+  border: 1px solid #ccc;
+  background-color: #fcffff;
+  box-shadow: 1px 2px 4px 0px;
+  cursor: pointer;
 }
 
 .company_profile_header.site-layout-background {
@@ -110,9 +120,9 @@
 
 .company_profile_section_wrapper {
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-top: 2rem;
 }
 
@@ -136,7 +146,39 @@
   width: 100%;
 }
 
+.header_btns_wrapper .ant-avatar.ant-avatar-image:hover {
+  cursor: pointer;
+}
+
 .company_info_form .ant-form-item-control,
 .company_info_form .ant-form-item-control .ant-form-explain {
   width: 250px;
+}
+
+.company_edit_info_profile {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.company_edit_info_profile button {
+  margin: 0 1rem;
+}
+
+.company_change_avatar_section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.company_change_avatar_section div {
+  margin: 0 1rem 1.5rem;
+}
+
+.company_upload_avatar_wrapper {
+  text-align: center;
+  height: 50px;
 }

@@ -30,16 +30,16 @@ const CountRequestInfo = ({ data }) => {
   return (
     <div style={{ marginRight: '20px', marginTop: '10px' }}>
       <Badge className="badge_margin" count={state.users}>
-        <TeamOutlined style={{ fontSize: '25px', color: 'blue' }} />
+        <TeamOutlined style={{ fontSize: '20px', color: 'white' }} />
       </Badge>
       <Badge className="badge_margin" count={state.accepted}>
-        <CheckCircleFilled style={{ fontSize: '25px', color: 'orange' }} />
+        <CheckCircleFilled style={{ fontSize: '20px', color: 'orange' }} />
       </Badge>
       <Badge className="badge_margin" count={state.declined}>
-        <CloseCircleFilled style={{ fontSize: '25px', color: 'red' }} />
+        <CloseCircleFilled style={{ fontSize: '20px', color: 'white' }} />
       </Badge>
       <Badge className="badge_margin" count={state.pending}>
-        <ClockCircleOutlined style={{ color: '#f5222d', fontSize: '25px' }} />
+        <ClockCircleOutlined style={{ color: 'white', fontSize: '20px' }} />
       </Badge>
     </div>
   )

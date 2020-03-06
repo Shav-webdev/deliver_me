@@ -3,6 +3,14 @@ import { Modal } from 'antd'
 import { Input } from 'antd'
 import { Avatar } from 'antd'
 import './modal.userEdit.css'
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  ClockCircleOutlined,
+  DeleteFilled,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
+const { confirm } = Modal
 const defaultState = {
   name: '',
   lastName: '',
@@ -16,15 +24,35 @@ export const ModalUserEdit = ({
   visible,
   modalUser,
   updateUser,
+  removeUser,
+  usersData,
+  setUserData,
 }) => {
   const [state, setState] = useState(modalUser)
-  const { name, lastName, address, phone, avatar } = state
+  const { id, name, lastName, address, phone, avatar, approved } = state
   useEffect(() => {
     setState({
       ...state,
       ...modalUser,
     })
   }, [modalUser])
+
+  const showConfirmRemove = () => {
+    confirm({
+      title: 'Do you want to delete ?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Some descriptions',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        const filt = usersData.filter(el => el.id != id)
+
+        removeUser(id), handleCancel(), setUserData(filt)
+      },
+      onCancel() {},
+    })
+  }
 
   const handleInputChange = ({ target: { name, value } }) => {
     setState({
@@ -37,7 +65,20 @@ export const ModalUserEdit = ({
     handleCancel()
     setState(defaultState)
   }
-
+  const handleAcceptUser = () => {
+    updateUser({ ...modalUser, approved: 'accepted' })
+    setState({ ...state, approved: 'accepted' })
+    setUserData({ ...state, approved: 'accepted' })
+  }
+  const handleDeclineUser = () => {
+    updateUser({ ...modalUser, approved: 'declined' })
+    setState({ ...state, approved: 'declined' })
+    setUserData({ ...state, approved: 'declined' })
+  }
+  const handleRemove = () => {
+    removeUser(id)
+    handleCancel()
+  }
   return (
     <div>
       <Modal
@@ -46,7 +87,45 @@ export const ModalUserEdit = ({
         okText="Update"
         onOk={handleSubmit}
         onCancel={handleCancel}>
-        <Avatar src={avatar} size={64} />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Avatar src={avatar} size={64} />
+          <div style={{ display: 'flex' }}>
+            <CheckCircleFilled
+              onClick={handleAcceptUser}
+              style={{
+                fontSize: '30px',
+                color: 'orange',
+                marginLeft: '5px',
+                display: `${approved === 'accepted' ? 'none' : 'block'}`,
+              }}
+            />
+            <CloseCircleFilled
+              style={{
+                fontSize: '30px',
+                color: 'red',
+                marginLeft: '5px',
+                display: `${approved === 'declined' ? 'none' : 'block'}`,
+              }}
+              onClick={handleDeclineUser}
+            />
+            <div>
+              <DeleteFilled
+                onClick={showConfirmRemove}
+                style={{
+                  fontSize: '30px',
+                  color: '#595959',
+                  marginLeft: '5px',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
         <Input
           addonAfter="Name"
           name="name"
