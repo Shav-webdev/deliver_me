@@ -38,6 +38,8 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
 import allOrdersIcon from '../../assets/images/allOrdersIcon.svg'
 import doneOrdersIcon from '../../assets/images/doneOrdersIcon.svg'
+import pendingOrdersIcon from '../../assets/images/pendingOrdersIcon.svg'
+
 import logo from '../../assets/images/logo.svg'
 import {
   validateEmail,
@@ -401,6 +403,14 @@ const ProfilePage = ({
               </Link>
             </Menu.Item>
             <Menu.Item key="3">
+              <Link to="/profile/company/pending_orders">
+                <span className="menu_item_icon">
+                  <img src={pendingOrdersIcon} alt="All orders" />
+                </span>
+                <span>Pending orders</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="4">
               <Link to="/profile/company/completed_orders">
                 <span className="menu_item_icon">
                   <img src={doneOrdersIcon} alt="Completed orders" />
@@ -524,7 +534,90 @@ const ProfilePage = ({
                 )}
               </List>
             </Route>
-            <Route path="/profile/company/completed_orders"> </Route>
+            <Route path="/profile/company/completed_orders">
+              <List className="company_orders_list_wrapper" style={{}}>
+                {getingCompanyAllOrders ? (
+                  <Spinner />
+                ) : (
+                  companyAllOrders
+                    .filter(el => el.state === 'done')
+                    .map(el => {
+                      return (
+                        <List.Item className="orders_list_item" key={el.id}>
+                          <div>
+                            <p>
+                              <strong>Order :</strong>
+                              {el.order_description}
+                            </p>
+                            <p>
+                              <strong>Money :</strong>
+                              {el.points}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Take address :</strong>
+                              {el.take_address}
+                            </p>
+                            <p>
+                              <strong>Deliver address :</strong>
+                              {el.deliver_address}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Status :</strong>
+                              {el.state}
+                            </p>
+                          </div>
+                        </List.Item>
+                      )
+                    })
+                )}
+              </List>
+            </Route>
+            <Route path="/profile/company/pending_orders">
+              <List className="company_orders_list_wrapper" style={{}}>
+                {getingCompanyAllOrders ? (
+                  <Spinner />
+                ) : (
+                  companyAllOrders
+                    .filter(el => el.state === 'pending')
+                    .map(el => {
+                      return (
+                        <List.Item className="orders_list_item" key={el.id}>
+                          <div>
+                            <p>
+                              <strong>Order :</strong>
+                              {el.order_description}
+                            </p>
+                            <p>
+                              <strong>Money :</strong>
+                              {el.points}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Take address :</strong>
+                              {el.take_address}
+                            </p>
+                            <p>
+                              <strong>Deliver address :</strong>
+                              {el.deliver_address}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Status :</strong>
+                              {el.state}
+                            </p>
+                          </div>
+                        </List.Item>
+                      )
+                    })
+                )}
+              </List>
+            </Route>
             <Route path="/profile/company/profile_info">
               <div className="company_profile_section_wrapper">
                 {signInLoading ? (
