@@ -2,6 +2,7 @@ import {
   GET_COMPANIES_REQUEST,
   GET_COMPANIES_SUCCSESS,
   GET_COMPANIES_FAILURE,
+  ADD_COMPANY_SOCKET_SUCCESS,
   CREATE_COMPANY_REQUEST,
   CREATE_COMPANY_SUCCSESS,
   CREATE_COMPANY_FAILURE,
@@ -20,12 +21,6 @@ import {
   GET_COMPANY_ALL_ORDERS_REQUEST,
   GET_COMPANY_ALL_ORDERS_SUCCESS,
   GET_COMPANY_ALL_ORDERS_FAILURE,
-  // GET_COMPANY_ACTIVE_ORDERS_REQUEST,
-  // GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
-  // GET_COMPANY_ACTIVE_ORDERS_FAILURE,
-  // GET_COMPANY_COMPLETED_ORDERS_REQUEST,
-  // GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
-  // GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 } from './constants'
 
 export const getCompaniesRequest = () => ({
@@ -37,6 +32,11 @@ export const getCompaniesSuccsess = data => ({
 })
 export const getCompaniesFailure = () => ({
   type: GET_COMPANIES_FAILURE,
+})
+
+export const addCompanySocketSuccsess = data => ({
+  type: ADD_COMPANY_SOCKET_SUCCESS,
+  payload: data,
 })
 
 export const createCompanyRequest = () => ({

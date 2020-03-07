@@ -16,6 +16,7 @@ import {
   getCompanyAllOrdersRequest,
   getCompanyAllOrdersSuccess,
   getCompanyAllOrdersFailure,
+  addCompanySocketSuccsess
 } from '../action'
 import {
   errorMessage,
@@ -32,6 +33,14 @@ export const getCompaniesThunk = () => async dispatch => {
     dispatch(getCompaniesSuccsess(response.data))
   } catch (error) {
     dispatch(getCompaniesFailure())
+  }
+}
+
+export const addCompanyBySocketThunk = data => async dispatch => {
+  try {
+    dispatch(addCompanySocketSuccsess(data))
+  } catch (err) {
+    console.log(err)
   }
 }
 

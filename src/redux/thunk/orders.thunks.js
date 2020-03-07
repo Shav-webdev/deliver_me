@@ -69,7 +69,7 @@ export const createCompanyOrderThunk = data => async dispatch => {
       }
       dispatch(editOrderSuccess(response.data))
     } else {
-      const response = await api.users.post({
+      const response = await api.createOrder.post({
         ...data,
       })
       dispatch(createOrderSuccess(response.data))
@@ -95,20 +95,6 @@ export const removeCompanyOrderThunk = (id) => async (dispatch) => {
 
   
 
-export const getCompanyAllOrdersThunk = id => async dispatch => {
-  console.log(id)
-  try {
-    dispatch(getCompanyAllOrdersRequest())
-    const response = await api.getCompanyOrders(id).get(id)
-    if (response.status > 300) {
-      throw new Error('Something went wrong, try again')
-    }
-    console.log(response.data)
-    dispatch(getCompanyAllOrdersSuccess(response.data))
-  } catch (error) {
-    console.log(error)
-    dispatch(getCompanyAllOrdersFailure())
-  }
-}
+
 
 

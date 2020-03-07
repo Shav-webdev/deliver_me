@@ -2,6 +2,7 @@ import {
   GET_USERS_REQUEST,
   GET_USERS_SUCCSESS,
   GET_USERS_FAILURE,
+  ADD_USER_SOCKET_SUCCESS,
   CREATE_USER_REQUEST,
   CREATE_USER_SUCCSESS,
   CREATE_USER_FAILURE,
@@ -25,6 +26,11 @@ export const getUsersSuccsess = data => ({
 })
 export const getUsersFailure = () => ({
   type: GET_USERS_FAILURE,
+})
+
+export const addUserSocketSuccsess = data => ({
+  type: ADD_USER_SOCKET_SUCCESS,
+  payload: data,
 })
 
 export const createUserRequest = () => ({

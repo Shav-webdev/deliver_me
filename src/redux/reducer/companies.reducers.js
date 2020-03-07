@@ -8,8 +8,7 @@ import {
   GET_COMPANY_ALL_ORDERS_REQUEST,
   GET_COMPANY_ALL_ORDERS_SUCCESS,
   GET_COMPANY_ALL_ORDERS_FAILURE,
-
- 
+  ADD_COMPANY_SOCKET_SUCCESS,
 } from '../action/constants'
 
 const initialState = {
@@ -40,6 +39,12 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanies: false,
+      }
+
+    case ADD_COMPANY_SOCKET_SUCCESS:
+      return {
+        ...state,
+        companiesData: [...state.companiesData, action.payload],
       }
 
     case 'CREATE_COMPANY_SUCCSESS':

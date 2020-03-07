@@ -16,7 +16,7 @@ export function signUp(url, data) {
   axios
     .post(`${url}`, data)
     .then(res => {
-      socket.emit('new_account', { data });
+      socket.emit('new_account', { data })
       successMessage(`${res.data.message}, please login for continue`)
     })
     .catch(e => {

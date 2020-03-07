@@ -25,8 +25,6 @@ export const ModalUserEdit = ({
   modalUser,
   updateUser,
   removeUser,
-  usersData,
-  setUserData,
 }) => {
   const [state, setState] = useState(modalUser)
   const { id, name, lastName, address, phone, avatar, approved } = state
@@ -46,9 +44,7 @@ export const ModalUserEdit = ({
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        const filt = usersData.filter(el => el.id != id)
-
-        removeUser(id), handleCancel(), setUserData(filt)
+        removeUser(id), handleCancel()
       },
       onCancel() {},
     })
@@ -68,12 +64,10 @@ export const ModalUserEdit = ({
   const handleAcceptUser = () => {
     updateUser({ ...modalUser, approved: 'accepted' })
     setState({ ...state, approved: 'accepted' })
-    setUserData({ ...state, approved: 'accepted' })
   }
   const handleDeclineUser = () => {
     updateUser({ ...modalUser, approved: 'declined' })
     setState({ ...state, approved: 'declined' })
-    setUserData({ ...state, approved: 'declined' })
   }
   const handleRemove = () => {
     removeUser(id)
