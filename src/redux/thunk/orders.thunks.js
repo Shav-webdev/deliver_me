@@ -37,7 +37,7 @@ export const getAllOrdersThunk = () => async dispatch => {
 export const getUserOrdersThunk = () => async dispatch => {
     try {
       dispatch(getUserOrdersRequest())
-      const response = await api.getUserOrders.get()
+      const response = await api.getUserOrders(id).get()
       if (response.status !== 200) {
         throw new Error('Cannot get Orders')
       }
@@ -50,7 +50,7 @@ export const getUserOrdersThunk = () => async dispatch => {
 export const getCompanyOrdersThunk = () => async dispatch => {
   try {
     dispatch(getCompanyOrdersRequest())
-    const response = await api.getCompanyOrders.get()
+    const response = await api.getCompanyOrders(id).get()
     if (response.status !== 200) {
       throw new Error('Cannot get Orders')
     }
@@ -85,7 +85,7 @@ export const createCompanyOrderThunk = data => async dispatch => {
 
 export const removeCompanyOrderThunk = (id) => async (dispatch) => {
     try {
-      await api.deleteUpdateUser(id).delete();
+      await api.deleteUpdateOrder(id).delete();
       dispatch(removeOrderSuccess(id))
       dispatch(getCompanyOrdersThunk())
     } catch (error) {
