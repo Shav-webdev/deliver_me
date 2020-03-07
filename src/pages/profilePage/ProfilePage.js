@@ -27,12 +27,12 @@ import Menu from 'antd/es/menu'
 import moment from 'moment'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
+import { createCompanyThunk, getCompanyByIdThunk } from '../../redux/thunk'
 import {
-  createOrderThunk,
-  createCompanyThunk,
-  getCompanyByIdThunk,
-  getCompanyAllOrdersThunk,
-} from '../../redux/thunk'
+  getCompanyOrdersThunk,
+  createCompanyOrderThunk,
+  removeCompanyOrderThunk,
+} from '../../redux/thunk/orders.thunks'
 import { getUsersFailure } from '../../redux/action'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
@@ -41,10 +41,9 @@ import doneOrdersIcon from '../../assets/images/doneOrdersIcon.svg'
 import pendingOrdersIcon from '../../assets/images/pendingOrdersIcon.svg'
 import EditProfileInfo from '../../containers/editProfileInfo/editProfileInfo'
 import logo from '../../assets/images/logo.svg'
-
-import OrdersList from '../../components/ordersList/ordersList'
-import LogoutPopover from '../../components/logoutPopover/logoutPopover'
 import Wallet from '../../components/wallet/wallet'
+import LogoutPopover from '../../components/logoutPopover/logoutPopover'
+import OrdersList from '../../components/ordersList/ordersList'
 
 const { Title } = Typography
 const { TextArea } = Input
@@ -55,6 +54,7 @@ const { Header, Sider, Content } = Layout
 
 const ProfilePage = ({
   companies,
+  orders,
   updateAvatar,
   getCompanyById,
   createOrder,
@@ -429,8 +429,8 @@ const mapDispatchToProps = dispatch => {
   return {
     updateCompanyData: id => dispatch(createCompanyThunk(id)),
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
-    createOrder: data => dispatch(createOrderThunk(data)),
-    getCompanyAllOrders: id => dispatch(getCompanyAllOrdersThunk(id)),
+    createOrder: data => dispatch(createCompanyOrderThunk(data)),
+    getCompanyAllOrders: id => dispatch(getCompanyOrdersThunk(id)),
     updateAvatar: data => {
       dispatch(createCompanyThunk(data))
     },

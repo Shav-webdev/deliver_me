@@ -20,37 +20,37 @@ import {
   getAllOrdersFailure,
 } from '../action'
 
-
 export const getAllOrdersThunk = () => async dispatch => {
-    try {
-      dispatch(getAllOrdersRequest())
-      const response = await api.getAllActiveOrders.get()
-      if (response.status !== 200) {
-        throw new Error('Cannot get active Orders')
-      }
-      dispatch(getAllOrdersSuccess(response.data))
-    } catch (error) {
-      dispatch(getAllOrdersFailure())
+  try {
+    dispatch(getAllOrdersRequest())
+    const response = await api.getAllActiveOrders.get()
+    if (response.status !== 200) {
+      throw new Error('Cannot get active Orders')
     }
+    dispatch(getAllOrdersSuccess(response.data))
+  } catch (error) {
+    dispatch(getAllOrdersFailure())
   }
+}
 
 export const getUserOrdersThunk = () => async dispatch => {
-    try {
-      dispatch(getUserOrdersRequest())
-      const response = await api.getUserOrders.get()
-      if (response.status !== 200) {
-        throw new Error('Cannot get Orders')
-      }
-      dispatch(getUserOrdersSuccess(response.data))
-    } catch (error) {
-      dispatch(getUserOrdersFailure())
+  try {
+    dispatch(getUserOrdersRequest())
+    const response = await api.getUserOrders.get()
+    if (response.status !== 200) {
+      throw new Error('Cannot get Orders')
     }
+    dispatch(getUserOrdersSuccess(response.data))
+  } catch (error) {
+    dispatch(getUserOrdersFailure())
   }
+}
 
-export const getCompanyOrdersThunk = () => async dispatch => {
+export const getCompanyOrdersThunk = id => async dispatch => {
+  console.log(id)
   try {
     dispatch(getCompanyOrdersRequest())
-    const response = await api.getCompanyOrders.get()
+    const response = await api.getCompanyOrders(id).get()
     if (response.status !== 200) {
       throw new Error('Cannot get Orders')
     }
@@ -83,32 +83,12 @@ export const createCompanyOrderThunk = data => async dispatch => {
   }
 }
 
-export const removeCompanyOrderThunk = (id) => async (dispatch) => {
-    try {
-      await api.deleteUpdateUser(id).delete();
-      dispatch(removeOrderSuccess(id))
-      dispatch(getCompanyOrdersThunk())
-    } catch (error) {
-      dispatch(removeOrderFailure());
-    }
-  }
-
-  
-
-export const getCompanyAllOrdersThunk = id => async dispatch => {
-  console.log(id)
+export const removeCompanyOrderThunk = id => async dispatch => {
   try {
-    dispatch(getCompanyAllOrdersRequest())
-    const response = await api.getCompanyOrders(id).get(id)
-    if (response.status > 300) {
-      throw new Error('Something went wrong, try again')
-    }
-    console.log(response.data)
-    dispatch(getCompanyAllOrdersSuccess(response.data))
+    await api.deleteUpdateUser(id).delete()
+    dispatch(removeOrderSuccess(id))
+    dispatch(getCompanyOrdersThunk())
   } catch (error) {
-    console.log(error)
-    dispatch(getCompanyAllOrdersFailure())
+    dispatch(removeOrderFailure())
   }
 }
-
-
