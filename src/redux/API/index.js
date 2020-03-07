@@ -8,11 +8,15 @@ const Endpoint = EndpointFactory(axiosInstance)
 export default {
   users: new Endpoint('users'),
   companies: new Endpoint('companies'),
-  login: new Endpoint('login'),
-  createOrder: new Endpoint('create-order'),
-  getCompanyOrders: id => new Endpoint(`company-orders/${id}`),
-  getUserById: id => new Endpoint('users/' + id),
-  getCompanyById: id => new Endpoint(`companies/${id}`),
   deleteUpdateUser: id => new Endpoint('users/' + id),
   deleteUpdateCompany: id => new Endpoint('companies/' + id),
+  login: new Endpoint('login'),
+  createOrder: new Endpoint('orders'),
+  getUserById: id => new Endpoint('users/' + id),
+  getCompanyById: id => new Endpoint(`companies/${id}`),
+
+  getAllActiveOrders: new Endpoint('active-orders'),
+  getUserOrders: id => new Endpoint(`user-orders/${id}`),
+  getCompanyOrders: id => new Endpoint(`company-orders/${id}`),
+  deleteUpdateOrder: id => new Endpoint(`orders/${id}`),
 }

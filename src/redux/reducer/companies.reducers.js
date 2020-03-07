@@ -25,10 +25,6 @@ const initialState = {
   orderData: {},
   getingCompanyAllOrders: false,
   companyAllOrders: [],
-  getingCompanyActiveOrders: false,
-  companyActiveOrders: [],
-  getingCompanyCompletedOrders: false,
-  companyCompletedOrders: [],
 }
 
 export default function companiesReducer(state = initialState, action) {
