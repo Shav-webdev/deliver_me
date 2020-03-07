@@ -1,3 +1,8 @@
+body {
+  overflow-y: overlay;
+  overflow-x: hidden;
+}
+
 .company_profile_trigger {
   font-size: 18px;
   line-height: 64px;
@@ -33,12 +38,12 @@
   padding: 24px;
   min-height: 280px;
 }
-.company_logo {
-  width: 120px;
-  height: 31px;
-  background-color: transparent;
-  margin: 16px 24px 16px 0;
-  float: left;
+.ant-layout-sider-collapsed .profile_company_logo {
+  padding: 1.22rem 0.5rem;
+}
+
+.profile_company_logo {
+  padding: 1.1rem 0.5rem;
 }
 
 .user_info {

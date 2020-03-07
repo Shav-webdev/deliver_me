@@ -37,26 +37,25 @@ export default function Routes() {
             component={AdminDashboard}
           />
           <AppRoute
-            path="/profile/company"
-            layout={profileLayout}
-            component={ProfilePage}
-            profile="company"
-          />
-
-          <AppRoute
-            path="/profile/company/active_orders"
+            path="/company"
             layout={profileLayout}
             component={ProfilePage}
             profile="company"
           />
           <AppRoute
-            path="/profile/company/pending_orders"
+            path="/company/active_orders"
             layout={profileLayout}
             component={ProfilePage}
             profile="company"
           />
           <AppRoute
-            path="/profile/company/completed_orders"
+            path="/company/pending_orders"
+            layout={profileLayout}
+            component={ProfilePage}
+            profile="company"
+          />
+          <AppRoute
+            path="/company/completed_orders"
             layout={profileLayout}
             component={ProfilePage}
             profile="company"
