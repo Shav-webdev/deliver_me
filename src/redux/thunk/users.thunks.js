@@ -13,6 +13,10 @@ export const getUsersThunk = () => async (dispatch) => {
     dispatch(getUsersFailure());
   }
 }
+export const addUserBySocketThunk=(data)=>async(dispatch)=>{
+
+}
+
 
 export const createUserThunk = (data) => async (dispatch) => {
   try {
