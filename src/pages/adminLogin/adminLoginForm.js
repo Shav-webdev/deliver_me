@@ -7,11 +7,11 @@ import {
   validateAdminPassword,
 } from '../registration/helpers/validations'
 import { connect } from 'react-redux'
-import { signInAs } from '../../redux/thunk'
+import { signInAsAdminThunk } from '../../redux/thunk'
 
 const { Title } = Typography
 
-function AdminLoginForm({ signInAs }) {
+function AdminLoginForm({ signInAdmin }) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(null)
@@ -69,7 +69,7 @@ function AdminLoginForm({ signInAs }) {
       } else if (!isPasswordValid) {
         setShowPasswordValidText(true)
       } else {
-        signInAs(data)
+        signInAdmin(data)
       }
       setLoading(false)
     }, 1000)
@@ -127,8 +127,8 @@ function AdminLoginForm({ signInAs }) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signInAs: data => {
-      dispatch(signInAs(data))
+    signInAdmin: data => {
+      dispatch(signInAsAdminThunk(data))
     },
   }
 }

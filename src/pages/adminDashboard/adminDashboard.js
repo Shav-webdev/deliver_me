@@ -62,13 +62,13 @@ function AdminBoard({
 
   const [userData, setUserData] = useState(usersData)
   useEffect(() => {
-    if (!getCookie('token')) {
-      history.push('/admin')
-    }else{
+    // if (!getCookie('token')) {
+    //   history.push('/admin')
+    // }else{
       getUsers()
       getCompanies()
       setUserData(usersData)
-    }
+    //}
     
   }, [])
 

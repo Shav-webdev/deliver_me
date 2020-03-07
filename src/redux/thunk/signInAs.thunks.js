@@ -33,3 +33,19 @@ export const signInAs = data => async dispatch => {
     dispatch(signInAsCompanyFailure())
   }
 }
+
+export const signInAsAdminThunk = data => async dispatch => {
+  try {
+    dispatch(signInAsCompanyRequest())
+    const response = await api.loginAdmin.post(data)
+    if (response.status !== 200) {
+      throw new Error('Something went wrong, try again')
+    } else {
+      dispatch(signInAsUserSuccess(response.data))
+      setCookie('token', `${response.data.token}`)
+      history.push('/admin/dashboard')
+    }
+  } catch (error) {
+    dispatch(signInAsCompanyFailure())
+  }
+}
