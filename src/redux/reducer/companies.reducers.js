@@ -25,10 +25,6 @@ const initialState = {
   orderData: {},
   getingCompanyAllOrders: false,
   companyAllOrders: [],
-  getingCompanyActiveOrders: false,
-  companyActiveOrders: [],
-  getingCompanyCompletedOrders: false,
-  companyCompletedOrders: [],
 }
 
 export default function companiesReducer(state = initialState, action) {
@@ -91,7 +87,6 @@ export default function companiesReducer(state = initialState, action) {
         signInLoading: true,
       }
     case SIGN_IN_AS_COMPANY_SUCCESS:
-      console.log('action', action.payload)
       return {
         ...state,
         signInLoading: false,
@@ -136,39 +131,39 @@ export default function companiesReducer(state = initialState, action) {
         getingCompanyAllOrders: false,
       }
 
-    case GET_COMPANY_ACTIVE_ORDERS_REQUEST:
-      return {
-        ...state,
-        getingCompanyActiveOrders: true,
-      }
-    case GET_COMPANY_ACTIVE_ORDERS_SUCCESS:
-      return {
-        ...state,
-        getingCompanyActiveOrders: false,
-        companyActiveOrders: action.payload,
-      }
-    case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
-      return {
-        ...state,
-        getingCompanyActiveOrders: false,
-      }
+    // case GET_COMPANY_ACTIVE_ORDERS_REQUEST:
+    //   return {
+    //     ...state,
+    //     getingCompanyActiveOrders: true,
+    //   }
+    // case GET_COMPANY_ACTIVE_ORDERS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     getingCompanyActiveOrders: false,
+    //     companyActiveOrders: action.payload,
+    //   }
+    // case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
+    //   return {
+    //     ...state,
+    //     getingCompanyActiveOrders: false,
+    //   }
 
-    case GET_COMPANY_COMPLETED_ORDERS_REQUEST:
-      return {
-        ...state,
-        getingCompanyCompletedOrders: true,
-      }
-    case GET_COMPANY_COMPLETED_ORDERS_SUCCESS:
-      return {
-        ...state,
-        getingCompanyCompletedOrders: false,
-        companyCompletedOrders: action.payload,
-      }
-    case GET_COMPANY_COMPLETED_ORDERS_FAILURE:
-      return {
-        ...state,
-        getingCompanyCompletedOrders: false,
-      }
+    // case GET_COMPANY_COMPLETED_ORDERS_REQUEST:
+    //   return {
+    //     ...state,
+    //     getingCompanyCompletedOrders: true,
+    //   }
+    // case GET_COMPANY_COMPLETED_ORDERS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     getingCompanyCompletedOrders: false,
+    //     companyCompletedOrders: action.payload,
+    //   }
+    // case GET_COMPANY_COMPLETED_ORDERS_FAILURE:
+    //   return {
+    //     ...state,
+    //     getingCompanyCompletedOrders: false,
+    //   }
     default:
       return state
   }

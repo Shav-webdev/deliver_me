@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
-import {socket} from '../../App'
+import { socket } from '../../App'
 import axios from 'axios'
 import {
   Form,
@@ -357,7 +357,7 @@ function RegisterAsCourier() {
           <Upload.Dragger
             onChange={e => handleImageChange(e)}
             customRequest={dummyRequest}
-            accept=".jpg, .jpeg, .png">
+            accept=".jpg, .jpeg, .png, .svg">
             <Icon type="upload" /> Click to Upload
           </Upload.Dragger>
         </Form.Item>

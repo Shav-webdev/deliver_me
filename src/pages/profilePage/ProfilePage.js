@@ -38,6 +38,8 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
 import allOrdersIcon from '../../assets/images/allOrdersIcon.svg'
 import doneOrdersIcon from '../../assets/images/doneOrdersIcon.svg'
+import pendingOrdersIcon from '../../assets/images/pendingOrdersIcon.svg'
+
 import logo from '../../assets/images/logo.svg'
 import {
   validateEmail,
@@ -112,8 +114,10 @@ const ProfilePage = ({
       return axios
         .post(CLOUDINARY_URL, formData)
         .then(res => {
-          setAvatarUrl(res.data.url)
           console.log(res.data.url)
+          setAvatarUrl(res.data.url)
+
+          console.log(avatarUrl)
           message.success(`${event.file.name} file uploaded successfully`)
           console.log({
             ...companies.signInAsCompanyData,
@@ -139,6 +143,8 @@ const ProfilePage = ({
     getCompanyAllOrders(companyId)
     // eslint-disable-next-line no-useless-escape
   }, [])
+
+  useEffect(() => {}, [avatarUrl])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -309,6 +315,27 @@ const ProfilePage = ({
 
   const handleEditInfoBtnClick = () => {
     setIsInputsEditable(true)
+
+    setCompanyName(name)
+    setCompanyTaxNumber(taxNumber)
+    setCompanyAddress(address)
+    setCompanyEmail(email)
+    setCompanyActivity(activity)
+    setPhoneNumber(phone)
+    setAvatarUrl(avatar)
+
+    // setTimeout(() => {
+    //   onHandleNameValidate()
+    //   onHandlePhoneNumValidate()
+    //   onHandleTaxNumValidate()
+    //   onHandleAddressValidate()
+    //   onHandleEmailValidate()
+    //   onHandleActivityValidate()
+    // }, 2000)
+  }
+
+  const handleCancelEditInfoBtnClick = () => {
+    setIsInputsEditable(false)
   }
 
   const handleSaveInfoBtnClick = () => {
@@ -320,38 +347,42 @@ const ProfilePage = ({
       phone: phoneNumber,
       taxNumber: companyTaxNumber,
       activity: companyActivity,
+      avatar: avatarUrl,
     }
 
-    if (
-      !isNameValid &&
-      !isEmailValid &&
-      !isAddressValid &&
-      !isActivityValid &&
-      !isPhoneNumberValid &&
-      !isTaxNumberValid
-    ) {
-      setShowNameValidText(true)
-      setShowEmailValidText(true)
-      setShowAddressValidText(true)
-      setShowPhoneNumValidText(true)
-      setShowTaxNumValidText(true)
-      setShowActivityValidText(true)
-    } else if (!isNameValid) {
-      setShowNameValidText(true)
-    } else if (!isEmailValid) {
-      setShowEmailValidText(true)
-    } else if (!isAddressValid) {
-      setShowAddressValidText(true)
-    } else if (!isPhoneNumberValid) {
-      setShowPhoneNumValidText(true)
-    } else if (!isTaxNumberValid) {
-      setShowTaxNumValidText(true)
-    } else if (!isActivityValid) {
-      setShowActivityValidText(true)
-    } else {
-      updateCompanyData(data)
-      setIsInputsEditable(false)
-    }
+    updateCompanyData(data)
+    setIsInputsEditable(false)
+
+    // if (
+    //   !isNameValid &&
+    //   !isEmailValid &&
+    //   !isAddressValid &&
+    //   !isActivityValid &&
+    //   !isPhoneNumberValid &&
+    //   !isTaxNumberValid
+    // ) {
+    //   setShowNameValidText(true)
+    //   setShowEmailValidText(true)
+    //   setShowAddressValidText(true)
+    //   setShowPhoneNumValidText(true)
+    //   setShowTaxNumValidText(true)
+    //   setShowActivityValidText(true)
+    // } else if (!isNameValid) {
+    //   setShowNameValidText(true)
+    // } else if (!isEmailValid) {
+    //   setShowEmailValidText(true)
+    // } else if (!isAddressValid) {
+    //   setShowAddressValidText(true)
+    // } else if (!isPhoneNumberValid) {
+    //   setShowPhoneNumValidText(true)
+    // } else if (!isTaxNumberValid) {
+    //   setShowTaxNumValidText(true)
+    // } else if (!isActivityValid) {
+    //   setShowActivityValidText(true)
+    // } else {
+    //   updateCompanyData(data)
+    //   setIsInputsEditable(false)
+    // }
   }
 
   const { signInLoading, signInAsCompanyData, companyAllOrders } = companies
@@ -364,6 +395,7 @@ const ProfilePage = ({
     phone,
     email,
     activity,
+    avatar,
     approved,
     amount,
   } = signInAsCompanyData
@@ -401,6 +433,14 @@ const ProfilePage = ({
               </Link>
             </Menu.Item>
             <Menu.Item key="3">
+              <Link to="/profile/company/pending_orders">
+                <span className="menu_item_icon">
+                  <img src={pendingOrdersIcon} alt="All orders" />
+                </span>
+                <span>Pending orders</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="4">
               <Link to="/profile/company/completed_orders">
                 <span className="menu_item_icon">
                   <img src={doneOrdersIcon} alt="Completed orders" />
@@ -433,7 +473,9 @@ const ProfilePage = ({
                 <Avatar
                   size="large"
                   src={
-                    signInAsCompanyData.avatar
+                    avatarUrl
+                      ? avatarUrl
+                      : signInAsCompanyData.avatar
                       ? signInAsCompanyData.avatar
                       : company_avatar
                   }
@@ -524,13 +566,121 @@ const ProfilePage = ({
                 )}
               </List>
             </Route>
-            <Route path="/profile/company/completed_orders"> </Route>
+            <Route path="/profile/company/completed_orders">
+              <List className="company_orders_list_wrapper" style={{}}>
+                {getingCompanyAllOrders ? (
+                  <Spinner />
+                ) : (
+                  companyAllOrders
+                    .filter(el => el.state === 'done')
+                    .map(el => {
+                      return (
+                        <List.Item className="orders_list_item" key={el.id}>
+                          <div>
+                            <p>
+                              <strong>Order :</strong>
+                              {el.order_description}
+                            </p>
+                            <p>
+                              <strong>Money :</strong>
+                              {el.points}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Take address :</strong>
+                              {el.take_address}
+                            </p>
+                            <p>
+                              <strong>Deliver address :</strong>
+                              {el.deliver_address}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Status :</strong>
+                              {el.state}
+                            </p>
+                          </div>
+                        </List.Item>
+                      )
+                    })
+                )}
+              </List>
+            </Route>
+            <Route path="/profile/company/pending_orders">
+              <List className="company_orders_list_wrapper" style={{}}>
+                {getingCompanyAllOrders ? (
+                  <Spinner />
+                ) : (
+                  companyAllOrders
+                    .filter(el => el.state === 'pending')
+                    .map(el => {
+                      return (
+                        <List.Item className="orders_list_item" key={el.id}>
+                          <div>
+                            <p>
+                              <strong>Order :</strong>
+                              {el.order_description}
+                            </p>
+                            <p>
+                              <strong>Money :</strong>
+                              {el.points}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Take address :</strong>
+                              {el.take_address}
+                            </p>
+                            <p>
+                              <strong>Deliver address :</strong>
+                              {el.deliver_address}
+                            </p>
+                          </div>
+                          <div>
+                            <p>
+                              <strong>Status :</strong>
+                              {el.state}
+                            </p>
+                          </div>
+                        </List.Item>
+                      )
+                    })
+                )}
+              </List>
+            </Route>
             <Route path="/profile/company/profile_info">
               <div className="company_profile_section_wrapper">
                 {signInLoading ? (
                   <Spinner />
                 ) : (
                   <Form className="company_info_form">
+                    <div className="company_change_avatar_section">
+                      <div>
+                        <Avatar
+                          size={128}
+                          src={
+                            avatarUrl
+                              ? avatarUrl
+                              : signInAsCompanyData.avatar
+                              ? signInAsCompanyData.avatar
+                              : company_avatar
+                          }
+                        />
+                      </div>
+                      <div className="company_upload_avatar_wrapper">
+                        <Upload.Dragger
+                          showUploadList={false}
+                          multiple={false}
+                          disabled={!isInputsEditable}
+                          onChange={e => handleImageChange(e)}
+                          customRequest={dummyRequest}
+                          accept=".jpg, .jpeg, .png, .svg">
+                          <Icon type="upload" /> Change avatar
+                        </Upload.Dragger>
+                      </div>
+                    </div>
                     <Form.Item
                       label="Name"
                       validateStatus={showNameValidText ? 'error' : 'success'}
@@ -542,8 +692,7 @@ const ProfilePage = ({
                       }>
                       <Input
                         disabled={!isInputsEditable}
-                        onChange={e => handleNameChange(e)}
-                        onBlur={onHandleNameValidate}
+                        onChange={handleNameChange}
                         value={isInputsEditable ? companyName : name}
                       />
                     </Form.Item>
@@ -559,7 +708,6 @@ const ProfilePage = ({
                       <Input
                         disabled={!isInputsEditable}
                         onChange={e => handleEmailChange(e)}
-                        onBlur={onHandleEmailValidate}
                         value={isInputsEditable ? companyEmail : email}
                       />
                     </Form.Item>
@@ -577,7 +725,6 @@ const ProfilePage = ({
                       <Input
                         disabled={!isInputsEditable}
                         onChange={e => handleAddressChange(e)}
-                        onBlur={onHandleAddressValidate}
                         value={isInputsEditable ? companyAddress : address}
                       />
                     </Form.Item>
@@ -595,7 +742,6 @@ const ProfilePage = ({
                       <Input
                         disabled={!isInputsEditable}
                         onChange={e => handlePhoneNumChange(e)}
-                        onBlur={onHandlePhoneNumValidate}
                         value={isInputsEditable ? phoneNumber : phone}
                       />
                     </Form.Item>
@@ -611,7 +757,6 @@ const ProfilePage = ({
                       <Input
                         disabled={!isInputsEditable}
                         onChange={e => handleTaxNumChange(e)}
-                        onBlur={onHandleTaxNumValidate}
                         value={isInputsEditable ? companyTaxNumber : taxNumber}
                       />
                     </Form.Item>
@@ -629,40 +774,29 @@ const ProfilePage = ({
                       <Input
                         disabled={!isInputsEditable}
                         onChange={e => handleActivityChange(e)}
-                        onBlur={onHandleActivityValidate}
                         value={isInputsEditable ? companyActivity : activity}
                       />
                     </Form.Item>
+                    <div className="company_edit_info_profile">
+                      {!isInputsEditable && (
+                        <Button type="primary" onClick={handleEditInfoBtnClick}>
+                          Edit
+                        </Button>
+                      )}
+                      {isInputsEditable && (
+                        <Button
+                          type="primary"
+                          onClick={handleCancelEditInfoBtnClick}>
+                          Cancel
+                        </Button>
+                      )}
+
+                      <Button type="primary" onClick={handleSaveInfoBtnClick}>
+                        Save
+                      </Button>
+                    </div>
                   </Form>
                 )}
-                <div>
-                  <Avatar
-                    size={128}
-                    src={
-                      signInAsCompanyData.avatar
-                        ? signInAsCompanyData.avatar
-                        : company_avatar
-                    }
-                  />
-                  <div>
-                    <Button type="primary" onClick={handleEditInfoBtnClick}>
-                      Edit
-                    </Button>
-                    <Button type="primary" onClick={handleSaveInfoBtnClick}>
-                      Save
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <Upload.Dragger
-                  showUploadList={false}
-                  multiple={false}
-                  onChange={e => handleImageChange(e)}
-                  customRequest={dummyRequest}
-                  accept=".jpg, .jpeg, .png">
-                  <Icon type="upload" /> Click to Upload
-                </Upload.Dragger>
               </div>
             </Route>
           </Content>
