@@ -11,6 +11,7 @@ export default {
   deleteUpdateUser: id => new Endpoint('users/' + id),
   deleteUpdateCompany: id => new Endpoint('companies/' + id),
   login: new Endpoint('login'),
+  loginAdmin: new Endpoint('admin'),
   createOrder: new Endpoint('orders'),
   getUserById: id => new Endpoint('users/' + id),
   getCompanyById: id => new Endpoint(`companies/${id}`),

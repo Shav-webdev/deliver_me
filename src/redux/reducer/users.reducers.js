@@ -30,6 +30,13 @@ export default function usersReducer(state = initialState, action) {
         gettingUsers: false,
       }
 
+case 'ADD_USER_SOCKET_SUCCESS':
+  return{
+    ...state,
+    usersData:[...state.usersData,action.payload]
+  }
+
+
     case 'CREATE_USER_SUCCSESS':
       return {
         ...state,
