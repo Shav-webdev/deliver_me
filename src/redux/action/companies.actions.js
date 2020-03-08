@@ -2,6 +2,7 @@ import {
   GET_COMPANIES_REQUEST,
   GET_COMPANIES_SUCCSESS,
   GET_COMPANIES_FAILURE,
+  ADD_COMPANY_SOCKET_SUCCESS,
   CREATE_COMPANY_REQUEST,
   CREATE_COMPANY_SUCCSESS,
   CREATE_COMPANY_FAILURE,
@@ -14,18 +15,6 @@ import {
   SIGN_IN_AS_COMPANY_REQUEST,
   SIGN_IN_AS_COMPANY_SUCCESS,
   SIGN_IN_AS_COMPANY_FAILURE,
-  CREATE_ORDER_REQUEST,
-  CREATE_ORDER_SUCCESS,
-  CREATE_ORDER_FAILURE,
-  GET_COMPANY_ALL_ORDERS_REQUEST,
-  GET_COMPANY_ALL_ORDERS_SUCCESS,
-  GET_COMPANY_ALL_ORDERS_FAILURE,
-  // GET_COMPANY_ACTIVE_ORDERS_REQUEST,
-  // GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
-  // GET_COMPANY_ACTIVE_ORDERS_FAILURE,
-  // GET_COMPANY_COMPLETED_ORDERS_REQUEST,
-  // GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
-  // GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 } from './constants'
 
 export const getCompaniesRequest = () => ({
@@ -37,6 +26,11 @@ export const getCompaniesSuccsess = data => ({
 })
 export const getCompaniesFailure = () => ({
   type: GET_COMPANIES_FAILURE,
+})
+
+export const addCompanySocketSuccsess = data => ({
+  type: ADD_COMPANY_SOCKET_SUCCESS,
+  payload: data,
 })
 
 export const createCompanyRequest = () => ({
@@ -81,47 +75,4 @@ export const signInAsCompanySuccess = data => ({
 })
 export const signInAsCompanyFailure = () => ({
   type: SIGN_IN_AS_COMPANY_FAILURE,
-})
-export const createOrderRequest = () => ({
-  type: CREATE_ORDER_REQUEST,
-})
-export const createOrderSuccsess = data => ({
-  type: CREATE_ORDER_SUCCESS,
-  payload: data,
-})
-export const createOrderFailure = () => ({
-  type: CREATE_ORDER_FAILURE,
-})
-
-export const getCompanyAllOrdersRequest = () => ({
-  type: GET_COMPANY_ALL_ORDERS_REQUEST,
-})
-export const getCompanyAllOrdersSuccess = data => ({
-  type: GET_COMPANY_ALL_ORDERS_SUCCESS,
-  payload: data,
-})
-export const getCompanyAllOrdersFailure = () => ({
-  type: GET_COMPANY_ALL_ORDERS_FAILURE,
-})
-
-export const getCompanyActiveOrdersRequest = () => ({
-  type: GET_COMPANY_ACTIVE_ORDERS_REQUEST,
-})
-export const getCompanyActiveOrdersSuccess = data => ({
-  type: GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
-  payload: data,
-})
-export const getCompanyActiveOrdersFailure = () => ({
-  type: GET_COMPANY_ACTIVE_ORDERS_FAILURE,
-})
-
-export const getCompanyCompletedOrdersRequest = () => ({
-  type: GET_COMPANY_COMPLETED_ORDERS_REQUEST,
-})
-export const getCompanyCompletedOrdersSuccess = data => ({
-  type: GET_COMPANY_COMPLETED_ORDERS_SUCCESS,
-  payload: data,
-})
-export const getCompanyCompletedOrdersFailure = () => ({
-  type: GET_COMPANY_COMPLETED_ORDERS_FAILURE,
 })

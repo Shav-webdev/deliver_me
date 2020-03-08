@@ -25,8 +25,12 @@ body {
   align-items: center;
 }
 
-.header_btns_wrapper button {
-  margin-right: 2rem;
+.header_btns_wrapper .wallet_wrapper {
+  padding: 0 1rem;
+  margin: 0 2rem 0 1rem;
+  color: #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
 }
 
 .sidebar_menu_wrapper a:hover {
@@ -186,4 +190,21 @@ body {
 .company_upload_avatar_wrapper {
   text-align: center;
   height: 50px;
+}
+
+.create_order_form {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.create_order_form .ant-form-item {
+  max-width: 220px;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.create_order_form .order_range_picker {
+  max-width: 350px;
+  width: 100%;
 }

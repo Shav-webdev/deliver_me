@@ -2,6 +2,7 @@ import {
   SIGN_IN_AS_USER_REQUEST,
   SIGN_IN_AS_USER_SUCCESS,
   SIGN_IN_AS_USER_FAILURE,
+  ADD_USER_SOCKET_SUCCESS
 } from '../action/constants'
 
 const initialState = {
@@ -30,7 +31,7 @@ export default function usersReducer(state = initialState, action) {
         gettingUsers: false,
       }
 
-case 'ADD_USER_SOCKET_SUCCESS':
+case ADD_USER_SOCKET_SUCCESS:
   return{
     ...state,
     usersData:[...state.usersData,action.payload]

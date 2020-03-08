@@ -10,7 +10,6 @@ import {
   Form,
   Input,
   Avatar,
-  DatePicker,
   Card,
   Collapse,
 } from 'antd'
@@ -22,9 +21,8 @@ import company_avatar from '../../assets/images/company_avatar.png'
 import axios from 'axios'
 import Popover from 'antd/es/popover'
 import { logOut } from '../registration/services/services'
-import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
-import moment from 'moment'
+
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import { createCompanyThunk, getCompanyByIdThunk } from '../../redux/thunk'
@@ -44,10 +42,9 @@ import logo from '../../assets/images/logo.svg'
 import Wallet from '../../components/wallet/wallet'
 import LogoutPopover from '../../components/logoutPopover/logoutPopover'
 import OrdersList from '../../components/ordersList/ordersList'
+import CreateOrderModal from '../../components/createOrderModal/createOrderModal'
 
 const { Title } = Typography
-const { TextArea } = Input
-const { RangePicker } = DatePicker
 const { Panel } = Collapse
 
 const { Header, Sider, Content } = Layout
@@ -64,15 +61,7 @@ const ProfilePage = ({
 }) => {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
-  const [points, setPoints] = useState('')
-  const [takeAddress, setTakeAddress] = useState('')
-  const [deliverAddress, setDeliverAddress] = useState('')
-  const [orderDescription, setOrderDescription] = useState('')
-  const [comment, setComment] = useState('')
-  const [orderStartTime, setOrderStartTime] = useState('')
-  const [orderEndTime, setOrderEndTime] = useState('')
   const [collapsed, setCollapsed] = useState(false)
-
   const [isInputsEditable, setIsInputsEditable] = useState(false)
 
   useEffect(() => {
@@ -99,50 +88,13 @@ const ProfilePage = ({
     setCollapsed(!collapsed)
   }
 
-  const handleCreateOrderSubmit = () => {
+  const handleCreateOrderSubmit = order => {
     const data = {
       companyId: companies.signInAsCompanyData.id,
-      order: {
-        points: points,
-        take_address: takeAddress,
-        deliver_address: deliverAddress,
-        order_description: orderDescription,
-        comment: comment,
-        order_start_time: orderStartTime,
-        order_end_time: orderEndTime,
-      },
+      order,
     }
     createOrder(data)
     setVisible(false)
-  }
-
-  const handlePointsChange = useCallback(e => {
-    const orderPoint = e.target.value
-    setPoints(orderPoint)
-  }, [])
-
-  const handleTakeAddressChange = useCallback(e => {
-    const orderTakeAddress = e.target.value
-    setTakeAddress(orderTakeAddress)
-  }, [])
-  const handleDeliverAddressChange = useCallback(e => {
-    const orderDeliverAddress = e.target.value
-    setDeliverAddress(orderDeliverAddress)
-  }, [])
-
-  const handleOrderDescriptionChange = useCallback(e => {
-    const orderDescriptionField = e.target.value
-    setOrderDescription(orderDescriptionField)
-  }, [])
-
-  const handleOrderCommentChange = useCallback(e => {
-    const orderCommentField = e.target.value
-    setComment(orderCommentField)
-  }, [])
-
-  const onTimeChangeChange = (dates, dateStrings) => {
-    setOrderStartTime(dateStrings[0])
-    setOrderEndTime(dateStrings[1])
   }
 
   const handleEditInfoBtnClick = () => {
@@ -334,83 +286,11 @@ const ProfilePage = ({
             </Route>
           </Content>
         </Layout>
-        <Modal
-          title="Create Request"
-          style={{ top: 20 }}
+        <CreateOrderModal
           visible={visible}
-          okText="Create order"
-          onOk={handleCreateOrderSubmit}
-          onCancel={modalHandleCancel}>
-          <Form className="login-form">
-            <Form.Item label="Point">
-              <Input
-                onChange={e => handlePointsChange(e)}
-                value={points}
-                placeholder="Point"
-                prefix={
-                  <Icon
-                    type="DollarOutlined"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                  />
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Take address">
-              <Input
-                onChange={e => handleTakeAddressChange(e)}
-                value={takeAddress}
-                placeholder="Take address"
-                prefix={
-                  <Icon
-                    type="environment"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                  />
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Deliver address">
-              <Input
-                onChange={e => handleDeliverAddressChange(e)}
-                value={deliverAddress}
-                placeholder="Deliver address"
-                prefix={
-                  <Icon
-                    type="environment"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                  />
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Description">
-              <TextArea
-                onChange={e => handleOrderDescriptionChange(e)}
-                value={orderDescription}
-                placeholder="Description"
-              />
-            </Form.Item>
-            <Form.Item label="Order time range">
-              <RangePicker
-                ranges={{
-                  Today: [moment(), moment()],
-                  'This Month': [
-                    moment().startOf('month'),
-                    moment().endOf('month'),
-                  ],
-                }}
-                showTime
-                format="LLL"
-                onChange={onTimeChangeChange}
-              />
-            </Form.Item>
-            <Form.Item label="Comment">
-              <TextArea
-                onChange={e => handleOrderCommentChange(e)}
-                value={comment}
-                placeholder="Comment"
-              />
-            </Form.Item>
-          </Form>
-        </Modal>
+          handleCreateOrderSubmit={handleCreateOrderSubmit}
+          modalHandleCancel={modalHandleCancel}
+        />
       </Layout>
     </Router>
   )
