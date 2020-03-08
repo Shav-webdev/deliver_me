@@ -7,7 +7,7 @@ import {
   validateAddress,
   validatePhoneNumber,
   validatePoint,
-  validateComment,
+  validateOrderComment,
 } from '../../pages/registration/helpers/validations'
 import SubTitle from '../subTitle/subTitle'
 
@@ -27,17 +27,21 @@ export default function CreateOrderModal({
   const [comment, setComment] = useState('')
   const [orderStartTime, setOrderStartTime] = useState('')
   const [orderEndTime, setOrderEndTime] = useState('')
-  const [senderPhone, setSenderPhone] = useState('')
+  const [reciverName, setReciverName] = useState('')
   const [reciverPhone, setReciverPhone] = useState('')
   const [isOrderDescValid, setIsOrderDescValid] = useState(null)
   const [isTakeAddressValid, setIsTakeAddressValid] = useState(null)
   const [isDeliverAddressValid, setIsDeliverAddressValid] = useState(null)
-  const [isSenderPhoneValid, setIsSenderPhoneValid] = useState(null)
   const [isReciverPhoneValid, setIsReciverPhoneValid] = useState(null)
+  const [selectPhonePrefix, setSelectPhonePrefix] = useState('374')
+  const [isReciverNameValid, setIsReciverNameValid] = useState(null)
   const [isPointsValid, setIsPointsValid] = useState(null)
   const [isOrderCommentValid, setIsOrderCommentValid] = useState(null)
   const [showPointValidText, setShowPointValidText] = useState(false)
   const [showOrderDescValidText, setShowOrderDescValidText] = useState(false)
+  const [showReciverNameValidText, setShowReciverNameValidText] = useState(
+    false
+  )
   const [showOrderCommentValidText, setShowOrderCommentValidText] = useState(
     false
   )
@@ -125,7 +129,7 @@ export default function CreateOrderModal({
   }, [])
 
   const onHandleOrderCommentValidate = () => {
-    if (validateComment(comment)) {
+    if (validateOrderComment(comment)) {
       setIsOrderCommentValid(true)
       setShowOrderCommentValidText(false)
     } else {
@@ -155,19 +159,19 @@ export default function CreateOrderModal({
     }
   }
 
-  const handleSenderPhoneChange = useCallback(e => {
-    const number = e.target.value
-    setSenderPhone(number)
-    setShowSenderPhoneValidText(false)
+  const handleReciverNameChange = useCallback(e => {
+    let name = e.target.value
+    setReciverName(name)
+    setShowReciverNameValidText(false)
   }, [])
 
-  const onHandleSenderPhoneValidate = () => {
-    if (validatePhoneNumber(senderPhone)) {
-      setIsSenderPhoneValid(true)
-      setShowSenderPhoneValidText(false)
+  const onHandleReciverNameValidate = () => {
+    if (validateName(reciverName)) {
+      setIsReciverNameValid(true)
+      setShowReciverNameValidText(false)
     } else {
-      setIsSenderPhoneValid(false)
-      setShowSenderPhoneValidText(true)
+      setIsReciverNameValid(false)
+      setShowReciverNameValidText(true)
     }
   }
 
@@ -180,16 +184,18 @@ export default function CreateOrderModal({
       comment: comment,
       order_start_time: orderStartTime,
       order_end_time: orderEndTime,
+      receiver_name: reciverName,
+      receiver_phone: selectPhonePrefix + reciverPhone,
     }
 
     if (
       !isTakeAddressValid &&
-      !isSenderPhoneValid &&
       !isOrderDescValid &&
       !isOrderCommentValid &&
       !isDeliverAddressValid &&
       !isReciverPhoneValid &&
-      !isPointsValid
+      !isPointsValid &&
+      !isReciverNameValid
     ) {
       setShowTakeAddressValidText(true)
       setShowSenderPhoneValidText(true)
@@ -198,10 +204,9 @@ export default function CreateOrderModal({
       setShowDeliverAddressValidText(true)
       setShowReciverPhoneValidText(true)
       setShowPointValidText(true)
+      setShowReciverNameValidText(true)
     } else if (!isTakeAddressValid) {
       setShowTakeAddressValidText(true)
-    } else if (!isSenderPhoneValid) {
-      setShowSenderPhoneValidText(true)
     } else if (!isOrderDescValid) {
       setShowOrderDescValidText(true)
     } else if (!isOrderCommentValid) {
@@ -212,13 +217,22 @@ export default function CreateOrderModal({
       setShowReciverPhoneValidText(true)
     } else if (!isPointsValid) {
       setShowPointValidText(true)
+    } else if (!isReciverNameValid) {
+      setShowReciverNameValidText(true)
     } else {
       handleCreateOrderSubmit(order)
     }
   }
 
+  const onSelectPhonePrefix = value => {
+    setSelectPhonePrefix(value)
+  }
+
   const prefixSelector = (
-    <Select style={{ width: 70 }}>
+    <Select
+      defaultValue="374"
+      onChange={onSelectPhonePrefix}
+      style={{ width: 70 }}>
       <Option selected value="374">
         +374
       </Option>
@@ -237,7 +251,7 @@ export default function CreateOrderModal({
       <Form className="create_order_form">
         <SubTitle>Sender</SubTitle>
         <Form.Item
-          label="Sender address"
+          label="Take address"
           validateStatus={showTakeAddressValidText ? 'error' : 'success'}
           hasFeedback={showTakeAddressValidText}
           help={
@@ -255,24 +269,6 @@ export default function CreateOrderModal({
             }
           />
         </Form.Item>
-        <Form.Item
-          label="Sender phone"
-          validateStatus={showSenderPhoneValidText ? 'error' : 'success'}
-          hasFeedback={showSenderPhoneValidText}
-          help={
-            showSenderPhoneValidText
-              ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
-              : ''
-          }>
-          <Input
-            onChange={e => handleSenderPhoneChange(e)}
-            onBlur={onHandleSenderPhoneValidate}
-            value={senderPhone}
-            addonBefore={prefixSelector}
-            placeholder="Sender phone number"
-          />
-        </Form.Item>
-
         <Form.Item
           label="Description"
           validateStatus={showOrderDescValidText ? 'error' : 'success'}
@@ -326,6 +322,23 @@ export default function CreateOrderModal({
             value={reciverPhone}
             addonBefore={prefixSelector}
             placeholder="Reciver phone number"
+          />
+        </Form.Item>
+        <Form.Item
+          label="Reciver name"
+          validateStatus={showReciverNameValidText ? 'error' : 'success'}
+          hasFeedback={showReciverNameValidText}
+          help={
+            showReciverNameValidText
+              ? 'Name should contain at least two characters'
+              : ''
+          }>
+          <Input
+            onChange={e => handleReciverNameChange(e)}
+            onBlur={onHandleReciverNameValidate}
+            value={reciverName}
+            placeholder="Reciver name"
+            prefix={<Icon type="name" style={{ color: 'rgba(0,0,0,.25)' }} />}
           />
         </Form.Item>
         <SubTitle>Order options</SubTitle>

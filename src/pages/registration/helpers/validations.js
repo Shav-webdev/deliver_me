@@ -31,6 +31,10 @@ export function validateComment(comment) {
   return comment.length >= 0 && comment.length < 256
 }
 
+export function validateOrderComment(comment) {
+  return comment.length < 256
+}
+
 export function validatePhoneNumber(number) {
   const re = /^\(?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/
   return re.test(String(number))
