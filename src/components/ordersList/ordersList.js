@@ -4,7 +4,9 @@ import List from 'antd/es/list'
 
 export default function OrdersList(props) {
   return (
-    <List className="company_orders_list_wrapper">
+    <List
+      style={{ minHeight: '100vh' }}
+      className="company_orders_list_wrapper">
       {props.loading ? (
         <Spinner />
       ) : props.filterBy ? (

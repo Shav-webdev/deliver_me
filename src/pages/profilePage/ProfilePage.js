@@ -57,7 +57,6 @@ const ProfilePage = ({
   createOrder,
   updateCompanyData,
   getCompanyAllOrders,
-  getingCompanyAllOrders,
 }) => {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
@@ -148,7 +147,12 @@ const ProfilePage = ({
     // }
   }
 
-  const { signInLoading, signInAsCompanyData, companyAllOrders } = companies
+  const {
+    signInLoading,
+    signInAsCompanyData,
+    companyAllOrders,
+    getingCompanyAllOrders,
+  } = companies
 
   const {
     id,
