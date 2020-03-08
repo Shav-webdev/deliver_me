@@ -26,6 +26,13 @@ export const ModalCompanyEdit = ({
   removeCompany,
 }) => {
   const [state, setState] = useState(modalCompany)
+  const [error, setError] = useState({
+    name: false,
+    activity: false,
+    phone: false,
+    address: false,
+    taxNumber: false,
+  })
   const {
     name,
     taxNumber,
@@ -61,15 +68,38 @@ export const ModalCompanyEdit = ({
   }
 
   const handleInputChange = ({ target: { name, value } }) => {
+    if (value === '') {
+      setError({
+        ...error,
+        [name]: true,
+      })
+    } else {
+      setError({
+        ...error,
+        [name]: false,
+      })
+    }
     setState({
       ...state,
       [name]: value,
     })
+    console.log(error)
   }
   const handleSubmit = () => {
-    updateCompany({ ...state, amount: Number(state.addMoney) + Number(amount) })
-    handleCancel()
-    setState(defaultState)
+    if (
+      !error.address &&
+      !error.taxNumber &&
+      !error.name &&
+      !error.phone &&
+      !error.activity
+    ) {
+      updateCompany({
+        ...state,
+        amount: Number(state.addMoney) + Number(amount),
+      })
+      handleCancel()
+      setState(defaultState)
+    }
   }
   const handleAcceptCompany = () => {
     updateCompany({ ...modalCompany, approved: 'accepted' })
@@ -103,7 +133,7 @@ export const ModalCompanyEdit = ({
               style={{
                 fontSize: '30px',
                 color: 'orange',
-                marginLeft:"5px",
+                marginLeft: '5px',
                 display: `${approved === 'accepted' ? 'none' : 'block'}`,
               }}
             />
@@ -134,45 +164,76 @@ export const ModalCompanyEdit = ({
           value={name}
           placeholder="Name"
         />
+        <p
+          style={{
+            color: error.name ?'red':'white',
+            margin: '0 5px',
+          }}>
+          Name is required
+        </p>
         <Input
           addonAfter="TaxNumber"
-          className="input_margin"
           name="taxNumber"
           onChange={handleInputChange}
           value={taxNumber}
           placeholder="TaxNumber"
         />
-        <Input
-          addonAfter="Phone"
-          className="input_margin"
-          name="phone"
-          onChange={handleInputChange}
-          value={phone}
-          placeholder="Phone"
-        />
+        <p
+          style={{
+            color: error.taxNumber ?'red':'white',
+            margin: '0 5px',
+          }}>
+          TaxNumber is required
+        </p>
+        
         <Input
           addonAfter="Address"
-          className="input_margin"
           name="address"
           onChange={handleInputChange}
           value={address}
           placeholder="Address"
         />
+        <p
+          style={{
+            color: error.address ?'red':'white',
+            margin: '0 5px',
+          }}>
+          Address is required
+        </p>
         <Input
           addonAfter="Activity"
-          className="input_margin"
           name="activity"
           onChange={handleInputChange}
           value={activity}
           placeholder="Activity"
         />
+        <p
+          style={{
+            color: error.activity ?'red':'white',
+            margin: '0 5px',
+          }}>
+          Activity is required
+        </p>
+        <Input
+          addonAfter="Phone"
+          name="phone"
+          onChange={handleInputChange}
+          value={phone}
+          placeholder="Phone"
+        />
+        <p
+          style={{
+            color: error.phone ?'red':'white',
+            margin: '0 5px',
+            height:"100%"
+          }}>Phone is required</p>
         <Input
           type="number"
           addonAfter="Add money"
           name="addMoney"
           value={addMoney}
           onChange={handleInputChange}
-          className="input_margin input_money"
+          className="input_money"
           defaultValue={0}
         />
       </Modal>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal } from 'antd'
+import { Modal, Form } from 'antd'
 import { Input } from 'antd'
 import { Avatar } from 'antd'
 import './modal.userEdit.css'
@@ -27,6 +27,12 @@ export const ModalUserEdit = ({
   removeUser,
 }) => {
   const [state, setState] = useState(modalUser)
+  const [error, setError] = useState({
+    name: false,
+    lastName: false,
+    phone: false,
+    address: false,
+  })
   const { id, name, lastName, address, phone, avatar, approved } = state
   useEffect(() => {
     setState({
@@ -51,15 +57,28 @@ export const ModalUserEdit = ({
   }
 
   const handleInputChange = ({ target: { name, value } }) => {
+    if (value === '') {
+      setError({
+        ...error,
+        [name]: true,
+      })
+    } else {
+      setError({
+        ...error,
+        [name]: false,
+      })
+    }
     setState({
       ...state,
       [name]: value,
     })
   }
   const handleSubmit = () => {
-    updateUser(state)
-    handleCancel()
-    setState(defaultState)
+    if (!error.address && !error.lastName && !error.name && !error.phone) {
+      updateUser(state)
+      handleCancel()
+      setState(defaultState)
+    }
   }
   const handleAcceptUser = () => {
     updateUser({ ...modalUser, approved: 'accepted' })
@@ -119,7 +138,9 @@ export const ModalUserEdit = ({
             </div>
           </div>
         </div>
-
+        <Form.Item label="Username" hidden={true}>
+          <Input type="text" />
+        </Form.Item>
         <Input
           addonAfter="Name"
           name="name"
@@ -128,30 +149,55 @@ export const ModalUserEdit = ({
           className="input_margin"
           placeholder="Name"
         />
+        <p
+          style={{
+            color: error.name ?'red':"white",
+            margin: '0 5px',
+          }}>
+          Name is required
+        </p>
         <Input
           addonAfter="LastName"
           name="lastName"
-          className="input_margin"
           onChange={handleInputChange}
           value={lastName}
-          placeholder="Last Name"
+          placeholder="LastName"
         />
+        <p
+          style={{
+            color: error.lastName ?'red':"white",
+            margin: '0 5px',
+          }}>
+          LastName is required
+        </p>
         <Input
           addonAfter="Phone"
           name="phone"
-          className="input_margin"
           onChange={handleInputChange}
           value={phone}
           placeholder="Phone"
         />
+        <p
+          style={{
+            color: error.phone ?'red':"white",
+            margin: '0 5px',
+          }}>
+          Phone is required
+        </p>
         <Input
           addonAfter="Address"
           name="address"
           onChange={handleInputChange}
           value={address}
-          className="input_margin"
           placeholder="Address"
         />
+        <p
+          style={{
+            color: error.address ?'red':"white",
+            margin: '0 5px',
+          }}>
+          Address is required
+        </p>
       </Modal>
     </div>
   )

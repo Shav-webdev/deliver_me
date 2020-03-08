@@ -1,5 +1,5 @@
 .input_margin {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 .ant-input-group-addon {
   width: 95px;
@@ -20,4 +20,7 @@
 }
 .ant-modal-header{
   background:  linear-gradient(to right,rgb(36, 77, 125), rgb(203, 82, 82));
+}
+.ant-modal-body{
+  padding: 20px;
 }
