@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Typography, Popover, Input } from 'antd'
-import { getCookie } from '../registration/services/cookies'
+import { getCookie} from '../registration/services/cookies'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,

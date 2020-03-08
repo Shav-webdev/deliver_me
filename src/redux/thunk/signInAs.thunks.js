@@ -25,17 +25,21 @@ export const signInAs = data => async dispatch => {
     if (response.data.type === 'company') {
       setCookie('token', `${response.data.token}`)
       setCookie('id', `${response.data.id}`)
+      setCookie('userType', 'company')
+
       successMessage('Sign In is successful !')
       history.push('/profile/company')
     } else if (response.data.type === 'user') {
       dispatch(signInAsUserSuccess(response.data))
       setCookie('token', `${response.data.token}`)
       setCookie('id', `${response.data.id}`)
+      setCookie('userType', `${response.data.type}`)
       successMessage('Sign In is successful !')
       history.push('/profile/user')
     } else {
       dispatch(signInAsUserSuccess(response.data))
       setCookie('token', `${response.data.token}`)
+      setCookie('userType', 'admin')
       history.push('/admin/dashboard')
     }
   } catch (error) {
@@ -53,6 +57,7 @@ export const signInAsAdminThunk = data => async dispatch => {
     } else {
       dispatch(signInAsUserSuccess(response.data))
       setCookie('token', `${response.data.token}`)
+      setCookie('userType', "admin")
       history.push('/admin/dashboard')
     }
   } catch (error) {

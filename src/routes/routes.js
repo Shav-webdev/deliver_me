@@ -1,5 +1,6 @@
 import React from 'react'
-import AppRoute from './approute'
+import AppRoute from './approute';
+import {PrivateRoute} from './priveteRoute'
 import { Router, Switch } from 'react-router-dom'
 import defaultLayout from '../hoc/layout/defaultLayout/defaultLayout'
 import PageNotFound from '../pages/404/pageNotFound'
@@ -14,6 +15,7 @@ import AdminLoginForm from '../pages/adminLogin/adminLoginForm'
 import AdminDashboard from '../pages/adminDashboard/adminDashboard'
 import history from './history'
 import ProfilePage from '../pages/profilePage/ProfilePage'
+import {getCookie} from '../pages/registration/services/cookies'
 
 export default function Routes() {
   return (
@@ -31,17 +33,42 @@ export default function Routes() {
             layout={registerLayout}
             component={RegisterAsCompany}
           />
-          <AppRoute
+          {/* <AppRoute
             path="/admin/dashboard"
+            admin={false}
             layout={adminDashboardLayout}
             component={AdminDashboard}
+          /> */}
+          <PrivateRoute
+          path="/admin/dashboard"
+          component={AdminDashboard}
+          authenticated={getCookie('token') && getCookie('userType')==='admin'}
+          />}
           />
-          <AppRoute
+          <PrivateRoute
+          path="/profile/company"
+          component={ProfilePage}
+          authenticated={getCookie('token') && getCookie('userType')==='company'}
+          />}
+          />
+          <PrivateRoute
+          path="/profile/user"
+          component={ProfilePage}
+          authenticated={getCookie('token') && getCookie('userType')==='user'}
+          />}
+          />
+          {/* <AppRoute
+            path="/profile/user"
+            layout={profileLayout}
+            component={ProfilePage}
+            profile="user"
+          /> */}
+          {/* <AppRoute
             path="/profile/company"
             layout={profileLayout}
             component={ProfilePage}
             profile="company"
-          />
+          /> */}
 
           <AppRoute
             path="/profile/company/active_orders"
@@ -61,22 +88,13 @@ export default function Routes() {
             component={ProfilePage}
             profile="company"
           />
-          <AppRoute
-            path="/profile/user"
-            layout={profileLayout}
-            component={ProfilePage}
-            profile="user"
-          />
+          
           <AppRoute
             path="/admin"
             layout={registerLayout}
             component={AdminLoginForm}
           />
-          <AppRoute
-            path="/register/courier"
-            layout={registerLayout}
-            component={RegisterAsCourier}
-          />
+         
           <AppRoute path="*" layout={notFoundLayout} component={PageNotFound} />
         </Switch>
       </Router>
