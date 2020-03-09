@@ -20,32 +20,31 @@ import {
   getAllOrdersFailure,
 } from '../action'
 
-
 export const getAllOrdersThunk = () => async dispatch => {
-    try {
-      dispatch(getAllOrdersRequest())
-      const response = await api.getAllActiveOrders.get()
-      if (response.status !== 200) {
-        throw new Error('Cannot get active Orders')
-      }
-      dispatch(getAllOrdersSuccess(response.data))
-    } catch (error) {
-      dispatch(getAllOrdersFailure())
+  try {
+    dispatch(getAllOrdersRequest())
+    const response = await api.getAllActiveOrders.get()
+    if (response.status !== 200) {
+      throw new Error('Cannot get active Orders')
     }
+    dispatch(getAllOrdersSuccess(response.data))
+  } catch (error) {
+    dispatch(getAllOrdersFailure())
   }
+}
 
 export const getUserOrdersThunk = () => async dispatch => {
-    try {
-      dispatch(getUserOrdersRequest())
-      const response = await api.getUserOrders(id).get()
-      if (response.status !== 200) {
-        throw new Error('Cannot get Orders')
-      }
-      dispatch(getUserOrdersSuccess(response.data))
-    } catch (error) {
-      dispatch(getUserOrdersFailure())
+  try {
+    dispatch(getUserOrdersRequest())
+    const response = await api.getUserOrders(id).get()
+    if (response.status !== 200) {
+      throw new Error('Cannot get Orders')
     }
+    dispatch(getUserOrdersSuccess(response.data))
+  } catch (error) {
+    dispatch(getUserOrdersFailure())
   }
+}
 
 export const getCompanyOrdersThunk = () => async dispatch => {
   try {
@@ -83,18 +82,12 @@ export const createCompanyOrderThunk = data => async dispatch => {
   }
 }
 
-export const removeCompanyOrderThunk = (id) => async (dispatch) => {
-    try {
-      await api.deleteUpdateOrder(id).delete();
-      dispatch(removeOrderSuccess(id))
-      dispatch(getCompanyOrdersThunk())
-    } catch (error) {
-      dispatch(removeOrderFailure());
-    }
+export const removeCompanyOrderThunk = id => async dispatch => {
+  try {
+    await api.deleteUpdateOrder(id).delete()
+    dispatch(removeOrderSuccess(id))
+    dispatch(getCompanyOrdersThunk())
+  } catch (error) {
+    dispatch(removeOrderFailure())
   }
-
-  
-
-
-
-
+}

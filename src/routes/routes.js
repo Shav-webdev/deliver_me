@@ -1,6 +1,6 @@
 import React from 'react'
-import AppRoute from './approute';
-import {PrivateRoute} from './priveteRoute'
+import AppRoute from './approute'
+import { PrivateRoute } from './privateRoute'
 import { Router, Switch } from 'react-router-dom'
 import defaultLayout from '../hoc/layout/defaultLayout/defaultLayout'
 import PageNotFound from '../pages/404/pageNotFound'
@@ -15,9 +15,15 @@ import AdminLoginForm from '../pages/adminLogin/adminLoginForm'
 import AdminDashboard from '../pages/adminDashboard/adminDashboard'
 import history from './history'
 import ProfilePage from '../pages/profilePage/ProfilePage'
-import {getCookie} from '../pages/registration/services/cookies'
 
-export default function Routes() {
+import { getCookie } from '../pages/registration/services/cookiesUtils'
+
+
+
+export default function Routes({currentUser}) {
+  const { token, userType } = currentUser
+  console.log(currentUser.token)
+  console.log(currentUser.userType)
   return (
     <>
       <Router history={history}>
@@ -33,30 +39,24 @@ export default function Routes() {
             layout={registerLayout}
             component={RegisterAsCompany}
           />
-          {/* <AppRoute
+          <PrivateRoute
             path="/admin/dashboard"
-            admin={false}
-            layout={adminDashboardLayout}
             component={AdminDashboard}
-          /> */}
-          <PrivateRoute
-          path="/admin/dashboard"
-          component={AdminDashboard}
-          authenticated={getCookie('token') && getCookie('userType')==='admin'}
-          />}
+            authenticated={true}//currentUser.token && currentUser.userType === 'admin'}
           />
+          } />
           <PrivateRoute
-          path="/profile/company"
-          component={ProfilePage}
-          authenticated={getCookie('token') && getCookie('userType')==='company'}
-          />}
+            path="/profile/company"
+            component={ProfilePage}
+            authenticated={true}//currentUser.token && currentUser.userType === 'company'}
           />
+          } />
           <PrivateRoute
-          path="/profile/user"
-          component={ProfilePage}
-          authenticated={getCookie('token') && getCookie('userType')==='user'}
-          />}
+            path="/profile/user"
+            component={ProfilePage}
+            authenticated={true}//token && userType === 'user'}
           />
+          } />
           {/* <AppRoute
             path="/profile/user"
             layout={profileLayout}
@@ -69,7 +69,6 @@ export default function Routes() {
             component={ProfilePage}
             profile="company"
           /> */}
-
           <AppRoute
             path="/profile/company/active_orders"
             layout={profileLayout}
@@ -88,13 +87,11 @@ export default function Routes() {
             component={ProfilePage}
             profile="company"
           />
-          
           <AppRoute
             path="/admin"
             layout={registerLayout}
             component={AdminLoginForm}
           />
-         
           <AppRoute path="*" layout={notFoundLayout} component={PageNotFound} />
         </Switch>
       </Router>

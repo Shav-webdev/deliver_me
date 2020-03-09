@@ -25,6 +25,14 @@ export function signUp(url, data) {
 }
 
 export function logOut() {
-  eraseCookie('token')
+  try{
+    eraseCookie('token')
+   // eraseCookie('userType')
+  }catch{
+
+  }
   history.push('/')
+  Cookies.remove('userType')
+  Cookies.remove('token')
+ 
 }

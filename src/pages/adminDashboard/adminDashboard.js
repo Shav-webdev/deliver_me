@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Typography, Popover, Input } from 'antd'
-import { getCookie} from '../registration/services/cookies'
+import { getCookie, removeCookie } from '../registration/services/cookiesUtils'
+import {logOut} from '../registration/services/services'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -78,8 +79,6 @@ function AdminBoard({
       console.log(data)
       socketCompany(data)
     })
-
-    //}
   }, [])
 
   const filterByValue = (array, value) => {
@@ -106,7 +105,6 @@ function AdminBoard({
       visibleUser: true,
     })
     setModalUser(user)
-    console.log(modalUser)
   }
   const showModalCompany = company => {
     setModalState({
@@ -134,6 +132,15 @@ function AdminBoard({
     if (e.key !== 'signOut') {
       setMenuItem(e.key)
     } else {
+      // console.log('must remove',removeCookie('token'))
+       logOut()
+      //  eraseCookie('token')
+      //  eraseCookie('userType')
+      // removeCookie('token')
+      // removeCookie('userType')
+      // Cookies.remove('token', { path: '' });
+      // Cookies.remove('userType', { path: '' });
+
       history.push('/admin')
     }
   }

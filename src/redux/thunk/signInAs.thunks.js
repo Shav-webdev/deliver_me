@@ -3,11 +3,12 @@ import {
   signInAsCompanyRequest,
   signInAsCompanyFailure,
   signInAsUserSuccess,
+  signInCurrentUserRequest,
+  signInCurrentUserSuccess,
+  signInCurrentUserFailure,
 } from '../action'
 import history from '../../routes/history'
-import {
-  setCookie
-} from '../../pages/registration/services/cookies'
+import { setCookie } from '../../pages/registration/services/cookiesUtils'
 import {
   errorMessage,
   successMessage,
@@ -26,7 +27,7 @@ export const signInAs = data => async dispatch => {
       setCookie('token', `${response.data.token}`)
       setCookie('id', `${response.data.id}`)
       setCookie('userType', 'company')
-
+      signInAsCompanySuccess(response.data)
       successMessage('Sign In is successful !')
       history.push('/profile/company')
     } else if (response.data.type === 'user') {
@@ -50,17 +51,21 @@ export const signInAs = data => async dispatch => {
 
 export const signInAsAdminThunk = data => async dispatch => {
   try {
-    dispatch(signInAsCompanyRequest())
+    //dispatch(signInCurrentUserRequest())
     const response = await api.loginAdmin.post(data)
     if (response.status !== 200) {
       throw new Error('Something went wrong, try again')
     } else {
-      dispatch(signInAsUserSuccess(response.data))
-      setCookie('token', `${response.data.token}`)
-      setCookie('userType', "admin")
+      console.log(response.data)
+      dispatch(
+        signInCurrentUserSuccess({
+          ...response.data,
+          userType: response.data.type,
+        })
+      )
       history.push('/admin/dashboard')
     }
   } catch (error) {
-    dispatch(signInAsCompanyFailure())
+    dispatch(signInCurrentUserFailure())
   }
 }

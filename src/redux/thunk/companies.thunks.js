@@ -16,7 +16,7 @@ import {
   getCompanyAllOrdersRequest,
   getCompanyAllOrdersSuccess,
   getCompanyAllOrdersFailure,
-  addCompanySocketSuccsess
+  addCompanySocketSuccsess,
 } from '../action'
 import {
   errorMessage,
@@ -48,7 +48,7 @@ export const createCompanyThunk = data => async dispatch => {
   try {
     if (data.id) {
       const response = await api.deleteUpdateCompany(data.id).put({
-        ...data
+        ...data,
       })
       if (response.status !== 201) {
         errorMessage('Cannot update Company')
@@ -99,7 +99,7 @@ export const createOrderThunk = data => async dispatch => {
 
 export const getCompanyByIdThunk = id => async dispatch => {
   try {
-    console.log(id);
+    console.log(id)
 
     dispatch(signInAsCompanyRequest())
     const response = await api.getCompanyById(id).get(id)
