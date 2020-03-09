@@ -88,10 +88,12 @@ const ProfilePage = ({
   }
 
   const handleCreateOrderSubmit = order => {
-    const data = {
-      companyId: companies.signInAsCompanyData.id,
-      order,
-    }
+    const data = order.id
+      ? order
+      : {
+          companyId: companies.signInAsCompanyData.id,
+          order,
+        }
     createOrder(data)
     setVisible(false)
   }
@@ -294,6 +296,9 @@ const ProfilePage = ({
           visible={visible}
           handleCreateOrderSubmit={handleCreateOrderSubmit}
           modalHandleCancel={modalHandleCancel}
+          modalTitle="Create Request"
+          okText="Create"
+          state={{}}
         />
       </Layout>
     </Router>
