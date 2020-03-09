@@ -88,7 +88,7 @@ export default function ordersReducer(state = initialState, action) {
     case CREATE_ORDER_SUCCESS:
       return {
         ...state,
-        allOrdersData: action.payload,
+        companyOrdersData: [...state.companyOrdersData, action.payload],
       }
     case CREATE_ORDER_FAILURE:
       return {
@@ -100,7 +100,7 @@ export default function ordersReducer(state = initialState, action) {
         ...state,
       }
     case EDIT_ORDER_SUCCESS:
-      const lastData = state.allOrdersData.filter(
+      const lastData = state.companyOrdersData.filter(
         elem => elem.id !== action.payload.id
       )
       return {
@@ -117,7 +117,7 @@ export default function ordersReducer(state = initialState, action) {
         ...state,
       }
     case REMOVE_ORDER_SUCCESS:
-      const filtered = state.companiesData.filter(
+      const filtered = state.companyOrdersData.filter(
         elem => elem.id !== action.payload
       )
       return {

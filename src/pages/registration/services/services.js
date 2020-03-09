@@ -26,5 +26,6 @@ export function signUp(url, data) {
 
 export function logOut() {
   eraseCookie('token')
+  eraseCookie('id')
   history.push('/')
 }

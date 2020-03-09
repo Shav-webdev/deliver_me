@@ -62,7 +62,7 @@ const ProfilePage = ({
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-
+  const { companyOrdersData } = orders
   useEffect(() => {
     if (!getCookie('token') && !getCookie('id')) {
       history.push('/')
@@ -244,27 +244,31 @@ const ProfilePage = ({
           <Content className="company_profile_main">
             <Route exact path="/company">
               <OrdersList
-                orders={companyAllOrders}
+                companyId={id}
+                orders={companyOrdersData}
                 loading={getingCompanyAllOrders}
               />
             </Route>
             <Route path="/company/active_orders">
               <OrdersList
-                orders={companyAllOrders}
+                companyId={id}
+                orders={companyOrdersData}
                 loading={getingCompanyAllOrders}
                 filterBy="active"
               />
             </Route>
             <Route path="/company/completed_orders">
               <OrdersList
-                orders={companyAllOrders}
+                companyId={id}
+                orders={companyOrdersData}
                 loading={getingCompanyAllOrders}
                 filterBy="done"
               />
             </Route>
             <Route path="/company/pending_orders">
               <OrdersList
-                orders={companyAllOrders}
+                companyId={id}
+                orders={companyOrdersData}
                 loading={getingCompanyAllOrders}
                 filterBy="pending"
               />
@@ -306,11 +310,11 @@ const ProfilePage = ({
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-  const { users, companies } = state
+  const { users, companies, orders } = state
   return {
     users,
     companies,
+    orders,
   }
 }
 

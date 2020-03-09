@@ -28,7 +28,7 @@ import {
 } from '../../redux/thunk'
 import history from '../../routes/history'
 import { socket } from '../../App'
-import { errorMessage } from '../registration/services/services'
+import { errorMessage, logOut } from '../registration/services/services'
 import { ModalUserEdit } from '../../components/ModalUserEdit'
 import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
 import CountRequestInfo from '../../components/CountRequestInfo/CountRequestInfo'
@@ -134,6 +134,7 @@ function AdminBoard({
     if (e.key !== 'signOut') {
       setMenuItem(e.key)
     } else {
+      logOut()
       history.push('/admin')
     }
   }
