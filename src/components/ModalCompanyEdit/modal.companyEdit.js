@@ -8,6 +8,8 @@ import {
   DeleteFilled,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
+import { errorMessage } from '../../pages/registration/services/services'
+
 const { confirm } = Modal
 const defaultState = {
   name: '',
@@ -48,7 +50,7 @@ export const ModalCompanyEdit = ({
   useEffect(() => {
     setState({
       ...state,
-      ...modalCompany,
+      ...modalCompany
     })
   }, [modalCompany])
 
@@ -63,7 +65,7 @@ export const ModalCompanyEdit = ({
       onOk() {
         removeCompany(id), handleCancel()
       },
-      onCancel() {},
+      onCancel() { },
     })
   }
 
@@ -89,6 +91,8 @@ export const ModalCompanyEdit = ({
     if (
       !error.address &&
       !error.taxNumber &&
+      taxNumber.toString().length === 8 &&
+      phone.toString().length === 8 &&
       !error.name &&
       !error.phone &&
       !error.activity
@@ -99,6 +103,8 @@ export const ModalCompanyEdit = ({
       })
       handleCancel()
       setState(defaultState)
+    } else {
+      errorMessage('Input fields are invalid !')
     }
   }
   const handleAcceptCompany = () => {
@@ -166,7 +172,7 @@ export const ModalCompanyEdit = ({
         />
         <p
           style={{
-            color: error.name ?'red':'white',
+            color: error.name ? 'red' : 'white',
             margin: '0 5px',
           }}>
           Name is required
@@ -180,12 +186,12 @@ export const ModalCompanyEdit = ({
         />
         <p
           style={{
-            color: error.taxNumber ?'red':'white',
+            color: error.taxNumber ? 'red' : 'white',
             margin: '0 5px',
           }}>
           TaxNumber is required
         </p>
-        
+
         <Input
           addonAfter="Address"
           name="address"
@@ -195,7 +201,7 @@ export const ModalCompanyEdit = ({
         />
         <p
           style={{
-            color: error.address ?'red':'white',
+            color: error.address ? 'red' : 'white',
             margin: '0 5px',
           }}>
           Address is required
@@ -209,7 +215,7 @@ export const ModalCompanyEdit = ({
         />
         <p
           style={{
-            color: error.activity ?'red':'white',
+            color: error.activity ? 'red' : 'white',
             margin: '0 5px',
           }}>
           Activity is required
@@ -223,9 +229,9 @@ export const ModalCompanyEdit = ({
         />
         <p
           style={{
-            color: error.phone ?'red':'white',
+            color: error.phone ? 'red' : 'white',
             margin: '0 5px',
-            height:"100%"
+            height: "100%"
           }}>Phone is required</p>
         <Input
           type="number"
