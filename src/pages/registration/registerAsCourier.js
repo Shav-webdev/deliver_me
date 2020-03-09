@@ -175,7 +175,7 @@ function RegisterAsCourier() {
 
   const handleSubmit = e => {
     e.preventDefault()
-    let url = 'https://thawing-ravine-80499.herokuapp.com/sign-up-user'
+    let url = 'https://thawing-ravine-80499.herokuapp.com/user'
     const data = {
       name,
       email,

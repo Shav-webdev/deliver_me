@@ -157,7 +157,7 @@ function RegisterAsCompany() {
 
   const handleSubmit = e => {
     e.preventDefault()
-    let url = 'https://thawing-ravine-80499.herokuapp.com/sign-up-company'
+    let url = 'https://thawing-ravine-80499.herokuapp.com/company'
     const data = {
       name,
       email,

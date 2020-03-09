@@ -20,7 +20,7 @@ import { getCookie } from '../pages/registration/services/cookiesUtils'
 
 
 
-export default function Routes({currentUser,token,userType}) {
+export default function Routes({token,userType}) {
   const pathTo =
   userType === 'admin'
     ? '/admin/dashboard'
@@ -29,10 +29,10 @@ export default function Routes({currentUser,token,userType}) {
     : userType === 'user'
     ? '/profile/user'
     : ''
-    console.log(pathTo)
-  console.log(currentUser.token)
-  console.log(currentUser.userType)
-  console.log(token,userType)
+  //   console.log(pathTo)
+  // console.log(currentUser.token)
+  // console.log(currentUser.userType)
+  // console.log(token,userType)
   return (
     <>
       <Router history={history}>
@@ -52,35 +52,22 @@ export default function Routes({currentUser,token,userType}) {
             path="/admin/dashboard"
             pathTo={pathTo}
             component={AdminDashboard}
-            authenticated={token!==''?token && userType==='admin':currentUser.token && currentUser.userType==='admin'}
+            authenticated={token &&  userType==='admin'}
           />
           
           <PrivateRoute
             path="/company"
             pathTo={pathTo}
             component={ProfilePage}
-            authenticated={token!==''?token && userType==='company':currentUser.token && currentUser.userType==='company'}//currentUser.token && currentUser.userType === 'company'}
+            authenticated={token && userType==='company'}
           />
           
           <PrivateRoute
             path="/profile/user"
             pathTo={pathTo}
             component={'hj'}
-            authenticated={token!==''?token && userType==='user':currentUser.token && currentUser.userType==='user'}//}//token && userType === 'user'}
+            authenticated={token && userType==='user'}
           />
-          
-          {/* <AppRoute
-            path="/profile/user"
-            layout={profileLayout}
-            component={ProfilePage}
-            profile="user"
-          /> */}
-          {/* <AppRoute
-            path="/profile/company"
-            layout={profileLayout}
-            component={ProfilePage}
-            profile="company"
-          /> */}
           <AppRoute
             path="/company/active_orders"
             layout={profileLayout}

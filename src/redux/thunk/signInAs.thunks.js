@@ -1,4 +1,5 @@
 import api from '../API'
+import Storage from '../../localStorage/localStorage'
 import {
   signInAsCompanyRequest,
   signInAsCompanyFailure,
@@ -73,9 +74,10 @@ export const signInAsAdminThunk = data => async dispatch => {
     if (response.status !== 200) {
       throw new Error('Something went wrong, try again')
     } else {
-      console.log(response.data)
-      setCookie('token',response.data.token)
-      setCookie('userType','admin')
+      Storage.set('deliver',{
+        token:response.headers.autorisation,
+        userType:'admin'
+      })
       dispatch(
         signInCurrentUserSuccess({
           ...response.data,

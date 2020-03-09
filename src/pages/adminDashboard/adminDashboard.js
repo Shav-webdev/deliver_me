@@ -71,17 +71,17 @@ function AdminBoard({
     getUsers()
     getCompanies()
     socket.on('update_user_list', data => {
-      console.log(data)
+     // console.log(data)
       socketUser(data)
     })
     socket.on('update_company_list', data => {
-      console.log(data)
+     // console.log(data)
       socketCompany(data)
     })
   }, [])
 
   const filterByValue = (array, value) => {
-    console.log(array)
+    //console.log(array)
     if (array.length > 1) {
       return array.filter(
         data =>

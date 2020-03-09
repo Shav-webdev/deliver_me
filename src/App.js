@@ -1,6 +1,7 @@
 import React from 'react'
 import './App.css'
 import Routes from './routes/routes'
+import Storage from './localStorage/localStorage'
 import { connect } from 'react-redux'
 import ErrorBoundary from './containers/errorBoundary/errorBoundary'
 import io from 'socket.io-client'
@@ -11,11 +12,12 @@ function App({ currentUserData }) {
   // const userType = Cookies.getJSON('userType')
     const token = getCookie('token')
   const userType = getCookie('userType')
+  const st = Storage.get('deliver')
   //const { token, userType } = currentUserData
-  console.log(currentUserData)
+ // console.log(currentUserData)
   return (
     <ErrorBoundary>
-      {<Routes token={token} currentUser={currentUserData} userType={userType} />}
+      {<Routes token={st.token}  userType={st.userType} />}
     </ErrorBoundary>
   )
 }
@@ -23,7 +25,7 @@ function App({ currentUserData }) {
 const mapStateToProps = state => {
   const { currentUser } = state
   const { currentUserData } = currentUser
-  console.log(currentUserData)
+  //console.log(currentUserData)
   return {
     currentUserData,
   }
