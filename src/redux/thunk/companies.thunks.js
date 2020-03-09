@@ -16,6 +16,7 @@ import {
   errorMessage,
   successMessage,
 } from '../../pages/registration/services/services'
+import history from '../../routes/history'
 
 export const getCompaniesThunk = () => async dispatch => {
   try {
@@ -49,20 +50,33 @@ export const createCompanyThunk = data => async dispatch => {
         throw new Error('Cannot update Company')
       }
       dispatch(editCompanySuccsess(response.data))
+      getCompanyByIdThunk(data.id)
       successMessage('Data successfully updated !')
     } else {
       const response = await api.companies.post({
         ...data,
       })
       dispatch(createCompanySuccsess(response.data))
-      dispatch(getCompaniesThunk())
+      dispatch(getCompaniesThunk(data.id))
       if (response.status !== 201) {
         errorMessage('Cannot create Company')
         throw new Error('Cannot create Company')
       }
     }
   } catch (error) {
+    console.log(error)
     errorMessage('Something went wrong, try later')
+  }
+}
+
+export const removeCompanyByIdThunk = id => async dispatch => {
+  try {
+    await api.deleteUpdateCompany(id).delete()
+    dispatch(removeCompanySuccsess(id))
+    successMessage('Account deleted.')
+    history.push('/')
+  } catch (error) {
+    dispatch(removeCompanyFailure())
   }
 }
 
@@ -78,10 +92,8 @@ export const removeCompanyThunk = id => async dispatch => {
 
 export const getCompanyByIdThunk = id => async dispatch => {
   try {
-    console.log(id)
-
     dispatch(signInAsCompanyRequest())
-    const response = await api.getCompanyById(id).get(id)
+    const response = await api.getCompanyById(id).get()
 
     if (response.status > 300) {
       errorMessage('Something went wrong, try again')

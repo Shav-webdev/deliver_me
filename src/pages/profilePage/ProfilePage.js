@@ -25,7 +25,11 @@ import Menu from 'antd/es/menu'
 
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
-import { createCompanyThunk, getCompanyByIdThunk } from '../../redux/thunk'
+import {
+  createCompanyThunk,
+  getCompanyByIdThunk,
+  removeCompanyByIdThunk,
+} from '../../redux/thunk'
 import {
   getCompanyOrdersThunk,
   createCompanyOrderThunk,
@@ -53,12 +57,12 @@ const ProfilePage = ({
   companies,
   orders,
   updateAvatar,
+  deleteAccount,
   getCompanyById,
   createOrder,
   updateCompanyData,
   getCompanyAllOrders,
 }) => {
-  const [avatarUrl, setAvatarUrl] = useState('')
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
@@ -73,8 +77,6 @@ const ProfilePage = ({
     getCompanyAllOrders(companyId)
     // eslint-disable-next-line no-useless-escape
   }, [])
-
-  useEffect(() => {}, [avatarUrl])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -100,53 +102,19 @@ const ProfilePage = ({
 
   const handleEditInfoBtnClick = () => {
     setIsInputsEditable(true)
-    setAvatarUrl(avatar)
   }
 
   const handleCancelEditInfoBtnClick = () => {
     setIsInputsEditable(false)
   }
 
-  const handleSaveInfoBtnClick = () => {
-    const data = {
-      id,
-      name: companyName,
-      address: companyAddress,
-      phone: phoneNumber,
-      taxNumber: companyTaxNumber,
-      activity: companyActivity,
-      avatar: avatarUrl,
-    }
-
+  const handleSaveInfoBtnClick = data => {
     updateCompanyData(data)
     setIsInputsEditable(false)
+  }
 
-    // if (
-    //   !isNameValid &&
-    //   !isAddressValid &&
-    //   !isActivityValid &&
-    //   !isPhoneNumberValid &&
-    //   !isTaxNumberValid
-    // ) {
-    //   setShowNameValidText(true)
-    //   setShowAddressValidText(true)
-    //   setShowPhoneNumValidText(true)
-    //   setShowTaxNumValidText(true)
-    //   setShowActivityValidText(true)
-    // } else if (!isNameValid) {
-    //   setShowNameValidText(true)
-    // } else if (!isAddressValid) {
-    //   setShowAddressValidText(true)
-    // } else if (!isPhoneNumberValid) {
-    //   setShowPhoneNumValidText(true)
-    // } else if (!isTaxNumberValid) {
-    //   setShowTaxNumValidText(true)
-    // } else if (!isActivityValid) {
-    //   setShowActivityValidText(true)
-    // } else {
-    //   updateCompanyData(data)
-    //   setIsInputsEditable(false)
-    // }
+  const deleteCompanyAccount = id => {
+    deleteAccount(id)
   }
 
   const {
@@ -235,8 +203,8 @@ const ProfilePage = ({
               </Button>
               <Wallet wallet={amount} />
               <LogoutPopover
+                avatarUrl={avatar}
                 companyDataUrl={signInAsCompanyData.avatar}
-                avatarUrl={avatarUrl}
                 default={company_avatar}
               />
             </div>
@@ -279,17 +247,10 @@ const ProfilePage = ({
                   handleCancelBtnClick={handleCancelEditInfoBtnClick}
                   handleSaveBtnClick={handleSaveInfoBtnClick}
                   handleEditBtnClick={handleEditInfoBtnClick}
-                  id={id}
-                  name={name}
-                  taxNumber={taxNumber}
-                  address={address}
-                  phone={phone}
-                  activity={activity}
-                  avatar={avatar}
-                  companyDataUrl={signInAsCompanyData.avatar}
-                  avatarUrl={avatarUrl}
+                  state={signInAsCompanyData}
                   defaultUrl={company_avatar}
                   loading={signInLoading}
+                  deleteAccount={deleteCompanyAccount}
                   isInputsEditable={isInputsEditable}
                 />
               </div>
@@ -311,6 +272,7 @@ const ProfilePage = ({
 
 const mapStateToProps = state => {
   const { users, companies, orders } = state
+  const { signInAsCompanyData, signInLoading } = companies
   return {
     users,
     companies,
@@ -324,6 +286,7 @@ const mapDispatchToProps = dispatch => {
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
     createOrder: data => dispatch(createCompanyOrderThunk(data)),
     getCompanyAllOrders: id => dispatch(getCompanyOrdersThunk(id)),
+    deleteAccount: id => dispatch(removeCompanyByIdThunk(id)),
     updateAvatar: data => {
       dispatch(createCompanyThunk(data))
     },
