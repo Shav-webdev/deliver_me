@@ -7,43 +7,33 @@ import {
   validateActivity,
 } from '../../pages/registration/helpers/validations'
 import Spinner from '../../components/spiner/spinner'
-import {
-  Button,
-  Icon,
-  Layout,
-  Typography,
-  message,
-  Upload,
-  Form,
-  Input,
-  Avatar,
-  DatePicker,
-  Card,
-  Collapse,
-} from 'antd'
+import { Button, Icon, message, Upload, Form, Input, Avatar } from 'antd'
+import axios from 'axios'
+import ConfirmModal from '../../components/confirmModal/confirmModal'
 
 export default function EditProfileInfo({
   isInputsEditable,
   loading,
   defaultUrl,
   companyDataUrl,
-  id,
-  name,
-  taxNumber,
-  address,
-  phone,
-  activity,
-  avatarUrl,
-  avatar,
+  deleteAccount,
+  state,
   handleEditBtnClick,
   handleSaveBtnClick,
   handleCancelBtnClick,
 }) {
-  const [companyName, setCompanyName] = useState('')
-  const [companyAddress, setCompanyAddress] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [companyTaxNumber, setCompanyTaxNumber] = useState('')
-  const [companyActivity, setCompanyActivity] = useState('')
+  const { id, name, taxNumber, address, phone, activity, avatar } = state
+
+  const [companyName, setCompanyName] = useState(name ? name : '')
+  const [companyAddress, setCompanyAddress] = useState(address ? address : '')
+  const [phoneNumber, setPhoneNumber] = useState(phone ? phone : '')
+  const [companyTaxNumber, setCompanyTaxNumber] = useState(
+    taxNumber ? taxNumber : ''
+  )
+  const [avatarUrl, setAvatarUrl] = useState('')
+  const [companyActivity, setCompanyActivity] = useState(
+    activity ? activity : ''
+  )
 
   const [isNameValid, setIsNameValid] = useState(null)
   const [isAddressValid, setIsAddressValid] = useState(null)
@@ -56,6 +46,17 @@ export default function EditProfileInfo({
   const [showPhoneNumValidText, setShowPhoneNumValidText] = useState(false)
   const [showTaxNumValidText, setShowTaxNumValidText] = useState(false)
   const [showActivityValidText, setShowActivityValidText] = useState(false)
+  const [confirmVisible, setConfirmVisible] = useState(false)
+
+  useEffect(() => {
+    if (isInputsEditable) {
+      onHandleNameValidate()
+      onHandleAddressValidate()
+      onHandlePhoneNumValidate()
+      onHandleTaxNumValidate()
+      onHandleActivityValidate()
+    }
+  }, [isInputsEditable])
 
   const handleNameChange = useCallback(e => {
     const name = e.target.value
@@ -147,7 +148,46 @@ export default function EditProfileInfo({
   }
 
   const handleSaveInfoBtnClick = () => {
-    handleSaveBtnClick()
+    onHandleNameValidate()
+    onHandleAddressValidate()
+    onHandlePhoneNumValidate()
+    onHandleTaxNumValidate()
+    onHandleActivityValidate()
+    const data = {
+      id,
+      name: companyName,
+      address: companyAddress,
+      phone: phoneNumber,
+      taxNumber: companyTaxNumber,
+      activity: companyActivity,
+      avatar: avatarUrl,
+    }
+
+    if (!isNameValid) {
+      setShowNameValidText(true)
+    } else if (!isAddressValid) {
+      setShowAddressValidText(true)
+    } else if (!isPhoneNumberValid) {
+      setShowPhoneNumValidText(true)
+    } else if (!isTaxNumberValid) {
+      setShowTaxNumValidText(true)
+    } else if (!isActivityValid) {
+      setShowActivityValidText(true)
+    } else if (
+      !isNameValid &&
+      !isAddressValid &&
+      !isPhoneNumberValid &&
+      !isTaxNumberValid &&
+      !isActivityValid
+    ) {
+      setShowNameValidText(true)
+      setShowAddressValidText(true)
+      setShowPhoneNumValidText(true)
+      setShowTaxNumValidText(true)
+      setShowActivityValidText(true)
+    } else {
+      handleSaveBtnClick(data)
+    }
   }
 
   const handleCancelEditInfoBtnClick = () => {
@@ -162,7 +202,6 @@ export default function EditProfileInfo({
 
   const handleImageChange = event => {
     if (event.file.status === 'done') {
-      console.log(event)
       const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfeoo5iog/upload'
       const CLOUDINARY_UPLOAD_PRESET = 'lvxujt8u'
       const formData = new FormData()
@@ -172,17 +211,10 @@ export default function EditProfileInfo({
       return axios
         .post(CLOUDINARY_URL, formData)
         .then(res => {
-          console.log(res.data.url)
           setAvatarUrl(res.data.url)
-
-          console.log(avatarUrl)
           message.success(`${event.file.name} file uploaded successfully`)
           console.log({
-            ...companies.signInAsCompanyData,
-            avatar: res.data.url,
-          })
-          updateAvatar({
-            ...companies.signInAsCompanyData,
+            ...state,
             avatar: res.data.url,
           })
           return res.data.url
@@ -191,126 +223,153 @@ export default function EditProfileInfo({
     }
   }
 
+  const handleDelAccountBtnClick = e => {
+    setConfirmVisible(true)
+  }
+
+  const deleteModalHandleCancel = () => {
+    setConfirmVisible(false)
+  }
+
+  const handleDeleteAccount = () => {
+    console.log(id)
+    deleteAccount(id)
+    setConfirmVisible(false)
+  }
+
   if (loading) {
     return <Spinner />
   }
 
   return (
-    <Form className="company_info_form">
-      <div className="company_change_avatar_section">
-        <div>
-          <Avatar
-            size={128}
-            src={
-              avatarUrl
-                ? avatarUrl
-                : companyDataUrl
-                ? companyDataUrl
-                : defaultUrl
-            }
-          />
+    <>
+      <Form className="company_info_form">
+        <div className="company_change_avatar_section">
+          <div>
+            <Avatar
+              size={128}
+              src={avatar ? avatar : avatarUrl ? avatarUrl : defaultUrl}
+            />
+          </div>
+          <div className="company_upload_avatar_wrapper">
+            <Upload.Dragger
+              showUploadList={false}
+              multiple={false}
+              disabled={!isInputsEditable}
+              onChange={e => handleImageChange(e)}
+              customRequest={dummyRequest}
+              accept=".jpg, .jpeg, .png, .svg">
+              <Icon type="upload" /> Change avatar
+            </Upload.Dragger>
+          </div>
         </div>
-        <div className="company_upload_avatar_wrapper">
-          <Upload.Dragger
-            showUploadList={false}
-            multiple={false}
+        <Form.Item
+          label="Name"
+          validateStatus={showNameValidText ? 'error' : 'success'}
+          hasFeedback={showNameValidText}
+          help={
+            showNameValidText
+              ? 'Name should contain at least two characters'
+              : ''
+          }>
+          <Input
             disabled={!isInputsEditable}
-            onChange={e => handleImageChange(e)}
-            customRequest={dummyRequest}
-            accept=".jpg, .jpeg, .png, .svg">
-            <Icon type="upload" /> Change avatar
-          </Upload.Dragger>
-        </div>
-      </div>
-      <Form.Item
-        label="Name"
-        validateStatus={showNameValidText ? 'error' : 'success'}
-        hasFeedback={showNameValidText}
-        help={
-          showNameValidText ? 'Name should contain at least two characters' : ''
-        }>
-        <Input
-          disabled={!isInputsEditable}
-          onChange={handleNameChange}
-          value={isInputsEditable ? companyName : name}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Address"
-        validateStatus={showAddressValidText ? 'error' : 'success'}
-        hasFeedback={showAddressValidText}
-        help={
-          showAddressValidText
-            ? 'Address should contain at least two characters'
-            : ''
-        }>
-        <Input
-          disabled={!isInputsEditable}
-          onChange={e => handleAddressChange(e)}
-          value={isInputsEditable ? companyAddress : address}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Phone Number"
-        validateStatus={showPhoneNumValidText ? 'error' : 'success'}
-        hasFeedback={showPhoneNumValidText}
-        help={
-          showPhoneNumValidText
-            ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
-            : ''
-        }>
-        <Input
-          disabled={!isInputsEditable}
-          onChange={e => handlePhoneNumChange(e)}
-          value={isInputsEditable ? phoneNumber : phone}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Tax Number"
-        validateStatus={showTaxNumValidText ? 'error' : 'success'}
-        hasFeedback={showTaxNumValidText}
-        help={
-          showTaxNumValidText
-            ? 'Tax number should contain only 8 digit either'
-            : ''
-        }>
-        <Input
-          disabled={!isInputsEditable}
-          onChange={e => handleTaxNumChange(e)}
-          value={isInputsEditable ? companyTaxNumber : taxNumber}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Activity"
-        validateStatus={showActivityValidText ? 'error' : 'success'}
-        hasFeedback={showActivityValidText}
-        help={
-          showActivityValidText
-            ? 'Activity should contain at least two characters'
-            : ''
-        }>
-        <Input
-          disabled={!isInputsEditable}
-          onChange={e => handleActivityChange(e)}
-          value={isInputsEditable ? companyActivity : activity}
-        />
-      </Form.Item>
-      <div className="company_edit_info_profile">
-        {!isInputsEditable && (
-          <Button type="primary" onClick={handleEditInfoBtnClick}>
-            Edit
+            onChange={handleNameChange}
+            value={isInputsEditable ? companyName : name}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Address"
+          validateStatus={showAddressValidText ? 'error' : 'success'}
+          hasFeedback={showAddressValidText}
+          help={
+            showAddressValidText
+              ? 'Address should contain at least two characters'
+              : ''
+          }>
+          <Input
+            disabled={!isInputsEditable}
+            onChange={e => handleAddressChange(e)}
+            value={isInputsEditable ? companyAddress : address}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Phone Number"
+          validateStatus={showPhoneNumValidText ? 'error' : 'success'}
+          hasFeedback={showPhoneNumValidText}
+          help={
+            showPhoneNumValidText
+              ? 'Phone number should contain only 8 digit either ( e.g "12345678" or "12-345-678")'
+              : ''
+          }>
+          <Input
+            disabled={!isInputsEditable}
+            onChange={e => handlePhoneNumChange(e)}
+            value={isInputsEditable ? phoneNumber : phone}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Tax Number"
+          validateStatus={showTaxNumValidText ? 'error' : 'success'}
+          hasFeedback={showTaxNumValidText}
+          help={
+            showTaxNumValidText
+              ? 'Tax number should contain only 8 digit either'
+              : ''
+          }>
+          <Input
+            disabled={!isInputsEditable}
+            onChange={e => handleTaxNumChange(e)}
+            value={isInputsEditable ? companyTaxNumber : taxNumber}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Activity"
+          validateStatus={showActivityValidText ? 'error' : 'success'}
+          hasFeedback={showActivityValidText}
+          help={
+            showActivityValidText
+              ? 'Activity should contain at least two characters'
+              : ''
+          }>
+          <Input
+            disabled={!isInputsEditable}
+            onChange={e => handleActivityChange(e)}
+            value={isInputsEditable ? companyActivity : activity}
+          />
+        </Form.Item>
+        <div className="company_edit_info_profile">
+          <Button type="danger" onClick={handleDelAccountBtnClick}>
+            Delete account
           </Button>
-        )}
-        {isInputsEditable && (
-          <Button type="primary" onClick={handleCancelEditInfoBtnClick}>
-            Cancel
-          </Button>
-        )}
+          {!isInputsEditable && (
+            <Button type="primary" onClick={handleEditInfoBtnClick}>
+              Edit
+            </Button>
+          )}
+          {isInputsEditable && (
+            <Button type="primary" onClick={handleCancelEditInfoBtnClick}>
+              Cancel
+            </Button>
+          )}
 
-        <Button type="primary" onClick={handleSaveInfoBtnClick}>
-          Save
-        </Button>
-      </div>
-    </Form>
+          <Button
+            disabled={!isInputsEditable}
+            type="primary"
+            onClick={handleSaveInfoBtnClick}>
+            Save
+          </Button>
+        </div>
+      </Form>
+      <ConfirmModal
+        handleDelete={handleDeleteAccount}
+        visible={confirmVisible}
+        deleteModalHandleCancel={deleteModalHandleCancel}
+        confirmVisible={confirmVisible}
+        title="Delete Account"
+        okText="Delete">
+        On press delete all your data will be lost
+      </ConfirmModal>
+    </>
   )
 }

@@ -10,6 +10,7 @@ import {
   DeleteFilled,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
+import { errorMessage, successMessage } from '../../pages/registration/services/services'
 const { confirm } = Modal
 const defaultState = {
   name: '',
@@ -52,7 +53,7 @@ export const ModalUserEdit = ({
       onOk() {
         removeUser(id), handleCancel()
       },
-      onCancel() {},
+      onCancel() { },
     })
   }
 
@@ -74,10 +75,13 @@ export const ModalUserEdit = ({
     })
   }
   const handleSubmit = () => {
-    if (!error.address && !error.lastName && !error.name && !error.phone) {
+    if (!error.address && !error.lastName && !error.name && !error.phone && phone.toString().length === 8) {
       updateUser(state)
       handleCancel()
       setState(defaultState)
+      successMessage('Data successfully updated !')
+    } else {
+      errorMessage('Input fields are invalid !')
     }
   }
   const handleAcceptUser = () => {
@@ -151,7 +155,7 @@ export const ModalUserEdit = ({
         />
         <p
           style={{
-            color: error.name ?'red':"white",
+            color: error.name ? 'red' : "white",
             margin: '0 5px',
           }}>
           Name is required
@@ -165,7 +169,7 @@ export const ModalUserEdit = ({
         />
         <p
           style={{
-            color: error.lastName ?'red':"white",
+            color: error.lastName ? 'red' : "white",
             margin: '0 5px',
           }}>
           LastName is required
@@ -179,7 +183,7 @@ export const ModalUserEdit = ({
         />
         <p
           style={{
-            color: error.phone ?'red':"white",
+            color: error.phone ? 'red' : "white",
             margin: '0 5px',
           }}>
           Phone is required
@@ -193,7 +197,7 @@ export const ModalUserEdit = ({
         />
         <p
           style={{
-            color: error.address ?'red':"white",
+            color: error.address ? 'red' : "white",
             margin: '0 5px',
           }}>
           Address is required

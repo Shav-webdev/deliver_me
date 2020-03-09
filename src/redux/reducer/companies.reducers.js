@@ -18,8 +18,6 @@ const initialState = {
   signInAsCompanyData: {},
   createOrderLoading: false,
   orderData: {},
-  getingCompanyAllOrders: false,
-  companyAllOrders: [],
 }
 
 export default function companiesReducer(state = initialState, action) {
@@ -64,6 +62,7 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         companiesData: [...lastData, action.payload],
+        signInAsCompanyData: action.payload,
       }
     case 'EDIT_COMPANY_FAILURE':
       return {
@@ -113,23 +112,6 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         createOrderLoading: false,
-      }
-
-    case GET_COMPANY_ALL_ORDERS_REQUEST:
-      return {
-        ...state,
-        getingCompanyAllOrders: true,
-      }
-    case GET_COMPANY_ALL_ORDERS_SUCCESS:
-      return {
-        ...state,
-        getingCompanyAllOrders: false,
-        companyAllOrders: action.payload,
-      }
-    case GET_COMPANY_ALL_ORDERS_FAILURE:
-      return {
-        ...state,
-        getingCompanyAllOrders: false,
       }
     default:
       return state

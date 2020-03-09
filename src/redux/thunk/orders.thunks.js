@@ -56,9 +56,7 @@ export const getUserOrdersThunk = () => async dispatch => {
 export const getCompanyOrdersThunk = id => async dispatch => {
   try {
     dispatch(getCompanyOrdersRequest())
-    console.log('company id 2', id)
     const response = await api.getCompanyOrders(id).get(id)
-    console.log(response)
     if (response.status !== 200) {
       errorMessage('Cannot get Orders')
     }
