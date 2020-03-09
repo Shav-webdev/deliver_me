@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
 import { Form, Input, Select, Button, Typography, Icon } from 'antd'
 import FormItem from 'antd/lib/form/FormItem'
-import { signUp } from '../services/services'
+import { signUp } from '../../../services/services'
 import history from '../../../routes/history'
 import './registerAsCompany.css'
 import {

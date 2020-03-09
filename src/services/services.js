@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { eraseCookie, getCookie, setCookie } from './cookies'
+import Storage from './localStorage/localStorage'
 import { message } from 'antd'
-import history from '../../../routes/history'
-import { socket } from '../../../App'
+import history from '../routes/history'
+import { socket } from '../App'
 
 export const successMessage = (msg = '') => {
   message.success(msg)
@@ -25,13 +25,6 @@ export function signUp(url, data) {
 }
 
 export function logOut() {
- setCookie('userType','')
- setCookie('token','')
-   // eraseCookie('token')
-   // eraseCookie('userType')
-  
+  Storage.clear()
   history.push('/')
-  // Cookies.remove('userType')
-  // Cookies.remove('token')
- 
 }

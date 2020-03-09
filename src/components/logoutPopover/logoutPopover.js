@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Avatar } from 'antd'
-import { logOut } from '../../pages/registration/services/services'
+import { logOut } from '../../services/services'
 import Popover from 'antd/es/popover'
 
 export default function LogoutPopover(props) {

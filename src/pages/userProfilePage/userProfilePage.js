@@ -15,13 +15,11 @@ import {
     Collapse,
 } from 'antd'
 import './profilePage.css'
-import { getCookie } from '../registration/services/cookies'
 import history from '../../routes/history'
 import List from 'antd/es/list'
 import company_avatar from '../../assets/images/company_avatar.png' //change to user avatar
 import axios from 'axios'
 import Popover from 'antd/es/popover'
-import { logOut } from '../registration/services/services'
 import Modal from 'antd/es/modal'
 import Menu from 'antd/es/menu'
 import moment from 'moment'

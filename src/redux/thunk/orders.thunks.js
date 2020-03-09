@@ -23,7 +23,7 @@ import {
 import {
   errorMessage,
   successMessage,
-} from '../../pages/registration/services/services'
+} from '../../services/services'
 
 export const getAllOrdersThunk = () => async dispatch => {
   try {

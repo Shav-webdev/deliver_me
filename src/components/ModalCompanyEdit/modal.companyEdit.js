@@ -8,7 +8,7 @@ import {
   DeleteFilled,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
-import { errorMessage } from '../../pages/registration/services/services'
+import { errorMessage } from '../../services/services'
 
 const { confirm } = Modal
 const defaultState = {
@@ -70,12 +70,12 @@ export const ModalCompanyEdit = ({
   }
 
   const handleInputChange = ({ target: { name, value } }) => {
-    if (value === '') {
+    if (value === '' || name==='taxNumber' && value.toString().length !== 8) {
       setError({
         ...error,
         [name]: true,
       })
-    } else {
+    } else if(name==='taxNumber' && value.toString().length === 8){
       setError({
         ...error,
         [name]: false,
@@ -92,7 +92,6 @@ export const ModalCompanyEdit = ({
       !error.address &&
       !error.taxNumber &&
       taxNumber.toString().length === 8 &&
-      phone.toString().length === 8 &&
       !error.name &&
       !error.phone &&
       !error.activity
@@ -115,9 +114,7 @@ export const ModalCompanyEdit = ({
     updateCompany({ ...modalCompany, approved: 'declined' })
     setState({ ...modalCompany, approved: 'declined' })
   }
-  const handleRemove = () => {
-    removeCompany(id)
-  }
+
   return (
     <div>
       <Modal
@@ -189,7 +186,7 @@ export const ModalCompanyEdit = ({
             color: error.taxNumber ? 'red' : 'white',
             margin: '0 5px',
           }}>
-          TaxNumber is required
+          TaxNumber is required and must have 8 digits
         </p>
 
         <Input
@@ -232,7 +229,7 @@ export const ModalCompanyEdit = ({
             color: error.phone ? 'red' : 'white',
             margin: '0 5px',
             height: "100%"
-          }}>Phone is required</p>
+          }}>Phone is required and must have 8 digits</p>
         <Input
           type="number"
           addonAfter="Add money"

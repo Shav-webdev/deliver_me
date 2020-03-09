@@ -15,7 +15,7 @@ import {
 import {
   errorMessage,
   successMessage,
-} from '../../pages/registration/services/services'
+} from '../../services/services'
 import history from '../../routes/history'
 
 export const getCompaniesThunk = () => async dispatch => {

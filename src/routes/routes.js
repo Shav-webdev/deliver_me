@@ -8,31 +8,22 @@ import notFoundLayout from '../hoc/layout/notFoundLayout'
 import HomePage from '../pages/homePage/HomePage'
 import registerLayout from '../hoc/layout/registerLayout/registerLayout'
 import profileLayout from '../hoc/layout/profileLayout/profileLayout'
-import adminDashboardLayout from '../hoc/layout/adminDashboardLayout/adminDashboardLayout'
 import RegisterAsCompany from '../pages/registration/registerAsCompany/registerAsCompany'
-import RegisterAsCourier from '../pages/registration/registerAsCourier'
 import AdminLoginForm from '../pages/adminLogin/adminLoginForm'
 import AdminDashboard from '../pages/adminDashboard/adminDashboard'
 import history from './history'
 import ProfilePage from '../pages/profilePage/ProfilePage'
 
-import { getCookie } from '../pages/registration/services/cookiesUtils'
-
-
-
-export default function Routes({token,userType}) {
+export default function Routes({ token, userType }) {
   const pathTo =
-  userType === 'admin'
-    ? '/admin/dashboard'
-    : userType === 'company'
-    ? '/company'
-    : userType === 'user'
-    ? '/profile/user'
-    : ''
-  //   console.log(pathTo)
-  // console.log(currentUser.token)
-  // console.log(currentUser.userType)
-  // console.log(token,userType)
+    userType === 'admin'
+      ? '/admin/dashboard'
+      : userType === 'company'
+      ? '/company'
+      : userType === 'user'
+      ? '/profile/user'
+      : ''
+
   return (
     <>
       <Router history={history}>
@@ -52,39 +43,38 @@ export default function Routes({token,userType}) {
             path="/admin/dashboard"
             pathTo={pathTo}
             component={AdminDashboard}
-            authenticated={token &&  userType==='admin'}
+            authenticated={token && userType === 'admin'}
           />
-          
-          <PrivateRoute
-            path="/company"
-            pathTo={pathTo}
-            component={ProfilePage}
-            authenticated={token && userType==='company'}
-          />
-          
+         
           <PrivateRoute
             path="/profile/user"
             pathTo={pathTo}
             component={'hj'}
-            authenticated={token && userType==='user'}
+            authenticated={token && userType === 'user'}
           />
-          <AppRoute
+          <PrivateRoute
             path="/company/active_orders"
-            layout={profileLayout}
+            pathTo={pathTo}
             component={ProfilePage}
-            profile="company"
+            authenticated={token && userType === 'company'}
           />
-          <AppRoute
+          <PrivateRoute
             path="/company/pending_orders"
-            layout={profileLayout}
+            pathTo={pathTo}
             component={ProfilePage}
-            profile="company"
+            authenticated={token && userType === 'company'}
           />
-          <AppRoute
+          <PrivateRoute
             path="/company/completed_orders"
-            layout={profileLayout}
+            pathTo={pathTo}
             component={ProfilePage}
-            profile="company"
+            authenticated={token && userType === 'company'}
+          />
+           <PrivateRoute
+            path="/company"
+            pathTo={pathTo}
+            component={ProfilePage}
+            authenticated={token && userType === 'company'}
           />
           <AppRoute
             path="/admin"

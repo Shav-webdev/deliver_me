@@ -10,7 +10,7 @@ import {
   DeleteFilled,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
-import { errorMessage, successMessage } from '../../pages/registration/services/services'
+import { errorMessage, successMessage } from '../../services/services'
 const { confirm } = Modal
 const defaultState = {
   name: '',
@@ -75,7 +75,7 @@ export const ModalUserEdit = ({
     })
   }
   const handleSubmit = () => {
-    if (!error.address && !error.lastName && !error.name && !error.phone && phone.toString().length === 8) {
+    if (!error.address && !error.lastName && !error.name && !error.phone) {
       updateUser(state)
       handleCancel()
       setState(defaultState)

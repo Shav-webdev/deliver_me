@@ -13,7 +13,7 @@ import {
   message,
 } from 'antd'
 import FormItem from 'antd/lib/form/FormItem'
-import { signUp } from './services/services'
+import { signUp } from '../../services/services'
 import history from '../../routes/history'
 import './registerAsCourier.css'
 import {

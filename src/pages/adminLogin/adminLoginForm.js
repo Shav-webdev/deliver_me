@@ -30,6 +30,7 @@ function AdminLoginForm({ signInAdmin }) {
       password,
     }
     setLoading(false)
+    console.log("loginadmin")
     signInAdmin(data)
   }
   if (loading) {

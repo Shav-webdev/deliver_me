@@ -1,5 +1,5 @@
 import api from '../API'
-import Storage from '../../localStorage/localStorage'
+import Storage from '../../services/localStorage/localStorage'
 import {
   signInAsCompanyRequest,
   signInAsCompanyFailure,
@@ -9,13 +9,7 @@ import {
   signInCurrentUserFailure,
 } from '../action'
 import history from '../../routes/history'
-import {
-  setCookie
-} from '../../pages/registration/services/cookies'
-import {
-  errorMessage,
-  successMessage,
-} from '../../pages/registration/services/services'
+import { errorMessage, successMessage } from '../../services/services'
 
 export const signInAs = data => async dispatch => {
   try {
@@ -24,59 +18,43 @@ export const signInAs = data => async dispatch => {
     if (response.status !== 200) {
       throw new Error(response.data.message)
     }
-    if (response.data.type === 'company') {
-      setCookie('token', `${response.data.token}`)
-      setCookie('id', `${response.data.id}`)
-      setCookie('userType', 'company')
-     // signInAsCompanySuccess(response.data)
-     dispatch(
+    Storage.set('deliver', {
+      id: response.data.id,
+      token: response.headers.autorisation,
+      userType: response.data.type,
+    })
+    dispatch(
       signInCurrentUserSuccess({
         ...response.data,
         userType: response.data.type,
       })
     )
+    if (response.data.type === 'company') {
       successMessage('Sign In is successful !')
       history.push('/company')
-    } else if (response.data.type === 'user') {
-     // dispatch(signInAsUserSuccess(response.data))
-      setCookie('token', `${response.data.token}`)
-      setCookie('id', `${response.data.id}`)
-      setCookie('userType', `${response.data.type}`)
-      dispatch(
-        signInCurrentUserSuccess({
-          ...response.data,
-          userType: response.data.type,
-        }))
+    } else {
       successMessage('Sign In is successful !')
       history.push('/profile/user')
-    } else {
-      dispatch(signInAsUserSuccess(response.data))
-      setCookie('token', `${response.data.token}`)
-      setCookie('userType', 'admin')
-      history.push('/admin/dashboard')
     }
   } catch (error) {
-    console.log({
-      error
-    })
     const err = {
-      ...error
+      ...error,
     }
-    dispatch(signInAsCompanyFailure())
     errorMessage(err.response.data.message)
   }
 }
 
 export const signInAsAdminThunk = data => async dispatch => {
   try {
-    //dispatch(signInCurrentUserRequest())
+    dispatch(signInCurrentUserRequest())
     const response = await api.loginAdmin.post(data)
+    console.log(response)
     if (response.status !== 200) {
       throw new Error('Something went wrong, try again')
     } else {
-      Storage.set('deliver',{
-        token:response.headers.autorisation,
-        userType:'admin'
+       Storage.set('deliver', {
+        token: response.headers.autorisation,
+        userType: 'admin',
       })
       dispatch(
         signInCurrentUserSuccess({
@@ -87,6 +65,9 @@ export const signInAsAdminThunk = data => async dispatch => {
       history.push('/admin/dashboard')
     }
   } catch (error) {
-    dispatch(signInCurrentUserFailure())
+    const err = {
+      ...error,
+    }
+    //errorMessage('Email or password is incorrect')
   }
 }

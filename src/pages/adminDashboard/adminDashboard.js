@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Typography, Popover, Input } from 'antd'
-import { getCookie, removeCookie } from '../registration/services/cookiesUtils'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  EditFilled,
   CheckCircleFilled,
   CloseCircleFilled,
-  DeleteFilled,
   ClockCircleOutlined,
+  ExportOutlined,
 } from '@ant-design/icons'
 import logo from '../../assets/images/logo.svg'
 import { Layout, Menu, Icon } from 'antd'
@@ -28,7 +26,7 @@ import {
 } from '../../redux/thunk'
 import history from '../../routes/history'
 import { socket } from '../../App'
-import { errorMessage, logOut } from '../registration/services/services'
+import { errorMessage, logOut } from '../../services/services'
 import { ModalUserEdit } from '../../components/ModalUserEdit'
 import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
 import CountRequestInfo from '../../components/CountRequestInfo/CountRequestInfo'
@@ -65,23 +63,17 @@ function AdminBoard({
   const [modalCompany, setModalCompany] = useState({})
 
   useEffect(() => {
-    // if (!getCookie('token')) {
-    //   history.push('/admin')
-    // }else{
     getUsers()
     getCompanies()
     socket.on('update_user_list', data => {
-     // console.log(data)
       socketUser(data)
     })
     socket.on('update_company_list', data => {
-     // console.log(data)
       socketCompany(data)
     })
   }, [])
 
   const filterByValue = (array, value) => {
-    //console.log(array)
     if (array.length > 1) {
       return array.filter(
         data =>
@@ -186,7 +178,7 @@ function AdminBoard({
               <span>Companies</span>
             </Menu.Item>
             <Menu.Item key="signOut">
-              <Icon type="LogoutOutlined" />
+              <ExportOutlined />
               <span>Sign Out</span>
             </Menu.Item>
           </Menu>
