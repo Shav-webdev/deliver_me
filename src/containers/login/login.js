@@ -59,16 +59,18 @@ function LoginForm({ signInAs }) {
       password,
     }
 
-    if (!isEmailValid && !isPasswordValid) {
-      setShowEmailValidText(true)
-      setShowPasswordValidText(true)
-    } else if (!isEmailValid) {
-      setShowEmailValidText(true)
-    } else if (!isPasswordValid) {
-      setShowPasswordValidText(true)
-    } else {
-      signInAs(data)
-    }
+    signInAs(data)
+    setLoading(false)
+    // if (!isEmailValid && !isPasswordValid) {
+    //   setShowEmailValidText(true)
+    //   setShowPasswordValidText(true)
+    // } else if (!isEmailValid) {
+    //   setShowEmailValidText(true)
+    // } else if (!isPasswordValid) {
+    //   setShowPasswordValidText(true)
+    // } else {
+    //   signInAs(data)
+    // }
     setLoading(false)
   }
 
@@ -80,28 +82,30 @@ function LoginForm({ signInAs }) {
       <h2>Sign in</h2>
       <Form onSubmit={e => handleSubmit(e)} className="login-form">
         <Form.Item
-          validateStatus={showEmailValidText ? 'error' : 'success'}
-          hasFeedback={showEmailValidText}
-          help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
+        // validateStatus={showEmailValidText ? 'error' : 'success'}
+        // hasFeedback={showEmailValidText}
+        // help={showEmailValidText ? 'The input is not valid E-mail!' : ''}>
+        >
           <Input
             onChange={e => handleEmailChange(e)}
-            onBlur={onHandleEmailValidate}
+            // onBlur={onHandleEmailValidate}
             value={email}
             placeholder="Email"
             prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
           />
         </Form.Item>
         <Form.Item
-          validateStatus={showPasswordValidText ? 'error' : 'success'}
-          hasFeedback={showPasswordValidText}
-          help={
-            showPasswordValidText
-              ? 'Password should contain at least 8 characters, one digit, one lower, one upper case'
-              : ''
-          }>
+        // validateStatus={showPasswordValidText ? 'error' : 'success'}
+        // hasFeedback={showPasswordValidText}
+        // help={
+        //   showPasswordValidText
+        //     ? 'Password should contain at least 8 characters, one digit, one lower, one upper case'
+        //     : ''
+        // }>
+        >
           <Input
             onChange={e => handlePasswordChange(e)}
-            onBlur={onHandlePasswordValidate}
+            // onBlur={onHandlePasswordValidate}
             value={password}
             type="password"
             placeholder="Password"
