@@ -1,9 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import List from 'antd/es/list'
 import CreateOrderModal from '../createOrderModal/createOrderModal'
+import {
+  createCompanyOrderThunk,
+  removeCompanyOrderThunk,
+} from '../../redux/thunk/orders.thunks'
+import { connect } from 'react-redux'
+import { Button } from 'antd'
+import ConfirmModal from '../confirmModal/confirmModal'
 
-export default function Order({ el }) {
+function Order({ el, updateOrder, deleteOrder }) {
   const [visible, setVisible] = useState(false)
+  const [confirmVisible, setConfirmVisible] = useState(false)
 
   const handleUpdateOrderClick = () => {
     setVisible(true)
@@ -11,6 +19,26 @@ export default function Order({ el }) {
 
   const modalHandleCancel = () => {
     setVisible(false)
+  }
+
+  const handleUpdateOrderSubmit = order => {
+    const data = order
+    console.log(order)
+    updateOrder(data)
+    setVisible(false)
+  }
+  const onDeleteBtnClick = e => {
+    e.stopPropagation()
+    setConfirmVisible(true)
+  }
+
+  const deleteModalHandleCancel = () => {
+    setConfirmVisible(false)
+  }
+
+  const handleDeleteOrder = () => {
+    deleteOrder(el.id)
+    setConfirmVisible(false)
   }
 
   return (
@@ -41,13 +69,37 @@ export default function Order({ el }) {
             <strong>Status :</strong>
             {el.state}
           </p>
+          {el.state !== 'pending' && (
+            <Button onClick={onDeleteBtnClick}>Delete</Button>
+          )}
         </div>
       </List.Item>
       <CreateOrderModal
         visible={visible}
-        // handleCreateOrderSubmit={handleCreateOrderSubmit}
+        handleCreateOrderSubmit={handleUpdateOrderSubmit}
         modalHandleCancel={modalHandleCancel}
+        modalTitle="Edit Request"
+        okText="Update"
+        state={el}
       />
+      <ConfirmModal
+        handleDeleteOrder={handleDeleteOrder}
+        visible={confirmVisible}
+        deleteModalHandleCancel={deleteModalHandleCancel}
+        confirmVisible={confirmVisible}
+        title="Delete Order"
+        okText="Delete">
+        Are you sure to delete this order ?
+      </ConfirmModal>
     </>
   )
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateOrder: data => dispatch(createCompanyOrderThunk(data)),
+    deleteOrder: id => dispatch(removeCompanyOrderThunk(id)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Order)

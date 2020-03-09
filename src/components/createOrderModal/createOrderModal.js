@@ -10,6 +10,7 @@ import {
   validateOrderComment,
 } from '../../pages/registration/helpers/validations'
 import SubTitle from '../subTitle/subTitle'
+import { connect } from 'react-redux'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -19,16 +20,34 @@ export default function CreateOrderModal({
   handleCreateOrderSubmit,
   modalHandleCancel,
   visible,
+  okText,
+  modalTitle,
+  state,
 }) {
-  const [points, setPoints] = useState('')
-  const [takeAddress, setTakeAddress] = useState('')
-  const [deliverAddress, setDeliverAddress] = useState('')
-  const [orderDescription, setOrderDescription] = useState('')
-  const [comment, setComment] = useState('')
-  const [orderStartTime, setOrderStartTime] = useState('')
-  const [orderEndTime, setOrderEndTime] = useState('')
-  const [reciverName, setReciverName] = useState('')
-  const [reciverPhone, setReciverPhone] = useState('')
+  const [orderId, setOrderId] = useState(state.id ? state.id : null)
+  const [points, setPoints] = useState(state.points ? state.points : '')
+  const [takeAddress, setTakeAddress] = useState(
+    state.take_address ? state.take_address : ''
+  )
+  const [deliverAddress, setDeliverAddress] = useState(
+    state.deliver_address ? state.deliver_address : ''
+  )
+  const [orderDescription, setOrderDescription] = useState(
+    state.order_description ? state.order_description : ''
+  )
+  const [comment, setComment] = useState(state.comment ? state.comment : '')
+  const [orderStartTime, setOrderStartTime] = useState(
+    state.order_start_time ? state.order_start_time : ''
+  )
+  const [orderEndTime, setOrderEndTime] = useState(
+    state.order_end_time ? state.order_end_time : ''
+  )
+  const [reciverName, setReciverName] = useState(
+    state.receiver_name ? state.receiver_name : ''
+  )
+  const [reciverPhone, setReciverPhone] = useState(
+    state.receiver_phone ? `${state.receiver_phone}`.slice(3) : ''
+  )
   const [isOrderDescValid, setIsOrderDescValid] = useState(null)
   const [isTakeAddressValid, setIsTakeAddressValid] = useState(null)
   const [isDeliverAddressValid, setIsDeliverAddressValid] = useState(null)
@@ -59,6 +78,22 @@ export default function CreateOrderModal({
   const [showReciverPhoneValidText, setShowReciverPhoneValidText] = useState(
     false
   )
+
+  const [isOrderEditable, setIsOrderEditable] = useState(
+    state.state ? state.state === 'pending' || state.state === 'done' : false
+  )
+
+  useEffect(() => {
+    if (visible && okText === 'Update') {
+      onHandleTakeAddressValidate()
+      onHandleOrderDescValidate()
+      onHandleDeliverAddressValidate()
+      onHandleReciverNameValidate()
+      onHandleReciverPhoneValidate()
+      onHandlePointsValidate()
+      onHandleOrderCommentValidate()
+    }
+  }, [visible])
 
   const handlePointsChange = useCallback(e => {
     const orderPoint = e.target.value
@@ -176,7 +211,18 @@ export default function CreateOrderModal({
   }
 
   const handleCreateOrder = () => {
+    if (visible && okText === 'Create') {
+      onHandleTakeAddressValidate()
+      onHandleOrderDescValidate()
+      onHandleDeliverAddressValidate()
+      onHandleReciverNameValidate()
+      onHandleReciverPhoneValidate()
+      onHandlePointsValidate()
+      onHandleOrderCommentValidate()
+    }
+
     const order = {
+      id: orderId,
       points: points,
       take_address: takeAddress,
       deliver_address: deliverAddress,
@@ -188,7 +234,21 @@ export default function CreateOrderModal({
       receiver_phone: selectPhonePrefix + reciverPhone,
     }
 
-    if (
+    if (!isTakeAddressValid) {
+      setShowTakeAddressValidText(true)
+    } else if (!isOrderDescValid) {
+      setShowOrderDescValidText(true)
+    } else if (!isOrderCommentValid) {
+      setShowOrderCommentValidText(true)
+    } else if (!isDeliverAddressValid) {
+      setShowDeliverAddressValidText(true)
+    } else if (!isReciverPhoneValid) {
+      setShowReciverPhoneValidText(true)
+    } else if (!isPointsValid) {
+      setShowPointValidText(true)
+    } else if (!isReciverNameValid) {
+      setShowReciverNameValidText(true)
+    } else if (
       !isTakeAddressValid &&
       !isOrderDescValid &&
       !isOrderCommentValid &&
@@ -204,20 +264,6 @@ export default function CreateOrderModal({
       setShowDeliverAddressValidText(true)
       setShowReciverPhoneValidText(true)
       setShowPointValidText(true)
-      setShowReciverNameValidText(true)
-    } else if (!isTakeAddressValid) {
-      setShowTakeAddressValidText(true)
-    } else if (!isOrderDescValid) {
-      setShowOrderDescValidText(true)
-    } else if (!isOrderCommentValid) {
-      setShowOrderCommentValidText(true)
-    } else if (!isDeliverAddressValid) {
-      setShowDeliverAddressValidText(true)
-    } else if (!isReciverPhoneValid) {
-      setShowReciverPhoneValidText(true)
-    } else if (!isPointsValid) {
-      setShowPointValidText(true)
-    } else if (!isReciverNameValid) {
       setShowReciverNameValidText(true)
     } else {
       handleCreateOrderSubmit(order)
@@ -238,14 +284,16 @@ export default function CreateOrderModal({
       </Option>
     </Select>
   )
+  console.log(state.state)
 
   return (
     <Modal
-      title="Create Request"
+      title={modalTitle}
       style={{ top: 20 }}
       width={756}
       visible={visible}
-      okText="Create order"
+      okText={okText}
+      okButtonProps={{ disabled: isOrderEditable }}
       onOk={handleCreateOrder}
       onCancel={modalHandleCancel}>
       <Form className="create_order_form">
@@ -260,6 +308,7 @@ export default function CreateOrderModal({
               : ''
           }>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handleTakeAddressChange(e)}
             onBlur={onHandleTakeAddressValidate}
             value={takeAddress}
@@ -279,6 +328,7 @@ export default function CreateOrderModal({
               : ''
           }>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handleOrderDescriptionChange(e)}
             onBlur={onHandleOrderDescValidate}
             value={orderDescription}
@@ -298,6 +348,7 @@ export default function CreateOrderModal({
               : ''
           }>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handleDeliverAddressChange(e)}
             value={deliverAddress}
             onBlur={onHandleDeliverAddressValidate}
@@ -317,6 +368,7 @@ export default function CreateOrderModal({
               : ''
           }>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handleReciverPhoneChange(e)}
             onBlur={onHandleReciverPhoneValidate}
             value={reciverPhone}
@@ -334,6 +386,7 @@ export default function CreateOrderModal({
               : ''
           }>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handleReciverNameChange(e)}
             onBlur={onHandleReciverNameValidate}
             value={reciverName}
@@ -348,6 +401,7 @@ export default function CreateOrderModal({
           hasFeedback={showPointValidText}
           help={showPointValidText ? 'Incorrect input value' : ''}>
           <Input
+            disabled={isOrderEditable}
             onChange={e => handlePointsChange(e)}
             onBlur={onHandlePointsValidate}
             value={points}
@@ -362,6 +416,7 @@ export default function CreateOrderModal({
         </Form.Item>
         <Form.Item className="order_range_picker" label="Order time range">
           <RangePicker
+            disabled={isOrderEditable}
             ranges={{
               Today: [moment(), moment()],
               'This Month': [
@@ -380,6 +435,7 @@ export default function CreateOrderModal({
           hasFeedback={showOrderCommentValidText}
           help={showOrderCommentValidText ? 'You are exceeding the limit' : ''}>
           <TextArea
+            disabled={isOrderEditable}
             onChange={e => handleOrderCommentChange(e)}
             onBlur={onHandleOrderCommentValidate}
             value={comment}
