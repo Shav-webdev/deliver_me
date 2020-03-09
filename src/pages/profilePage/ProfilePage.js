@@ -56,7 +56,6 @@ const { Header, Sider, Content } = Layout
 const ProfilePage = ({
   companies,
   orders,
-  updateAvatar,
   deleteAccount,
   getCompanyById,
   createOrder,
@@ -120,21 +119,10 @@ const ProfilePage = ({
   const {
     signInLoading,
     signInAsCompanyData,
-    companyAllOrders,
     getingCompanyAllOrders,
   } = companies
 
-  const {
-    id,
-    name,
-    taxNumber,
-    address,
-    phone,
-    activity,
-    avatar,
-    approved,
-    amount,
-  } = signInAsCompanyData
+  const { id, avatar, amount } = signInAsCompanyData
 
   return (
     <Router>
@@ -271,10 +259,14 @@ const ProfilePage = ({
 }
 
 const mapStateToProps = state => {
-  const { users, companies, orders } = state
+  const { companies, orders } = state
   const { signInAsCompanyData, signInLoading } = companies
+  console.log(state)
+  console.log(signInAsCompanyData)
+  console.log(signInLoading)
   return {
-    users,
+    signInAsCompanyData,
+    signInLoading,
     companies,
     orders,
   }

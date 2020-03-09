@@ -339,6 +339,9 @@ export default function EditProfileInfo({
           />
         </Form.Item>
         <div className="company_edit_info_profile">
+          <Button type="danger" onClick={handleDelAccountBtnClick}>
+            Delete account
+          </Button>
           {!isInputsEditable && (
             <Button type="primary" onClick={handleEditInfoBtnClick}>
               Edit
@@ -355,10 +358,6 @@ export default function EditProfileInfo({
             type="primary"
             onClick={handleSaveInfoBtnClick}>
             Save
-          </Button>
-
-          <Button type="danger" onClick={handleDelAccountBtnClick}>
-            Delete account
           </Button>
         </div>
       </Form>
