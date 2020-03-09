@@ -5,9 +5,7 @@ import {
   signInAsUserSuccess,
 } from '../action'
 import history from '../../routes/history'
-import {
-  setCookie
-} from '../../pages/registration/services/cookies'
+import { setCookie } from '../../pages/registration/services/cookies'
 import {
   errorMessage,
   successMessage,
@@ -24,7 +22,7 @@ export const signInAs = data => async dispatch => {
       setCookie('token', `${response.data.token}`)
       setCookie('id', `${response.data.id}`)
       successMessage('Sign In is successful !')
-      history.push('/profile/company')
+      history.push('/company')
     } else if (response.data.type === 'user') {
       dispatch(signInAsUserSuccess(response.data))
       setCookie('token', `${response.data.token}`)

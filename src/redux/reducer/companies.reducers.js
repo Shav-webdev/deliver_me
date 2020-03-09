@@ -8,8 +8,7 @@ import {
   GET_COMPANY_ALL_ORDERS_REQUEST,
   GET_COMPANY_ALL_ORDERS_SUCCESS,
   GET_COMPANY_ALL_ORDERS_FAILURE,
-
- 
+  ADD_COMPANY_SOCKET_SUCCESS,
 } from '../action/constants'
 
 const initialState = {
@@ -40,6 +39,12 @@ export default function companiesReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanies: false,
+      }
+
+    case ADD_COMPANY_SOCKET_SUCCESS:
+      return {
+        ...state,
+        companiesData: [...state.companiesData, action.payload],
       }
 
     case 'CREATE_COMPANY_SUCCSESS':
@@ -126,40 +131,6 @@ export default function companiesReducer(state = initialState, action) {
         ...state,
         getingCompanyAllOrders: false,
       }
-
-    // case GET_COMPANY_ACTIVE_ORDERS_REQUEST:
-    //   return {
-    //     ...state,
-    //     getingCompanyActiveOrders: true,
-    //   }
-    // case GET_COMPANY_ACTIVE_ORDERS_SUCCESS:
-    //   return {
-    //     ...state,
-    //     getingCompanyActiveOrders: false,
-    //     companyActiveOrders: action.payload,
-    //   }
-    // case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
-    //   return {
-    //     ...state,
-    //     getingCompanyActiveOrders: false,
-    //   }
-
-    // case GET_COMPANY_COMPLETED_ORDERS_REQUEST:
-    //   return {
-    //     ...state,
-    //     getingCompanyCompletedOrders: true,
-    //   }
-    // case GET_COMPANY_COMPLETED_ORDERS_SUCCESS:
-    //   return {
-    //     ...state,
-    //     getingCompanyCompletedOrders: false,
-    //     companyCompletedOrders: action.payload,
-    //   }
-    // case GET_COMPANY_COMPLETED_ORDERS_FAILURE:
-    //   return {
-    //     ...state,
-    //     getingCompanyCompletedOrders: false,
-    //   }
     default:
       return state
   }

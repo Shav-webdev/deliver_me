@@ -7,15 +7,10 @@ import {
   editCompanySuccsess,
   removeCompanyFailure,
   removeCompanySuccsess,
-  createOrderRequest,
-  createOrderSuccsess,
-  createOrderFailure,
   signInAsCompanyRequest,
   signInAsCompanySuccess,
   signInAsCompanyFailure,
-  getCompanyAllOrdersRequest,
-  getCompanyAllOrdersSuccess,
-  getCompanyAllOrdersFailure,
+  addCompanySocketSuccsess,
 } from '../action'
 import {
   errorMessage,
@@ -35,11 +30,19 @@ export const getCompaniesThunk = () => async dispatch => {
   }
 }
 
+export const addCompanyBySocketThunk = data => async dispatch => {
+  try {
+    dispatch(addCompanySocketSuccsess(data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const createCompanyThunk = data => async dispatch => {
   try {
     if (data.id) {
       const response = await api.deleteUpdateCompany(data.id).put({
-        ...data
+        ...data,
       })
       if (response.status !== 201) {
         errorMessage('Cannot update Company')
@@ -73,24 +76,9 @@ export const removeCompanyThunk = id => async dispatch => {
   }
 }
 
-export const createOrderThunk = data => async dispatch => {
-  try {
-    dispatch(createOrderRequest())
-    const response = await api.createOrder.post(data)
-    if (response.status > 300) {
-      errorMessage('Something went wrong, try again')
-      throw new Error('Something went wrong, try again')
-    }
-    dispatch(createOrderSuccsess(response.data))
-    successMessage('Order successfully created !')
-  } catch (error) {
-    dispatch(createOrderFailure())
-  }
-}
-
 export const getCompanyByIdThunk = id => async dispatch => {
   try {
-    console.log(id);
+    console.log(id)
 
     dispatch(signInAsCompanyRequest())
     const response = await api.getCompanyById(id).get(id)
@@ -103,19 +91,5 @@ export const getCompanyByIdThunk = id => async dispatch => {
     successMessage(`Dear ${response.data.name}, nice to see you again`)
   } catch (error) {
     dispatch(signInAsCompanyFailure())
-  }
-}
-
-export const getCompanyAllOrdersThunk = id => async dispatch => {
-  try {
-    dispatch(getCompanyAllOrdersRequest())
-    const response = await api.getCompanyOrders(id).get(id)
-    if (response.status > 300) {
-      throw new Error('Something went wrong, try again')
-    }
-    dispatch(getCompanyAllOrdersSuccess(response.data))
-    successMessage('Orders loaded...')
-  } catch (error) {
-    dispatch(getCompanyAllOrdersFailure())
   }
 }
