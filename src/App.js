@@ -5,15 +5,17 @@ import { connect } from 'react-redux'
 import ErrorBoundary from './containers/errorBoundary/errorBoundary'
 import io from 'socket.io-client'
 export const socket = io.connect('https://thawing-ravine-80499.herokuapp.com/')
-import { getCookie } from './pages/registration/services/cookiesUtils'
+import { getCookie } from './pages/registration/services/cookies'
 function App({ currentUserData }) {
   // const token = Cookies.getJSON('token')
   // const userType = Cookies.getJSON('userType')
+    const token = getCookie('token')
+  const userType = getCookie('userType')
   //const { token, userType } = currentUserData
   console.log(currentUserData)
   return (
     <ErrorBoundary>
-      {<Routes currentUser={currentUserData} />}
+      {<Routes token={token} currentUser={currentUserData} userType={userType} />}
     </ErrorBoundary>
   )
 }

@@ -132,7 +132,7 @@ function AdminBoard({
     if (e.key !== 'signOut') {
       setMenuItem(e.key)
     } else {
-      // console.log('must remove',removeCookie('token'))
+       console.log('must remove')
        logOut()
       //  eraseCookie('token')
       //  eraseCookie('userType')
@@ -141,7 +141,7 @@ function AdminBoard({
       // Cookies.remove('token', { path: '' });
       // Cookies.remove('userType', { path: '' });
 
-      history.push('/admin')
+      //history.push('/admin')
     }
   }
 
