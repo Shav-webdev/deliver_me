@@ -2,18 +2,11 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 export const PrivateRoute = ({
   component: Component,
-  userType,
+  pathTo,
   authenticated,
   ...rest
 }) => {
-  const pathTo =
-    userType === 'admin'
-      ? '/admin/dashboard'
-      : userType === 'company'
-      ? '/company'
-      : userType === 'user'
-      ? 'profile/user'
-      : ''
+ 
   return (
     <Route
       {...rest}

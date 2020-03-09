@@ -21,6 +21,15 @@ import { getCookie } from '../pages/registration/services/cookiesUtils'
 
 
 export default function Routes({currentUser,token,userType}) {
+  const pathTo =
+  userType === 'admin'
+    ? '/admin/dashboard'
+    : userType === 'company'
+    ? '/company'
+    : userType === 'user'
+    ? '/profile/user'
+    : ''
+    console.log(pathTo)
   console.log(currentUser.token)
   console.log(currentUser.userType)
   console.log(token,userType)
@@ -41,23 +50,23 @@ export default function Routes({currentUser,token,userType}) {
           />
           <PrivateRoute
             path="/admin/dashboard"
-            userType='admin'
+            pathTo={pathTo}
             component={AdminDashboard}
-            authenticated={token?token && userType==='admin':currentUser.token && currentUser.userType==='admin'}
+            authenticated={token!==''?token && userType==='admin':currentUser.token && currentUser.userType==='admin'}
           />
           
           <PrivateRoute
             path="/company"
-            userType='company'
+            pathTo={pathTo}
             component={ProfilePage}
-            authenticated={token?token && userType==='company':currentUser.token && currentUser.userType==='company'}//currentUser.token && currentUser.userType === 'company'}
+            authenticated={token!==''?token && userType==='company':currentUser.token && currentUser.userType==='company'}//currentUser.token && currentUser.userType === 'company'}
           />
           
           <PrivateRoute
             path="/profile/user"
-            userType='user'
+            pathTo={pathTo}
             component={'hj'}
-            authenticated={token?token && userType==='user':currentUser.token && currentUser.userType==='user'}//}//token && userType === 'user'}
+            authenticated={token!==''?token && userType==='user':currentUser.token && currentUser.userType==='user'}//}//token && userType === 'user'}
           />
           
           {/* <AppRoute
