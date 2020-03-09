@@ -5,7 +5,9 @@ import {
   signInAsUserSuccess,
 } from '../action'
 import history from '../../routes/history'
-import { setCookie } from '../../pages/registration/services/cookies'
+import {
+  setCookie
+} from '../../pages/registration/services/cookies'
 import {
   errorMessage,
   successMessage,
@@ -39,7 +41,6 @@ export const signInAs = data => async dispatch => {
     const err = {
       ...error
     }
-    // const message = err.response.data.message;
     dispatch(signInAsCompanyFailure())
     errorMessage(err.response.data.message)
   }
