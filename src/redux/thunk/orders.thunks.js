@@ -56,7 +56,9 @@ export const getUserOrdersThunk = () => async dispatch => {
 export const getCompanyOrdersThunk = id => async dispatch => {
   try {
     dispatch(getCompanyOrdersRequest())
-    const response = await api.getCompanyOrders(id).get()
+    console.log('company id 2', id)
+    const response = await api.getCompanyOrders(id).get(id)
+    console.log(response)
     if (response.status !== 200) {
       errorMessage('Cannot get Orders')
     }
@@ -72,9 +74,9 @@ export const createCompanyOrderThunk = data => async dispatch => {
   console.log(data)
   try {
     if (data.id) {
-      console.log(data)
+      console.log('edit data', data)
       const response = await api.deleteUpdateOrder(data.id).put({ ...data })
-      console.log(response)
+      console.log('edit response', response)
       if (response.status !== 201) {
         errorMessage('Cannot update Order')
       }
@@ -85,6 +87,7 @@ export const createCompanyOrderThunk = data => async dispatch => {
         ...data,
       })
       dispatch(createOrderSuccess(response.data))
+      console.log('company id', data.companyId)
       dispatch(getCompanyOrdersThunk(data.companyId))
       successMessage('Order created.')
       if (response.status !== 201) {
@@ -97,14 +100,15 @@ export const createCompanyOrderThunk = data => async dispatch => {
   }
 }
 
-export const removeCompanyOrderThunk = id => async dispatch => {
+export const removeCompanyOrderThunk = (
+  companyId,
+  orderId
+) => async dispatch => {
   try {
-    const response = await api.deleteUpdateOrder(id).delete()
-    dispatch(removeOrderSuccess(id))
-    dispatch(getCompanyOrdersThunk())
-    if (response.status === 202) {
-      successMessage('Order deleted.')
-    }
+    await api.deleteUpdateOrder(orderId).delete()
+    dispatch(removeOrderSuccess(orderId))
+    dispatch(getCompanyOrdersThunk(companyId))
+    successMessage('Order deleted.')
   } catch (error) {
     console.log(error)
     dispatch(removeOrderFailure())

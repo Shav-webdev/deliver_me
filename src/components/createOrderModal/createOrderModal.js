@@ -276,6 +276,7 @@ export default function CreateOrderModal({
 
   const prefixSelector = (
     <Select
+      disabled={isOrderEditable}
       defaultValue="374"
       onChange={onSelectPhonePrefix}
       style={{ width: 70 }}>
@@ -284,7 +285,6 @@ export default function CreateOrderModal({
       </Option>
     </Select>
   )
-  console.log(state.state)
 
   return (
     <Modal

@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { Button } from 'antd'
 import ConfirmModal from '../confirmModal/confirmModal'
 
-function Order({ el, updateOrder, deleteOrder }) {
+function Order({ el, updateOrder, deleteOrder, companyId }) {
   const [visible, setVisible] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
 
@@ -37,7 +37,8 @@ function Order({ el, updateOrder, deleteOrder }) {
   }
 
   const handleDeleteOrder = () => {
-    deleteOrder(el.id)
+    console.log(el)
+    deleteOrder(companyId, el.id)
     setConfirmVisible(false)
   }
 
@@ -98,7 +99,8 @@ function Order({ el, updateOrder, deleteOrder }) {
 const mapDispatchToProps = dispatch => {
   return {
     updateOrder: data => dispatch(createCompanyOrderThunk(data)),
-    deleteOrder: id => dispatch(removeCompanyOrderThunk(id)),
+    deleteOrder: (companyId, orderId) =>
+      dispatch(removeCompanyOrderThunk(companyId, orderId)),
   }
 }
 

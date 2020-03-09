@@ -8,7 +8,9 @@ import {
   signInCurrentUserFailure,
 } from '../action'
 import history from '../../routes/history'
-import { setCookie } from '../../pages/registration/services/cookies'
+import {
+  setCookie
+} from '../../pages/registration/services/cookies'
 import {
   errorMessage,
   successMessage,
@@ -19,9 +21,7 @@ export const signInAs = data => async dispatch => {
     dispatch(signInAsCompanyRequest())
     const response = await api.login.post(data)
     if (response.status !== 200) {
-      console.log(response)
-      errorMessage(response.data.message)
-      throw new Error('Something went wrong, try again')
+      throw new Error(response.data.message)
     }
     if (response.data.type === 'company') {
       setCookie('token', `${response.data.token}`)
@@ -55,8 +55,14 @@ export const signInAs = data => async dispatch => {
       history.push('/admin/dashboard')
     }
   } catch (error) {
+    console.log({
+      error
+    })
+    const err = {
+      ...error
+    }
     dispatch(signInAsCompanyFailure())
-    errorMessage('')
+    errorMessage(err.response.data.message)
   }
 }
 

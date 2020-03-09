@@ -2,8 +2,11 @@ import React from 'react'
 import Spinner from '../spiner/spinner'
 import List from 'antd/es/list'
 import Order from '../order/order'
+import { Typography } from 'antd'
 
-export default function OrdersList({ loading, filterBy, orders }) {
+const { Title } = Typography
+
+export default function OrdersList({ loading, filterBy, orders, companyId }) {
   return (
     <List
       style={{ minHeight: '100vh' }}
@@ -11,15 +14,21 @@ export default function OrdersList({ loading, filterBy, orders }) {
       {loading ? (
         <Spinner />
       ) : filterBy ? (
-        orders
-          .filter(el => el.state === filterBy)
-          .map(el => {
-            return <Order el={el} key={el.id} />
-          })
-      ) : (
+        orders.length > 0 ? (
+          orders
+            .filter(el => el.state === filterBy)
+            .map(el => {
+              return <Order companyId={companyId} el={el} key={el.id} />
+            })
+        ) : (
+          <Title style={{ textAlign: 'center' }}>There are no order</Title>
+        )
+      ) : orders.length > 0 ? (
         orders.map(el => {
-          return <Order el={el} key={el.id} />
+          return <Order companyId={companyId} el={el} key={el.id} />
         })
+      ) : (
+        <Title style={{ textAlign: 'center' }}>There are no order</Title>
       )}
     </List>
   )
