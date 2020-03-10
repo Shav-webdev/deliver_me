@@ -1,8 +1,13 @@
 import axios from 'axios'
 import EndpointFactory from 'axios-endpoints'
+import Storage from '../../services/localStorage/localStorage'
+const token = Storage.get('deliver').token
 const axiosInstance = axios.create({
   baseURL: 'https://thawing-ravine-80499.herokuapp.com/',
   responseType: 'json',
+  headers: {
+    Authorization: token ? token : null,
+  },
 })
 const Endpoint = EndpointFactory(axiosInstance)
 export default {

@@ -20,7 +20,7 @@ export const signInAs = data => async dispatch => {
     }
     Storage.set('deliver', {
       id: response.data.id,
-      token: response.headers.autorisation,
+      token: response.headers.autorization,
       userType: response.data.type,
     })
     dispatch(
