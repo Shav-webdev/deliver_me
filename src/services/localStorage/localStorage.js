@@ -10,6 +10,7 @@ export default class Storage {
   
     static get(key) {
       try {
+        localStorage.removeItem(key);
         const response = localStorage.getItem(key);
         const data = JSON.parse(response) || null;
         return data;
