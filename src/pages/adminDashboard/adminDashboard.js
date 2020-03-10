@@ -24,6 +24,7 @@ import {
   addUserBySocketThunk,
   addCompanyBySocketThunk,
 } from '../../redux/thunk'
+import audioSound from '../../assets/sound.mp3'
 import history from '../../routes/history'
 import { socket } from '../../App'
 import { errorMessage, logOut } from '../../services/services'
@@ -61,15 +62,19 @@ function AdminBoard({
   })
   const [modalUser, setModalUser] = useState({})
   const [modalCompany, setModalCompany] = useState({})
-
+const audio = new Audio()
   useEffect(() => {
     getUsers()
     getCompanies()
     socket.on('update_user_list', data => {
       socketUser(data)
+      audio.src=audioSound
+      audio.play()
     })
     socket.on('update_company_list', data => {
       socketCompany(data)
+      audio.src=audioSound
+      audio.play()
     })
   }, [])
 
