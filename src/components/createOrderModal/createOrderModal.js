@@ -304,7 +304,8 @@ export default function CreateOrderModal({
     }
   }
 
-  const dateFormat = 'YYYY-MM-DD'
+  console.log(orderStartTime)
+  console.log(orderEndTime)
 
   return (
     <Modal
@@ -440,8 +441,8 @@ export default function CreateOrderModal({
             disabledDate={disabledDate}
             disabledTime={disabledDateTime}
             defaultValue={[
-              moment('2015-06-06', dateFormat),
-              moment('2015-06-06', dateFormat),
+              orderStartTime ? moment(orderStartTime) : '',
+              orderEndTime ? moment(orderEndTime) : '',
             ]}
             showTime={{
               hideDisabledOptions: true,
