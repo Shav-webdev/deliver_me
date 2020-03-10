@@ -91,8 +91,8 @@ export default function CreateOrderModal({
       onHandleReciverNameValidate()
       onHandleReciverPhoneValidate()
       onHandlePointsValidate()
-      onHandleOrderCommentValidate()
     }
+    onHandleOrderCommentValidate()
   }, [visible])
 
   const handlePointsChange = useCallback(e => {

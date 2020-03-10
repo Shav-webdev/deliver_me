@@ -1,26 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import {
-  Button,
-  Icon,
-  Layout,
-  Typography,
-  message,
-  Upload,
-  Form,
-  Input,
-  Avatar,
-  Card,
-  Collapse,
-} from 'antd'
+import { Button, Layout } from 'antd'
 import './profilePage.css'
 import Storage from '../../services/localStorage/localStorage'
-import history from '../../routes/history'
-import List from 'antd/es/list'
 import company_avatar from '../../assets/images/company_avatar.png'
-import axios from 'axios'
-import Popover from 'antd/es/popover'
-import { logOut } from '../../services/services'
 import Menu from 'antd/es/menu'
 
 import Spinner from '../../components/spiner/spinner'
@@ -33,9 +16,7 @@ import {
 import {
   getCompanyOrdersThunk,
   createCompanyOrderThunk,
-  removeCompanyOrderThunk,
 } from '../../redux/thunk/orders.thunks'
-import { getUsersFailure } from '../../redux/action'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
 import allOrdersIcon from '../../assets/images/allOrdersIcon.svg'
@@ -48,9 +29,6 @@ import LogoutPopover from '../../components/logoutPopover/logoutPopover'
 import OrdersList from '../../components/ordersList/ordersList'
 import CreateOrderModal from '../../components/createOrderModal/createOrderModal'
 
-const { Title } = Typography
-const { Panel } = Collapse
-
 const { Header, Sider, Content } = Layout
 
 const ProfilePage = ({
@@ -61,6 +39,8 @@ const ProfilePage = ({
   createOrder,
   updateCompanyData,
   getCompanyAllOrders,
+  gettingCompanyOrders,
+  gettingAllOrders,
 }) => {
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
@@ -113,11 +93,7 @@ const ProfilePage = ({
     deleteAccount(id)
   }
 
-  const {
-    signInLoading,
-    signInAsCompanyData,
-    getingCompanyAllOrders,
-  } = companies
+  const { signInLoading, signInAsCompanyData } = companies
 
   const { id, avatar, amount } = signInAsCompanyData
 
@@ -199,14 +175,14 @@ const ProfilePage = ({
               <OrdersList
                 companyId={id}
                 orders={companyOrdersData}
-                loading={getingCompanyAllOrders}
+                loading={gettingCompanyOrders}
               />
             </Route>
             <Route path="/company/active_orders">
               <OrdersList
                 companyId={id}
                 orders={companyOrdersData}
-                loading={getingCompanyAllOrders}
+                loading={gettingCompanyOrders}
                 filterBy="active"
               />
             </Route>
@@ -214,7 +190,7 @@ const ProfilePage = ({
               <OrdersList
                 companyId={id}
                 orders={companyOrdersData}
-                loading={getingCompanyAllOrders}
+                loading={gettingCompanyOrders}
                 filterBy="done"
               />
             </Route>
@@ -222,7 +198,7 @@ const ProfilePage = ({
               <OrdersList
                 companyId={id}
                 orders={companyOrdersData}
-                loading={getingCompanyAllOrders}
+                loading={gettingCompanyOrders}
                 filterBy="pending"
               />
             </Route>
@@ -258,11 +234,13 @@ const ProfilePage = ({
 const mapStateToProps = state => {
   const { companies, orders } = state
   const { signInAsCompanyData, signInLoading } = companies
+  const { gettingCompanyOrders } = orders
   return {
     signInAsCompanyData,
     signInLoading,
     companies,
     orders,
+    gettingCompanyOrders,
   }
 }
 

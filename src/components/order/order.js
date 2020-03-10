@@ -23,13 +23,11 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
 
   const handleUpdateOrderSubmit = order => {
     const data = order
-    console.log(order)
     updateOrder(data)
     setVisible(false)
   }
   const onDeleteBtnClick = e => {
     e.stopPropagation()
-    console.log(el)
     setConfirmVisible(true)
   }
 
@@ -38,7 +36,6 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
   }
 
   const handleDeleteOrder = () => {
-    console.log(el)
     deleteOrder(companyId, el.id)
     setConfirmVisible(false)
   }
