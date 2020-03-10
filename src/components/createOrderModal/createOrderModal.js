@@ -10,7 +10,6 @@ import {
   validateOrderComment,
 } from '../../pages/registration/helpers/validations'
 import SubTitle from '../subTitle/subTitle'
-import { connect } from 'react-redux'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -71,9 +70,6 @@ export default function CreateOrderModal({
     showDeliverAddressValidText,
     setShowDeliverAddressValidText,
   ] = useState(false)
-  const [showSenderPhoneValidText, setShowSenderPhoneValidText] = useState(
-    false
-  )
 
   const [showReciverPhoneValidText, setShowReciverPhoneValidText] = useState(
     false
@@ -258,7 +254,6 @@ export default function CreateOrderModal({
       !isReciverNameValid
     ) {
       setShowTakeAddressValidText(true)
-      setShowSenderPhoneValidText(true)
       setShowOrderDescValidText(true)
       setShowOrderCommentValidText(true)
       setShowDeliverAddressValidText(true)
@@ -285,6 +280,32 @@ export default function CreateOrderModal({
       </Option>
     </Select>
   )
+
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current < moment().subtract(1, 'days')
+    // return current && current < moment().endOf('day')
+  }
+
+  function range(start, end) {
+    const result = []
+    for (let i = start; i < end; i++) {
+      result.push(i)
+    }
+    return result
+  }
+
+  function disabledDateTime() {
+    const currentTime = new Date()
+    currentTime.getHours()
+    return {
+      disabledHours: () => range(0, currentTime.getHours()),
+      disabledMinutes: () => range(0, currentTime.getMinutes()),
+    }
+  }
+
+  console.log(orderStartTime)
+  console.log(orderEndTime)
 
   return (
     <Modal
@@ -417,14 +438,17 @@ export default function CreateOrderModal({
         <Form.Item className="order_range_picker" label="Order time range">
           <RangePicker
             disabled={isOrderEditable}
-            ranges={{
-              Today: [moment(), moment()],
-              'This Month': [
-                moment().startOf('month'),
-                moment().endOf('month'),
-              ],
+            disabledDate={disabledDate}
+            disabledTime={disabledDateTime}
+            defaultValue={[
+              orderStartTime ? moment(orderStartTime) : '',
+              orderEndTime ? moment(orderEndTime) : '',
+            ]}
+            showTime={{
+              hideDisabledOptions: true,
+              minuteStep: 5,
+              format: 'HH:mm',
             }}
-            showTime
             format="LLL"
             onChange={onTimeChangeChange}
           />
