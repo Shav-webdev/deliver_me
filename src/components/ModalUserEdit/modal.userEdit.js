@@ -79,7 +79,7 @@ export const ModalUserEdit = ({
       updateUser(state)
       handleCancel()
       setState(defaultState)
-      successMessage('Data successfully updated !')
+      // successMessage('Data successfully updated !')
     } else {
       errorMessage('Input fields are invalid !')
     }

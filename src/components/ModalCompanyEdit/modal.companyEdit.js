@@ -70,12 +70,17 @@ export const ModalCompanyEdit = ({
   }
 
   const handleInputChange = ({ target: { name, value } }) => {
-    if (value === '' || name==='taxNumber' && value.toString().length !== 8) {
+    if (value === '' || name === 'taxNumber' && value.toString().length !== 8) {
       setError({
         ...error,
         [name]: true,
       })
-    } else if(name==='taxNumber' && value.toString().length === 8){
+    } else if (name === 'taxNumber' && value.toString().length === 8) {
+      setError({
+        ...error,
+        [name]: false,
+      })
+    } else {
       setError({
         ...error,
         [name]: false,
@@ -229,7 +234,7 @@ export const ModalCompanyEdit = ({
             color: error.phone ? 'red' : 'white',
             margin: '0 5px',
             height: "100%"
-          }}>Phone is required and must have 8 digits</p>
+          }}>Phone is required</p>
         <Input
           type="number"
           addonAfter="Add money"
