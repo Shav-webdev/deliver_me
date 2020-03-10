@@ -7,12 +7,21 @@ import ErrorBoundary from './containers/errorBoundary/errorBoundary'
 import io from 'socket.io-client'
 export const socket = io.connect('https://thawing-ravine-80499.herokuapp.com/')
 
-const App = () => {
+const App = ({ currentUserData }) => {
   const ls = Storage.get('deliver')
   return (
     <ErrorBoundary>
-      <Routes token={ls ? ls.token : null} userType={ls ? ls.userType : null} />
+      <Routes token={ls ? ls.token : currentUserData.token} userType={ls ? ls.userType : currentUserData.userType} />
     </ErrorBoundary>
   )
 }
-export default App
+
+const mapStateToProps = state => {
+  const { currentUser } = state
+  const { currentUserData } = currentUser
+  return {
+    currentUserData,
+  }
+}
+
+export default connect(mapStateToProps, null)(App)

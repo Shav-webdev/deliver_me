@@ -304,8 +304,6 @@ export default function CreateOrderModal({
     }
   }
 
-  console.log(orderStartTime)
-  console.log(orderEndTime)
 
   return (
     <Modal
