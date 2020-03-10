@@ -1,15 +1,10 @@
 import api from '../API'
 import {
-  createOrderRequest,
   createOrderSuccess,
-  createOrderFailure,
   getCompanyOrdersRequest,
   getCompanyOrdersSuccess,
   getCompanyOrdersFailure,
-  editOrderRequest,
   editOrderSuccess,
-  editOrderFailure,
-  removeOrderRequest,
   removeOrderSuccess,
   removeOrderFailure,
   getUserOrdersRequest,
@@ -66,12 +61,9 @@ export const getCompanyOrdersThunk = id => async dispatch => {
 }
 
 export const createCompanyOrderThunk = data => async dispatch => {
-  console.log(data)
   try {
     if (data.id) {
-      console.log('edit data', data)
       const response = await api.deleteUpdateOrder(data.id).put({ ...data })
-      console.log('edit response', response)
       if (response.status !== 201) {
         errorMessage('Cannot update Order')
       }
@@ -82,7 +74,6 @@ export const createCompanyOrderThunk = data => async dispatch => {
         ...data,
       })
       dispatch(createOrderSuccess(response.data))
-      console.log('company id', data.companyId)
       dispatch(getCompanyOrdersThunk(data.companyId))
       successMessage('Order created.')
       if (response.status !== 201) {
@@ -90,7 +81,6 @@ export const createCompanyOrderThunk = data => async dispatch => {
       }
     }
   } catch (error) {
-    console.log(error)
     errorMessage('Something went wrong, plese try letter')
   }
 }
@@ -99,15 +89,12 @@ export const removeCompanyOrderThunk = (
   companyId,
   orderId
 ) => async dispatch => {
-  console.log(companyId)
-  console.log(orderId)
   try {
     await api.deleteUpdateOrder(orderId).delete()
     dispatch(removeOrderSuccess(orderId))
     dispatch(getCompanyOrdersThunk(companyId))
     successMessage('Order deleted.')
   } catch (error) {
-    console.log(error)
     dispatch(removeOrderFailure())
     errorMessage('Something went wrong.')
   }
