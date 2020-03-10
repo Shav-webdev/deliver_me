@@ -53,7 +53,6 @@ const { Panel } = Collapse
 
 const { Header, Sider, Content } = Layout
 
-
 const ProfilePage = ({
   companies,
   orders,
@@ -259,9 +258,6 @@ const ProfilePage = ({
 const mapStateToProps = state => {
   const { companies, orders } = state
   const { signInAsCompanyData, signInLoading } = companies
-  console.log(state)
-  console.log(signInAsCompanyData)
-  console.log(signInLoading)
   return {
     signInAsCompanyData,
     signInLoading,

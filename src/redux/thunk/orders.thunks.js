@@ -20,10 +20,7 @@ import {
   getAllOrdersFailure,
 } from '../action'
 
-import {
-  errorMessage,
-  successMessage,
-} from '../../services/services'
+import { errorMessage, successMessage } from '../../services/services'
 
 export const getAllOrdersThunk = () => async dispatch => {
   try {
@@ -102,6 +99,8 @@ export const removeCompanyOrderThunk = (
   companyId,
   orderId
 ) => async dispatch => {
+  console.log(companyId)
+  console.log(orderId)
   try {
     await api.deleteUpdateOrder(orderId).delete()
     dispatch(removeOrderSuccess(orderId))

@@ -336,10 +336,10 @@ export default function CreateOrderModal({
           />
         </Form.Item>
 
-        <SubTitle>Reciver</SubTitle>
+        <SubTitle>Receiver</SubTitle>
 
         <Form.Item
-          label="Reciver address"
+          label="Receiver address"
           validateStatus={showDeliverAddressValidText ? 'error' : 'success'}
           hasFeedback={showDeliverAddressValidText}
           help={
@@ -359,7 +359,7 @@ export default function CreateOrderModal({
           />
         </Form.Item>
         <Form.Item
-          label="Reciver phone"
+          label="Receiver phone"
           validateStatus={showReciverPhoneValidText ? 'error' : 'success'}
           hasFeedback={showReciverPhoneValidText}
           help={
@@ -373,11 +373,11 @@ export default function CreateOrderModal({
             onBlur={onHandleReciverPhoneValidate}
             value={reciverPhone}
             addonBefore={prefixSelector}
-            placeholder="Reciver phone number"
+            placeholder="Receiver phone number"
           />
         </Form.Item>
         <Form.Item
-          label="Reciver name"
+          label="Receiver name"
           validateStatus={showReciverNameValidText ? 'error' : 'success'}
           hasFeedback={showReciverNameValidText}
           help={
@@ -390,7 +390,7 @@ export default function CreateOrderModal({
             onChange={e => handleReciverNameChange(e)}
             onBlur={onHandleReciverNameValidate}
             value={reciverName}
-            placeholder="Reciver name"
+            placeholder="Receiver name"
             prefix={<Icon type="name" style={{ color: 'rgba(0,0,0,.25)' }} />}
           />
         </Form.Item>

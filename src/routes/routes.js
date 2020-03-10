@@ -9,6 +9,7 @@ import HomePage from '../pages/homePage/HomePage'
 import registerLayout from '../hoc/layout/registerLayout/registerLayout'
 import profileLayout from '../hoc/layout/profileLayout/profileLayout'
 import RegisterAsCompany from '../pages/registration/registerAsCompany/registerAsCompany'
+import RegisterAsCourier from '../pages/registration/registerAsCourier'
 import AdminLoginForm from '../pages/adminLogin/adminLoginForm'
 import AdminDashboard from '../pages/adminDashboard/adminDashboard'
 import history from './history'
@@ -39,13 +40,18 @@ export default function Routes({ token, userType }) {
             layout={registerLayout}
             component={RegisterAsCompany}
           />
+          <AppRoute
+            path="/register/courier"
+            layout={registerLayout}
+            component={RegisterAsCourier}
+          />
           <PrivateRoute
             path="/admin/dashboard"
             pathTo={pathTo}
             component={AdminDashboard}
             authenticated={token && userType === 'admin'}
           />
-         
+
           <PrivateRoute
             path="/profile/user"
             pathTo={pathTo}
@@ -70,7 +76,7 @@ export default function Routes({ token, userType }) {
             component={ProfilePage}
             authenticated={token && userType === 'company'}
           />
-           <PrivateRoute
+          <PrivateRoute
             path="/company"
             pathTo={pathTo}
             component={ProfilePage}

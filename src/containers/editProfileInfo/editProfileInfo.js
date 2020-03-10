@@ -30,7 +30,7 @@ export default function EditProfileInfo({
   const [companyTaxNumber, setCompanyTaxNumber] = useState(
     taxNumber ? taxNumber : ''
   )
-  const [avatarUrl, setAvatarUrl] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState(avatar ? avatar : '')
   const [companyActivity, setCompanyActivity] = useState(
     activity ? activity : ''
   )
@@ -47,6 +47,7 @@ export default function EditProfileInfo({
   const [showTaxNumValidText, setShowTaxNumValidText] = useState(false)
   const [showActivityValidText, setShowActivityValidText] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
+  const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(true)
 
   useEffect(() => {
     if (isInputsEditable) {
@@ -55,8 +56,36 @@ export default function EditProfileInfo({
       onHandlePhoneNumValidate()
       onHandleTaxNumValidate()
       onHandleActivityValidate()
+    } else {
+      setShowNameValidText(false)
+      setShowAddressValidText(false)
+      setShowPhoneNumValidText(false)
+      setShowTaxNumValidText(false)
+      setShowActivityValidText(false)
     }
   }, [isInputsEditable])
+
+  useEffect(() => {
+    if (
+      companyName &&
+      phoneNumber &&
+      companyAddress &&
+      companyAddress &&
+      companyTaxNumber &&
+      setCompanyActivity
+    ) {
+      setIsSaveBtnDisabled(false)
+    } else {
+      setIsSaveBtnDisabled(true)
+    }
+  }, [
+    companyName,
+    companyAddress,
+    companyAddress,
+    companyTaxNumber,
+    phoneNumber,
+    setCompanyActivity,
+  ])
 
   const handleNameChange = useCallback(e => {
     const name = e.target.value
@@ -69,6 +98,7 @@ export default function EditProfileInfo({
       setIsNameValid(true)
       setShowNameValidText(false)
     } else {
+      setIsSaveBtnDisabled(true)
       setIsNameValid(false)
       setShowNameValidText(true)
     }
@@ -85,6 +115,7 @@ export default function EditProfileInfo({
       setIsAddressValid(true)
       setShowAddressValidText(false)
     } else {
+      setIsSaveBtnDisabled(true)
       setIsAddressValid(false)
       setShowAddressValidText(true)
     }
@@ -101,6 +132,7 @@ export default function EditProfileInfo({
       setIsPhoneNumberValid(true)
       setShowPhoneNumValidText(false)
     } else {
+      setIsSaveBtnDisabled(true)
       setIsPhoneNumberValid(false)
       setShowPhoneNumValidText(true)
     }
@@ -117,6 +149,7 @@ export default function EditProfileInfo({
       setIsTaxNumberValid(true)
       setShowTaxNumValidText(false)
     } else {
+      setIsSaveBtnDisabled(true)
       setIsTaxNumberValid(false)
       setShowTaxNumValidText(true)
     }
@@ -133,6 +166,7 @@ export default function EditProfileInfo({
       setIsActivityValid(true)
       setShowActivityValidText(false)
     } else {
+      setIsSaveBtnDisabled(true)
       setIsActivityValid(false)
       setShowActivityValidText(true)
     }
@@ -145,6 +179,7 @@ export default function EditProfileInfo({
     setCompanyAddress(address)
     setCompanyActivity(activity)
     setPhoneNumber(phone)
+    setAvatarUrl(avatar)
   }
 
   const handleSaveInfoBtnClick = () => {
@@ -162,6 +197,8 @@ export default function EditProfileInfo({
       activity: companyActivity,
       avatar: avatarUrl,
     }
+
+    console.log(data)
 
     if (!isNameValid) {
       setShowNameValidText(true)
@@ -275,6 +312,7 @@ export default function EditProfileInfo({
           <Input
             disabled={!isInputsEditable}
             onChange={handleNameChange}
+            onBlur={onHandleNameValidate}
             value={isInputsEditable ? companyName : name}
           />
         </Form.Item>
@@ -290,6 +328,7 @@ export default function EditProfileInfo({
           <Input
             disabled={!isInputsEditable}
             onChange={e => handleAddressChange(e)}
+            onBlur={onHandleAddressValidate}
             value={isInputsEditable ? companyAddress : address}
           />
         </Form.Item>
@@ -305,6 +344,7 @@ export default function EditProfileInfo({
           <Input
             disabled={!isInputsEditable}
             onChange={e => handlePhoneNumChange(e)}
+            onBlur={onHandlePhoneNumValidate}
             value={isInputsEditable ? phoneNumber : phone}
           />
         </Form.Item>
@@ -320,6 +360,7 @@ export default function EditProfileInfo({
           <Input
             disabled={!isInputsEditable}
             onChange={e => handleTaxNumChange(e)}
+            onBlur={onHandleTaxNumValidate}
             value={isInputsEditable ? companyTaxNumber : taxNumber}
           />
         </Form.Item>
@@ -335,6 +376,7 @@ export default function EditProfileInfo({
           <Input
             disabled={!isInputsEditable}
             onChange={e => handleActivityChange(e)}
+            onBlur={onHandleActivityValidate}
             value={isInputsEditable ? companyActivity : activity}
           />
         </Form.Item>
@@ -354,7 +396,7 @@ export default function EditProfileInfo({
           )}
 
           <Button
-            disabled={!isInputsEditable}
+            disabled={isSaveBtnDisabled}
             type="primary"
             onClick={handleSaveInfoBtnClick}>
             Save

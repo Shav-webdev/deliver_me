@@ -29,6 +29,7 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
   }
   const onDeleteBtnClick = e => {
     e.stopPropagation()
+    console.log(el)
     setConfirmVisible(true)
   }
 
@@ -84,7 +85,7 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
         state={el}
       />
       <ConfirmModal
-        handleDeleteOrder={handleDeleteOrder}
+        handleDelete={handleDeleteOrder}
         visible={confirmVisible}
         deleteModalHandleCancel={deleteModalHandleCancel}
         confirmVisible={confirmVisible}
