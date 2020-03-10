@@ -53,7 +53,7 @@ export const signInAsAdminThunk = data => async dispatch => {
       throw new Error('Something went wrong, try again')
     } else {
        Storage.set('deliver', {
-        token: response.headers.autorisation,
+        token: response.headers.autorization,
         userType: 'admin',
       })
       dispatch(
