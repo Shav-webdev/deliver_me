@@ -381,10 +381,7 @@ export default function EditProfileInfo({
           />
         </Form.Item>
         <div className="company_edit_info_profile">
-          <Button
-            style={{ textAlign: 'left' }}
-            type="danger"
-            onClick={handleDelAccountBtnClick}>
+          <Button type="danger" onClick={handleDelAccountBtnClick}>
             Delete account
           </Button>
           {!isInputsEditable && (

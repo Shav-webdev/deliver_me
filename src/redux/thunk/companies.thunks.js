@@ -12,10 +12,7 @@ import {
   signInAsCompanyFailure,
   addCompanySocketSuccsess,
 } from '../action'
-import {
-  errorMessage,
-  successMessage,
-} from '../../services/services'
+import { errorMessage, successMessage } from '../../services/services'
 import history from '../../routes/history'
 
 export const getCompaniesThunk = () => async dispatch => {
