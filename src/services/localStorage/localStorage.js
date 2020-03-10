@@ -1,8 +1,8 @@
 export default class Storage {
-  static async set(key, data) {
+  static set(key, data) {
     try {
       const value = JSON.stringify(data)
-      await localStorage.setItem(key, value)
+      localStorage.setItem(key, value)
     } catch (err) {
       throw new Error(err.message)
     }

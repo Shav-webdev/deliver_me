@@ -94,14 +94,10 @@ export const getCompanyByIdThunk = id => async dispatch => {
   try {
     dispatch(signInAsCompanyRequest())
     const response = await api.getCompanyById(id).get()
-
-    if (response.status > 300) {
-      errorMessage('Something went wrong, try again')
-      throw new Error('Something went wrong, try again')
-    }
     dispatch(signInAsCompanySuccess(response.data))
     successMessage(`Dear ${response.data.name}, nice to see you again`)
   } catch (error) {
+    errorMessage('Something went wrong, try again')
     dispatch(signInAsCompanyFailure())
   }
 }

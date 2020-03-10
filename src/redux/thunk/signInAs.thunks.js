@@ -26,7 +26,7 @@ export const signInAs = data => async dispatch => {
       token: response.headers.authorization,
       userType: response.data.type,
     })
-    dispatch(
+   await dispatch(
       signInCurrentUserSuccess({
         ...response.data,
         userType: response.data.type,
@@ -34,12 +34,15 @@ export const signInAs = data => async dispatch => {
     )
     if (response.data.type === 'company') {
       successMessage('Sign In is successful !')
+      console.log("company errror")
       history.push('/company')
+      console.log("company errror22")
     } else {
       successMessage('Sign In is successful !')
       history.push('/profile/user')
     }
   } catch (error) {
+    console.log("company errror33",error)
     const err = {
       ...error,
     }
