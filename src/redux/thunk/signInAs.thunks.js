@@ -26,7 +26,7 @@ export const signInAs = data => async dispatch => {
       token: response.headers.authorization,
       userType: response.data.type,
     })
-    dispatch(
+   await dispatch(
       signInCurrentUserSuccess({
         ...response.data,
         userType: response.data.type,
