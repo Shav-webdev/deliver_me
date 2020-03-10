@@ -9,7 +9,10 @@ import {
   signInCurrentUserFailure,
 } from '../action'
 import history from '../../routes/history'
-import { errorMessage, successMessage } from '../../services/services'
+import {
+  errorMessage,
+  successMessage
+} from '../../services/services'
 
 export const signInAs = data => async dispatch => {
   try {
@@ -50,7 +53,7 @@ export const signInAsAdminThunk = data => async dispatch => {
     const response = await api.loginAdmin.post(data)
     console.log(response)
     if (response.status !== 200) {
-      throw new Error('Something went wrong, try again')
+      throw new Error(response.data.message)
     } else {
        Storage.set('deliver', {
         token: response.headers.authorization,
@@ -68,6 +71,6 @@ export const signInAsAdminThunk = data => async dispatch => {
     const err = {
       ...error,
     }
-    //errorMessage('Email or password is incorrect')
+    errorMessage(err.response.data.message)
   }
 }
