@@ -20,7 +20,7 @@ export const signInAs = data => async dispatch => {
     }
     Storage.set('deliver', {
       id: response.data.id,
-      token: response.headers.autorisation,
+      token: response.headers.autorization,
       userType: response.data.type,
     })
     dispatch(
@@ -53,7 +53,7 @@ export const signInAsAdminThunk = data => async dispatch => {
       throw new Error('Something went wrong, try again')
     } else {
        Storage.set('deliver', {
-        token: response.headers.autorisation,
+        token: response.headers.autorization,
         userType: 'admin',
       })
       dispatch(
