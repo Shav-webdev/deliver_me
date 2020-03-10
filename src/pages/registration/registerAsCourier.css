@@ -1,0 +1,25 @@
+.formCourierWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.formCourier {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 1rem 1.5rem;
+    max-width: 500px;
+    width: 100%;
+}
+
+.formCourier .ant-form-item {
+    margin-bottom: 0;
+}
+.formCourier .ant-form-item-label {
+    line-height: 30px;
+}
+.formCourier .ant-form-explain {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 450px;
+    width: 100%;
+}

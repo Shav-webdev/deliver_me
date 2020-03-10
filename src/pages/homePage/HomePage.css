@@ -1,0 +1,50 @@
+.login_section_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-direction: row;
+}
+
+.login_section_container {
+  max-width: 400px;
+  width: 100%;
+  margin: 1rem;
+}
+
+.description_content_wrapper {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  padding: 1rem;
+  height: fit-content;
+}
+
+.description_wrapper {
+  max-width: 350px;
+  width: 100%;
+  margin: 1rem;
+}
+
+.description_wrapper h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.description_text {
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  padding: 0.2rem;
+}
+
+.buttons_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons_wrapper a {
+  margin: 0 1rem;
+}

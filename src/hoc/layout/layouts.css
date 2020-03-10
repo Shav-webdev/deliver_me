@@ -1,0 +1,34 @@
+.layout_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+.layout_wrapper::after {
+    content: "";
+    background-color: #ffffff;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.65;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.layout_wrapper.homepage_wrapper::after {
+    background-image: url("../../assets/images/delivery.jpg");
+    background-size: cover;
+    opacity: 0.65;
+}
+
+.layout_wrapper.registration_wrapper::after {
+    background-image: url("../../assets/images/registration-bg.svg");
+    background-size: contain;
+    opacity: 0.15;
+}
