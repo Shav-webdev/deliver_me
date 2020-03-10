@@ -282,9 +282,7 @@ export default function CreateOrderModal({
   )
 
   function disabledDate(current) {
-    // Can not select days before today and today
     return current < moment().subtract(1, 'days')
-    // return current && current < moment().endOf('day')
   }
 
   function range(start, end) {
@@ -303,9 +301,6 @@ export default function CreateOrderModal({
       disabledMinutes: () => range(0, currentTime.getMinutes()),
     }
   }
-
-  console.log(orderStartTime)
-  console.log(orderEndTime)
 
   return (
     <Modal

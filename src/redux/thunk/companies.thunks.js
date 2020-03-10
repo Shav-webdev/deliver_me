@@ -12,10 +12,7 @@ import {
   signInAsCompanyFailure,
   addCompanySocketSuccsess,
 } from '../action'
-import {
-  errorMessage,
-  successMessage,
-} from '../../services/services'
+import { errorMessage, successMessage } from '../../services/services'
 import history from '../../routes/history'
 
 export const getCompaniesThunk = () => async dispatch => {
@@ -94,7 +91,6 @@ export const getCompanyByIdThunk = id => async dispatch => {
   try {
     dispatch(signInAsCompanyRequest())
     const response = await api.getCompanyById(id).get()
-
     if (response.status > 300) {
       errorMessage('Something went wrong, try again')
       throw new Error('Something went wrong, try again')
