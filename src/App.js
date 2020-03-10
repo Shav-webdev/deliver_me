@@ -7,12 +7,13 @@ import ErrorBoundary from './containers/errorBoundary/errorBoundary'
 import io from 'socket.io-client'
 export const socket = io.connect('https://thawing-ravine-80499.herokuapp.com/')
 const ls = Storage.get('deliver')
-const App = ({currentUserData}) => {
- 
- console.log(currentUserData)
+const App = ({ currentUserData }) => {
   return (
     <ErrorBoundary>
-      <Routes token={ls?ls.token:currentUserData.token} userType={ls?ls.userType:currentUserData.userType} />
+      <Routes
+        token={ls ? ls.token : currentUserData.token}
+        userType={ls ? ls.userType : currentUserData.userType}
+      />
     </ErrorBoundary>
   )
 }
