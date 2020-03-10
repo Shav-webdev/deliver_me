@@ -9,17 +9,25 @@ import {
   removeUserSuccsess,
   addUserSocketSuccsess
 } from '../action'
+import {
+  errorMessage,
+  successMessage
+} from '../../services/services'
 
 export const getUsersThunk = () => async dispatch => {
   try {
     dispatch(getUsersRequest())
     const response = await api.users.get()
     if (response.status !== 200) {
-      throw new Error('Cannot get Users')
+      throw new Error(response.data.message)
     }
     dispatch(getUsersSuccsess(response.data))
   } catch (error) {
+    const err = {
+      ...error,
+    }
     dispatch(getUsersFailure())
+    errorMessage(err.response.data.message)
   }
 }
 export const addUserBySocketThunk = data => async dispatch => {
@@ -33,23 +41,30 @@ export const addUserBySocketThunk = data => async dispatch => {
 export const createUserThunk = data => async dispatch => {
   try {
     if (data.id) {
-      const response = await api.deleteUpdateUser(data.id).put({ ...data })
+      const response = await api.deleteUpdateUser(data.id).put({
+        ...data
+      })
       if (response.status !== 201) {
-        throw new Error('Cannot update User')
+        throw new Error(response.data.message)
       }
       dispatch(editUserSuccsess(response.data))
+      successMessage('Data successfully updated !')
     } else {
       const response = await api.users.post({
         ...data,
       })
       dispatch(createUserSuccsess(response.data))
+      successMessage('Data successfully created !')
       dispatch(getUsersThunk())
       if (response.status !== 201) {
-        throw new Error('Cannot create User')
+        throw new Error(response.data.message)
       }
     }
   } catch (error) {
-    throw new Error(error)
+    const err = {
+      ...error,
+    }
+    errorMessage(err.response.data.message)
   }
 }
 
@@ -59,6 +74,10 @@ export const removeUserThunk = id => async dispatch => {
     dispatch(removeUserSuccsess(id))
     dispatch(getUsersThunk())
   } catch (error) {
+    const err = {
+      ...error,
+    }
     dispatch(removeUserFailure())
+    errorMessage(err.response.data.message)
   }
 }
