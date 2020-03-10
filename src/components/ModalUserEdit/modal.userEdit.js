@@ -179,6 +179,7 @@ export const ModalUserEdit = ({
           name="phone"
           onChange={handleInputChange}
           value={phone}
+          type='number'
           placeholder="Phone"
         />
         <p

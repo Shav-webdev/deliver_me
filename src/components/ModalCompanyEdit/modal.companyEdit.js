@@ -185,6 +185,7 @@ export const ModalCompanyEdit = ({
           onChange={handleInputChange}
           value={taxNumber}
           placeholder="TaxNumber"
+          type='number'
         />
         <p
           style={{
@@ -228,6 +229,7 @@ export const ModalCompanyEdit = ({
           onChange={handleInputChange}
           value={phone}
           placeholder="Phone"
+          type='number'
         />
         <p
           style={{
