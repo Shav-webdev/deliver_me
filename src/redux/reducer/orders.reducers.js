@@ -11,12 +11,24 @@ import {
   GET_COMPANY_ALL_ORDERS_REQUEST,
   GET_COMPANY_ALL_ORDERS_SUCCESS,
   GET_COMPANY_ALL_ORDERS_FAILURE,
+  GET_COMPANY_ACTIVE_ORDERS_REQUEST,
+  GET_COMPANY_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_PENDING_ORDERS_REQUEST,
+  GET_COMPANY_PENDING_ORDERS_SUCCESS,
+  GET_COMPANY_PENDING_ORDERS_FAILURE,
+  GET_COMPANY_DONE_ORDERS_REQUEST,
+  GET_COMPANY_DONE_ORDERS_SUCCESS,
+  GET_COMPANY_DONE_ORDERS_FAILURE,
   GET_ALL_ORDERS_REQUEST,
   GET_ALL_ORDERS_SUCCESS,
   GET_ALL_ORDERS_FAILURE,
   GET_USER_ORDERS_REQUEST,
   GET_USER_ORDERS_SUCCESS,
   GET_USER_ORDERS_FAILURE,
+  ADD_ORDER_BY_SOCKET_REQUEST,
+  ADD_ORDER_BY_SOCKET_SUCCESS,
+  ADD_ORDER_BY_SOCKET_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -26,6 +38,12 @@ const initialState = {
   userOrdersData: [],
   gettingCompanyOrders: false,
   companyOrdersData: [],
+  gettingCompanyActiveOrders: false,
+  companyActiveOrdersData: [],
+  gettingCompanyDoneOrders: false,
+  companyDoneOrdersData: [],
+  gettingCompanyPendingOrders: false,
+  companyPendingOrdersData: [],
 }
 
 export default function ordersReducer(state = initialState, action) {
@@ -45,6 +63,57 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyOrders: false,
+      }
+
+    case GET_COMPANY_DONE_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: true,
+      }
+    case GET_COMPANY_DONE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+        companyDoneOrdersData: action.payload,
+      }
+    case GET_COMPANY_DONE_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+      }
+
+    case GET_COMPANY_PENDING_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: true,
+      }
+    case GET_COMPANY_PENDING_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+        companyPendingOrdersData: action.payload,
+      }
+    case GET_COMPANY_PENDING_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+      }
+
+    case GET_COMPANY_ACTIVE_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyActiveOrders: true,
+      }
+    case GET_COMPANY_ACTIVE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyActiveOrders: false,
+        companyActiveOrdersData: action.payload,
+      }
+    case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyActiveOrders: false,
       }
 
     case GET_ALL_ORDERS_REQUEST:

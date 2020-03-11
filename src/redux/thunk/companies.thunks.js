@@ -61,8 +61,10 @@ export const createCompanyThunk = data => async dispatch => {
       }
     }
   } catch (error) {
-    console.log(error)
-    errorMessage('Something went wrong, try later')
+    const err = {
+      ...error,
+    }
+    errorMessage(`${error.response.data.message}`)
   }
 }
 

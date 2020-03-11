@@ -135,11 +135,22 @@ body {
   padding-top: 2rem;
 }
 
+.ant-menu-item a .order_text {
+  display: inline-block;
+  white-space: nowrap;
+  width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 0.5rem;
+  vertical-align: top;
+}
+
 .menu_item_icon {
   display: inline-block;
   width: 25px;
   height: 25px;
   margin-right: 1.5rem;
+  vertical-align: top;
 }
 
 .menu_item_icon img {
@@ -207,4 +218,9 @@ body {
 .create_order_form .order_range_picker {
   max-width: 350px;
   width: 100%;
+}
+
+.company_borders_badge sup {
+  background-color: #ccc;
+  color: #000;
 }
