@@ -82,7 +82,7 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
         state={el}
       />
       <ConfirmModal
-        handleDelete={handleDeleteOrder}
+        handleOk={handleDeleteOrder}
         visible={confirmVisible}
         deleteModalHandleCancel={deleteModalHandleCancel}
         confirmVisible={confirmVisible}

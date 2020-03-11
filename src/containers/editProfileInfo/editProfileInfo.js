@@ -10,6 +10,7 @@ import Spinner from '../../components/spiner/spinner'
 import { Button, Icon, message, Upload, Form, Input, Avatar } from 'antd'
 import axios from 'axios'
 import ConfirmModal from '../../components/confirmModal/confirmModal'
+import ChangePassword from '../changePassword/changePassword'
 
 export default function EditProfileInfo({
   isInputsEditable,
@@ -21,6 +22,7 @@ export default function EditProfileInfo({
   handleEditBtnClick,
   handleSaveBtnClick,
   handleCancelBtnClick,
+  handleChangePassBtnClick,
 }) {
   const { id, name, taxNumber, address, phone, activity, avatar } = state
 
@@ -48,6 +50,7 @@ export default function EditProfileInfo({
   const [showActivityValidText, setShowActivityValidText] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
   const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(true)
+  const [changePassVisible, setChangePassVisible] = useState(false)
 
   useEffect(() => {
     if (isInputsEditable) {
@@ -198,8 +201,6 @@ export default function EditProfileInfo({
       avatar: avatarUrl,
     }
 
-    console.log(data)
-
     if (!isNameValid) {
       setShowNameValidText(true)
     } else if (!isAddressValid) {
@@ -272,6 +273,19 @@ export default function EditProfileInfo({
     console.log(id)
     deleteAccount(id)
     setConfirmVisible(false)
+  }
+
+  const handleChangePassModalBtnClick = e => {
+    setChangePassVisible(true)
+  }
+
+  const changePassModalHandleCancel = () => {
+    setChangePassVisible(false)
+  }
+
+  const changePassBtnClick = data => {
+    console.log('edit pass', data)
+    handleChangePassBtnClick(data)
   }
 
   if (loading) {
@@ -381,6 +395,9 @@ export default function EditProfileInfo({
           />
         </Form.Item>
         <div className="company_edit_info_profile">
+          <Button type="danger" onClick={handleChangePassModalBtnClick}>
+            Change password
+          </Button>
           <Button type="danger" onClick={handleDelAccountBtnClick}>
             Delete account
           </Button>
@@ -404,7 +421,7 @@ export default function EditProfileInfo({
         </div>
       </Form>
       <ConfirmModal
-        handleDelete={handleDeleteAccount}
+        handleOk={handleDeleteAccount}
         visible={confirmVisible}
         deleteModalHandleCancel={deleteModalHandleCancel}
         confirmVisible={confirmVisible}
@@ -412,6 +429,11 @@ export default function EditProfileInfo({
         okText="Delete">
         On press delete all your data will be lost
       </ConfirmModal>
+      <ChangePassword
+        changePassBtnClick={changePassBtnClick}
+        changePassModalHandleCancel={changePassModalHandleCancel}
+        changePassVisible={changePassVisible}
+      />
     </>
   )
 }

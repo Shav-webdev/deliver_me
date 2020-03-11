@@ -93,6 +93,15 @@ const ProfilePage = ({
     deleteAccount(id)
   }
 
+  const handleChangePassBtnClick = data => {
+    console.log('profile page pass', data)
+    const passData = {
+      id: companies.signInAsCompanyData.id,
+      data,
+    }
+    updateCompanyData(passData)
+  }
+
   const { signInLoading, signInAsCompanyData } = companies
 
   const { id, avatar, amount } = signInAsCompanyData
@@ -208,6 +217,7 @@ const ProfilePage = ({
                   handleCancelBtnClick={handleCancelEditInfoBtnClick}
                   handleSaveBtnClick={handleSaveInfoBtnClick}
                   handleEditBtnClick={handleEditInfoBtnClick}
+                  handleChangePassBtnClick={handleChangePassBtnClick}
                   state={signInAsCompanyData}
                   defaultUrl={company_avatar}
                   loading={signInLoading}
