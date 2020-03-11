@@ -17,7 +17,6 @@ const defaultState = {
   phone: '',
   address: '',
   avatar: '',
-  amount: 0,
   addMoney: 0,
 }
 export const ModalCompanyEdit = ({
