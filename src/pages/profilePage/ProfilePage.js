@@ -94,7 +94,6 @@ const ProfilePage = ({
   }
 
   const handleChangePassBtnClick = data => {
-    console.log('profile page pass', data)
     const passData = {
       id: companies.signInAsCompanyData.id,
       data,
