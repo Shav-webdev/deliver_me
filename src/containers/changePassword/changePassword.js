@@ -16,20 +16,14 @@ export default function ChangePassword({
   const [confirmPassValidVisible, setConfirmPassValidVisible] = useState(false)
 
   const getOldPassValue = pass => {
-    console.log(pass)
     setOldPassword(pass)
-    console.log(password)
   }
 
   const getFirstPassValue = pass => {
-    console.log(pass)
     setPassword(pass)
-    console.log(password)
   }
   const getSecondPassValue = pass => {
-    console.log(pass)
     setPassword1(pass)
-    console.log(password1)
   }
 
   const hidePassValidVisible = () => {
@@ -50,11 +44,9 @@ export default function ChangePassword({
         old_password: oldPassword,
         new_password: password1,
       }
-      console.log('change pass', data)
-      changePassBtnClick(data)
+      changePassBtnClick({ ...data })
+      changePassModalHandleCancel()
     }
-
-    //changePassModalHandleCancel()
   }
 
   return (

@@ -1,4 +1,5 @@
 import api from '../API'
+import { ACTIVE, PENDING, ALL, DONE } from '../action/constants'
 import {
   createOrderSuccess,
   getCompanyOrdersRequest,
@@ -13,6 +14,18 @@ import {
   getAllOrdersRequest,
   getAllOrdersSuccess,
   getAllOrdersFailure,
+  getActiveOrdersRequest,
+  getActiveOrdersSuccess,
+  getActiveOrdersFailure,
+  getDoneOrdersRequest,
+  getDoneOrdersSuccess,
+  getDoneOrdersFailure,
+  getPendingOrdersRequest,
+  getPendingOrdersSuccess,
+  getPendingOrdersFailure,
+  addOrderBySocketRequest,
+  addOrderBySocketSuccsess,
+  addOrderBySocketFailure,
 } from '../action'
 
 import { errorMessage, successMessage } from '../../services/services'
@@ -45,18 +58,61 @@ export const getUserOrdersThunk = () => async dispatch => {
   }
 }
 
-export const getCompanyOrdersThunk = id => async dispatch => {
+export const getCompanyOrdersThunk = (id, type) => async dispatch => {
   try {
-    dispatch(getCompanyOrdersRequest())
-    const response = await api.getCompanyOrders(id).get(id)
-    if (response.status !== 200) {
-      errorMessage('Cannot get Orders')
+    switch (type) {
+      case ALL:
+        dispatch(getCompanyOrdersRequest())
+        const responseAll = await api
+          .getCompanyOrders(id)
+          .get({ params: { type } })
+        dispatch(getCompanyOrdersSuccess(responseAll.data))
+        successMessage('Orders loaded soccessfully.')
+        break
+      case ACTIVE:
+        dispatch(getActiveOrdersRequest())
+        const responseActive = await api
+          .getCompanyOrders(id)
+          .get({ params: { type } })
+        dispatch(getActiveOrdersSuccess(responseActive.data))
+        successMessage('Active orders loaded soccessfully.')
+        break
+      case DONE:
+        dispatch(getDoneOrdersRequest())
+        const responseDone = await api
+          .getCompanyOrders(id)
+          .get({ params: { type } })
+        dispatch(getDoneOrdersSuccess(responseDone.data))
+        successMessage('Completed orders loaded soccessfully.')
+        break
+      case PENDING:
+        dispatch(getPendingOrdersRequest())
+        const responsePending = await api
+          .getCompanyOrders(id)
+          .get({ params: { type } })
+        dispatch(getPendingOrdersSuccess(responsePending.data))
+        successMessage('Pending orders loaded soccessfully.')
+        break
     }
-    dispatch(getCompanyOrdersSuccess(response.data))
-    successMessage('Orders loaded soccessfully.')
   } catch (error) {
-    dispatch(getCompanyOrdersFailure())
-    errorMessage('Cannot get Orders')
+    switch (type) {
+      case ALL:
+        dispatch(getCompanyOrdersFailure())
+        errorMessage('Cannot get Orders')
+        break
+      case ACTIVE:
+        dispatch(getActiveOrdersFailure())
+        errorMessage('Cannot get active orders')
+        break
+      case DONE:
+        dispatch(getDoneOrdersFailure())
+        errorMessage('Cannot get completed orders')
+        break
+      case PENDING:
+        dispatch(getPendingOrdersFailure())
+        errorMessage('Cannot get pending orders')
+        break
+    }
   }
 }
 
