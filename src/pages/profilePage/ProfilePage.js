@@ -66,11 +66,6 @@ const audio= new Audio()
   }, [])
 
   useEffect(() => {
-    socket.emit('user_take_order', data => {
-      console.log(data)
-      audio.src = audioSound
-      audio.play()
-    })
     socket.on('user_took_order', data => {
       console.log(data)
       audio.src = audioSound

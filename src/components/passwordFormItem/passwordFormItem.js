@@ -5,9 +5,10 @@ import { validatePassword } from '../../pages/registration/helpers/validations'
 export default function PasswordFormItem({
   getPasswordValue,
   label,
+  defaultPass,
   hidePassValidVisible,
 }) {
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState(defaultPass ? defaultPass : '')
   const [showPasswordValidText, setShowPasswordValidText] = useState(false)
   const [isPasswordValid, setIsPasswordValid] = useState(false)
 
