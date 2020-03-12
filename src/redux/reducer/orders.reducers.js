@@ -125,12 +125,24 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingAllOrders: false,
-        orderData: action.payload,
+        allOrdersData: action.payload,
       }
     case GET_ALL_ORDERS_FAILURE:
       return {
         ...state,
         gettingAllOrders: false,
+      }
+
+    case 'TAKE_ORDER_SUCCESS':
+      console.log(action.payload)
+
+      const lastOrders = state.allOrdersData.filter(
+        elem => elem.id !== action.payload.id
+      )
+      console.log(lastOrders)
+      return {
+        ...state,
+        allOrdersData: [...lastOrders]
       }
 
     case GET_USER_ORDERS_REQUEST:

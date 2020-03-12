@@ -27,7 +27,7 @@ export default {
   getUserById: id => new Endpoint('users/' + id),
   getCompanyById: id => new Endpoint(`companies/${id}`),
   getAllActiveOrders: new Endpoint('active-orders'),
-  getUserOrders: id => new Endpoint(`user-orders/${id}`),
+  getUserOrders: (id,type) => new Endpoint(`user-orders/${id}?type=${type}`),
   getCompanyOrders: id => new Endpoint(`company-orders/${id}`),
   deleteUpdateOrder: id => new Endpoint(`orders/${id}`),
 }
