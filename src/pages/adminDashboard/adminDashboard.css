@@ -16,9 +16,9 @@
   height: 60px;
 }
 
-.ant-table-wrapper {
-  overflow-x: auto !important;
-  height: 100% !important;
+.ant-table-body{
+  max-height: 450px;
+  overflow-y: auto;
 }
 .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td {
@@ -62,3 +62,5 @@
 .ant-menu-dark.ant-menu-vertical-right {
   background: #ffffff00;
 }
+
+

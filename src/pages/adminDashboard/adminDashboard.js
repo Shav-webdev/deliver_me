@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Typography, Popover, Input } from 'antd'
+import { Table, Typography, Popover, Input, Button } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -24,6 +24,7 @@ import {
   addUserBySocketThunk,
   addCompanyBySocketThunk,
   getMoreUsersThunk,
+  getMoreCompanyThunk,
 } from '../../redux/thunk'
 import audioSound from '../../assets/sound.mp3'
 import history from '../../routes/history'
@@ -33,6 +34,7 @@ import { ModalUserEdit } from '../../components/ModalUserEdit'
 import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
 import CountRequestInfo from '../../components/CountRequestInfo/CountRequestInfo'
 import { useSelector } from 'react-redux'
+import LoadingWithDot from '../../components/laoding/loadingWithDot'
 const { Header, Sider, Content } = Layout
 const { Column } = Table
 
@@ -54,10 +56,17 @@ function AdminBoard({
   updateCompany,
   socketUser,
   socketCompany,
-  lastUserData,
-  hasUsers,
+  getMoreCompany,
 }) {
-  const { usersData, gettingUsers } = users
+  const {
+    usersData,
+    gettingUsers,
+    gettingCompanies,
+    gettingMoreUsers,
+    hasUsers,
+    hasCompanies,
+    gettingMoreCompanies,
+  } = users
   const { companiesData } = companies
   const [state, setState] = useState(defaultState)
   const [menuItem, setMenuItem] = useState('users')
@@ -68,12 +77,13 @@ function AdminBoard({
   const [modalUser, setModalUser] = useState({})
   const [modalCompany, setModalCompany] = useState({})
   const [lastUser, setLastUser] = useState(usersData)
+  const [loading, setLoading] = useState(false)
 
   const audio = new Audio()
   useEffect(() => {
     getUsers(Date.now())
 
-    getCompanies()
+    getCompanies(Date.now())
     socket.on('update_user_list', data => {
       successMessage(`${data.name} ${data.lastName} signed up !`)
       socketUser(data)
@@ -87,42 +97,21 @@ function AdminBoard({
       audio.play()
     })
   }, [])
-  useEffect(() => {
-    console.log(
-      'effecct 2',
-      usersData.length > 0 ? usersData[usersData.length - 1] : null
-    )
+  useEffect(() => {}, [usersData])
 
-    let lUser = usersData.length > 0 ? usersData[usersData.length - 1] : null
-    console.log(lUser)
-    if (hasUsers === true) {
-      lUser = usersData.length > 0 ? usersData[usersData.length - 1] : null
-      console.log(lUser)
-      scrollLoading(lUser)
-      console.log('=== chi')
-      console.log('state after set', lastUser)
-    } else {
-      console.log('===')
-      console.log('=== after set', lastUser)
+  const loadMore = () => {
+    if (menuItem === 'users') {
+      console.log('loading ??', users.usersData.length - 1)
+      setLoading(true)
+      const user = users.usersData[users.usersData.length - 1]
+      getMoreUsers(user.createdTime)
+    } else if (menuItem === 'companies') {
+      console.log('loading ??', companies.companiesData.length - 1)
+      setLoading(true)
+      const company =
+        companies.companiesData[companies.companiesData.length - 1]
+      getMoreCompany(company.createdTime)
     }
-  }, [usersData.length])
-
-  const scrollLoading = lUser => {
-    window.addEventListener('scroll', () => {
-      const scrollable =
-        document.documentElement.scrollHeight - window.innerHeight
-      const scrolled = window.scrollY
-      if (Math.ceil(scrolled) === scrollable) {
-        if (lUser) {
-          console.log(users)
-          console.log(lUser, 'timeeeeeeeee')
-          console.log(lUser.createdTime)
-          setLastUser(lUser.id)
-          console.log('more useers can get', hasUsers)
-          getMoreUsers(lUser.createdTime)
-        }
-      }
-    })
   }
 
   const filterByValue = (array, value) => {
@@ -354,69 +343,87 @@ function AdminBoard({
                 ))
               ))}
             {menuItem === 'companies' &&
-              (companiesData.sort(
-                (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
-              ) && (filtered = filterByValue(companiesData, state.search)),
-              (
-                <Table
-                  rowKey={record => record.id}
-                  onRow={r => ({
-                    onClick: () => showModalCompany(r),
-                  })}
-                  pagination={{
-                    pageSize: 9,
-                  }}
-                  dataSource={filtered}>
-                  <Column title="Name" dataIndex="name" key="name" />
-                  <Column
-                    title="TaxNumber"
-                    dataIndex="taxNumber"
-                    key="taxNumber"
-                  />
-                  <Column title="Phone" dataIndex="phone" key="phone" />
-                  <Column title="Email" dataIndex="email" key="email" />
-                  <Column title="Address" dataIndex="address" key="address" />
-                  <Column
-                    title="Amount"
-                    key="amount"
-                    render={(text, record) => record.amount}
-                  />
-                  <Column
-                    title="Status"
-                    key="approved"
-                    render={(text, record) =>
-                      record.approved === 'accepted' ? (
-                        <span>
-                          <CheckCircleFilled
-                            style={{
-                              color: 'orange',
-                              marginRight: '5px',
-                            }}
-                          />
-                          {record.approved}
-                        </span>
-                      ) : record.approved === 'declined' ? (
-                        <span>
-                          <CloseCircleFilled
-                            style={{
-                              color: 'red',
-                              marginRight: '5px',
-                            }}
-                          />
-                          {record.approved}
-                        </span>
-                      ) : (
-                        <span>
-                          <ClockCircleOutlined
-                            style={{ color: '#595959', marginRight: '5px' }}
-                          />{' '}
-                          {record.approved}
-                        </span>
-                      )
-                    }
-                  />
-                </Table>
+              (companiesData.length === 0 ? (
+                <Spinner />
+              ) : (
+                (companiesData.sort(
+                  (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
+                ),
+                (filtered = filterByValue(companiesData, state.search)),
+                (
+                  <Table
+                    rowKey={record => record.id}
+                    onRow={r => ({
+                      onClick: () => showModalCompany(r),
+                    })}
+                    pagination={false}
+                    dataSource={filtered}>
+                    <Column title="Name" dataIndex="name" key="name" />
+                    <Column
+                      title="TaxNumber"
+                      dataIndex="taxNumber"
+                      key="taxNumber"
+                    />
+                    <Column title="Phone" dataIndex="phone" key="phone" />
+                    <Column title="Email" dataIndex="email" key="email" />
+                    <Column title="Address" dataIndex="address" key="address" />
+                    <Column
+                      title="Amount"
+                      key="amount"
+                      render={(text, record) => record.amount}
+                    />
+                    <Column
+                      title="Status"
+                      key="approved"
+                      render={(text, record) =>
+                        record.approved === 'accepted' ? (
+                          <span>
+                            <CheckCircleFilled
+                              style={{
+                                color: 'orange',
+                                marginRight: '5px',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : record.approved === 'declined' ? (
+                          <span>
+                            <CloseCircleFilled
+                              style={{
+                                color: 'red',
+                                marginRight: '5px',
+                              }}
+                            />
+                            {record.approved}
+                          </span>
+                        ) : (
+                          <span>
+                            <ClockCircleOutlined
+                              style={{ color: '#595959', marginRight: '5px' }}
+                            />{' '}
+                            {record.approved}
+                          </span>
+                        )
+                      }
+                    />
+                  </Table>
+                ))
               ))}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '10px',
+                alignItems: 'center',
+              }}>
+              {!gettingMoreUsers && !gettingUsers && hasUsers ? (
+                <Button onClick={loadMore}>Load more</Button>
+              ) : hasUsers && !gettingUsers ? (
+                <LoadingWithDot />
+              ) : (
+                ''
+              )}
+            </div>
           </Content>
         </Layout>
       </Layout>
@@ -444,14 +451,17 @@ const mapDispatchToProps = dispatch => {
     socketCompany: data => {
       dispatch(addCompanyBySocketThunk(data))
     },
+    getMoreCompany: lastCompanyTime => {
+      dispatch(getMoreCompanyThunk(lastCompanyTime, 8))
+    },
     getUsers: lastUserTime => {
-      dispatch(getUsersThunk(lastUserTime, 12))
+      dispatch(getUsersThunk(lastUserTime, 8))
     },
     getMoreUsers: lastUserTime => {
-      dispatch(getMoreUsersThunk(lastUserTime, 12))
+      dispatch(getMoreUsersThunk(lastUserTime, 8))
     },
-    getCompanies: () => {
-      dispatch(getCompaniesThunk())
+    getCompanies: lastCompanyTime => {
+      dispatch(getCompaniesThunk(lastCompanyTime, 8))
     },
     removeUser: id => {
       dispatch(removeUserThunk(id))

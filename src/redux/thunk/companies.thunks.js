@@ -11,14 +11,17 @@ import {
   signInAsCompanySuccess,
   signInAsCompanyFailure,
   addCompanySocketSuccsess,
+  getMoreCompanyRequest,
+  getMoreCompanySuccsess,
+  noMoreCompanyGet
 } from '../action'
 import { errorMessage, successMessage } from '../../services/services'
 import history from '../../routes/history'
 
-export const getCompaniesThunk = () => async dispatch => {
+export const getCompaniesThunk = (last,count) => async dispatch => {
   try {
     dispatch(getCompaniesRequest())
-    const response = await api.companies.get()
+    const response = await api.companies(last,count).get()
     if (response.status !== 200) {
       throw new Error('Cannot get Companies')
     }
@@ -28,6 +31,25 @@ export const getCompaniesThunk = () => async dispatch => {
   }
 }
 
+export const getMoreCompanyThunk = (last, count) => async dispatch => {
+  try {
+    dispatch(getMoreCompanyRequest())
+    if (last) {
+      const response = await api.companies(last, count).get()
+      if (response.status !== 206) {
+        dispatch(getMoreCompanySuccsess(response.data))
+      } else {
+        console.log('no data')
+        dispatch(noMoreCompanyGet())
+      }
+    }
+  } catch (error) {
+    const err = {
+      ...error,
+    }
+    dispatch(noMoreUsersGet())
+  }
+}
 export const addCompanyBySocketThunk = data => async dispatch => {
   try {
     dispatch(addCompanySocketSuccsess(data))
@@ -61,8 +83,10 @@ export const createCompanyThunk = data => async dispatch => {
       }
     }
   } catch (error) {
-    console.log(error)
-    errorMessage('Something went wrong, try later')
+    const err = {
+      ...error,
+    }
+    errorMessage(`${error.response.data.message}`)
   }
 }
 

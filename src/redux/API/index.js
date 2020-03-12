@@ -18,7 +18,7 @@ const Endpoint = EndpointFactory(axiosInstance)
 
 export default {
   users: (lastUser,uCount)=>new Endpoint(`users?last=${lastUser}&count=${uCount}`),
-  companies: new Endpoint('companies'),
+  companies:(lastCompany,cCount)=> new Endpoint(`companies?last=${lastCompany}&count=${cCount}`),
   deleteUpdateUser: id => new Endpoint('users/' + id),
   deleteUpdateCompany: id => new Endpoint('companies/' + id),
   login: new Endpoint('login'),

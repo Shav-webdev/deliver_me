@@ -17,7 +17,7 @@ const { Option } = Select
 
 export default function CreateOrderModal({
   handleCreateOrderSubmit,
-  modalHandleCancel,
+  orderModalHandleCancel,
   visible,
   okText,
   modalTitle,
@@ -311,7 +311,7 @@ export default function CreateOrderModal({
       okText={okText}
       okButtonProps={{ disabled: isOrderEditable }}
       onOk={handleCreateOrder}
-      onCancel={modalHandleCancel}>
+      onCancel={orderModalHandleCancel}>
       <Form className="create_order_form">
         <SubTitle>Sender</SubTitle>
         <Form.Item
@@ -436,8 +436,8 @@ export default function CreateOrderModal({
             disabledDate={disabledDate}
             disabledTime={disabledDateTime}
             defaultValue={[
-              orderStartTime ? moment(orderStartTime) : '',
-              orderEndTime ? moment(orderEndTime) : '',
+              orderStartTime ? moment(orderStartTime) : null,
+              orderEndTime ? moment(orderEndTime) : null,
             ]}
             showTime={{
               hideDisabledOptions: true,

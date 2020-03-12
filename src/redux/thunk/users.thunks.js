@@ -49,7 +49,6 @@ export const getMoreUsersThunk = (last, count) => async dispatch => {
       ...error,
     }
     dispatch(noMoreUsersGet())
-    //errorMessage(err.response.data.message)
   }
 }
 export const addUserBySocketThunk = data => async dispatch => {

@@ -14,6 +14,8 @@ import {
 const initialState = {
   gettingCompanies: false,
   companiesData: [],
+  gettingMoreCompanies:false,
+  hasCompanies:true,
   signInLoading: false,
   signInAsCompanyData: {},
   createOrderLoading: false,
@@ -38,7 +40,29 @@ export default function companiesReducer(state = initialState, action) {
         ...state,
         gettingCompanies: false,
       }
+      case 'GET_MORE_USERS_REQUEST':
+        return {
+          ...state,
+          gettingMoreCompanies: true,
+        }
+      case 'GET_MORE_USERS_SUCCSESS':
+        return {
+          ...state,
+          gettingMoreCompanies: false,
+          companiesData: [...state.companiesData,...action.payload]
+        }
+      case 'GET_MORE_USERS_FAILURE':
+        return {
+          ...state,
+          gettingMoreCompanies: false,
+          hasCompanies:false
+        }
 
+        case 'NO_MORE_COMPANY':
+        return {
+          ...state,
+          hasCompanies: false,
+        }
     case ADD_COMPANY_SOCKET_SUCCESS:
       return {
         ...state,

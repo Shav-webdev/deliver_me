@@ -4,17 +4,19 @@ import Modal from 'antd/es/modal'
 export default function ConfirmModal({
   title,
   confirmVisible,
-  handleDelete,
-  deleteModalHandleCancel,
+  handleOk,
+  okButtonProps,
+  modalHandleCancel,
   okText,
   children,
 }) {
   return (
     <Modal
+      okButtonProps={okButtonProps}
       title={title}
       visible={confirmVisible}
-      onOk={handleDelete}
-      onCancel={deleteModalHandleCancel}
+      onOk={handleOk}
+      onCancel={modalHandleCancel}
       okText={okText}>
       {children}
     </Modal>

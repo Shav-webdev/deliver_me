@@ -17,7 +17,7 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
     setVisible(true)
   }
 
-  const modalHandleCancel = () => {
+  const orderModalHandleCancel = () => {
     setVisible(false)
   }
 
@@ -31,7 +31,7 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
     setConfirmVisible(true)
   }
 
-  const deleteModalHandleCancel = () => {
+  const modalHandleCancel = () => {
     setConfirmVisible(false)
   }
 
@@ -53,6 +53,18 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
             {el.points}
           </p>
         </div>
+        {el.state === 'pending' && (
+          <div>
+            <p>
+              <strong>Deliverer :</strong>
+              {el.user_name}
+            </p>
+            <p>
+              <strong>Deliverer phone :</strong>
+              {el.user_phone}
+            </p>
+          </div>
+        )}
         <div>
           <p>
             <strong>Take address :</strong>
@@ -76,15 +88,15 @@ function Order({ el, updateOrder, deleteOrder, companyId }) {
       <CreateOrderModal
         visible={visible}
         handleCreateOrderSubmit={handleUpdateOrderSubmit}
-        modalHandleCancel={modalHandleCancel}
+        orderModalHandleCancel={orderModalHandleCancel}
         modalTitle="Edit Request"
         okText="Update"
         state={el}
       />
       <ConfirmModal
-        handleDelete={handleDeleteOrder}
+        handleOk={handleDeleteOrder}
         visible={confirmVisible}
-        deleteModalHandleCancel={deleteModalHandleCancel}
+        modalHandleCancel={modalHandleCancel}
         confirmVisible={confirmVisible}
         title="Delete Order"
         okText="Delete">

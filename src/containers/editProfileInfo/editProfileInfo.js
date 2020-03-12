@@ -11,6 +11,7 @@ import Spinner from '../../components/spiner/spinner'
 import { Button, Icon, message, Upload, Form, Input, Avatar } from 'antd'
 import axios from 'axios'
 import ConfirmModal from '../../components/confirmModal/confirmModal'
+import ChangePassword from '../changePassword/changePassword'
 
 export default function EditProfileInfo({
   isInputsEditable,
@@ -22,7 +23,7 @@ export default function EditProfileInfo({
   handleEditBtnClick,
   handleSaveBtnClick,
   handleCancelBtnClick,
-  
+  handleChangePassBtnClick,
 }) {
   const {
     id,
@@ -63,6 +64,7 @@ export default function EditProfileInfo({
   const [showActivityValidText, setShowActivityValidText] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
   const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(true)
+  const [changePassVisible, setChangePassVisible] = useState(false)
 
   useEffect(() => {
     if (isInputsEditable) {
@@ -225,7 +227,7 @@ export default function EditProfileInfo({
     setPhoneNumber(phone)
     setAvatarUrl(avatar)
     setCompanyAddress(address)
-    if (lastName) {
+    if (type!=='user') {
       setCompanyActivity(activity)
       setCompanyTaxNumber(taxNumber)
     }
@@ -358,6 +360,19 @@ export default function EditProfileInfo({
     setConfirmVisible(false)
   }
 
+  const handleChangePassModalBtnClick = e => {
+    setChangePassVisible(true)
+  }
+
+  const changePassModalHandleCancel = () => {
+    setChangePassVisible(false)
+  }
+
+  const changePassBtnClick = data => {
+    console.log('edit pass', data)
+    handleChangePassBtnClick(data)
+  }
+
   if (loading) {
     return <Spinner />
   }
@@ -451,7 +466,7 @@ export default function EditProfileInfo({
           />
         </Form.Item>
 
-        {state.taxNumber && (
+        {type!=='user' &&  (
             <Form.Item
               label="Tax Number"
               validateStatus={showTaxNumValidText ? 'error' : 'success'}
@@ -468,7 +483,7 @@ export default function EditProfileInfo({
                 value={isInputsEditable ? companyTaxNumber : taxNumber}
               />
             </Form.Item>
-          ) && (
+          ) }{type!=='user' && (
             <Form.Item
               label="Activity"
               validateStatus={showActivityValidText ? 'error' : 'success'}
@@ -487,6 +502,9 @@ export default function EditProfileInfo({
             </Form.Item>
           )}
         <div className="company_edit_info_profile">
+          <Button type="danger" onClick={handleChangePassModalBtnClick}>
+            Change password
+          </Button>
           <Button type="danger" onClick={handleDelAccountBtnClick}>
             Delete account
           </Button>
@@ -510,7 +528,7 @@ export default function EditProfileInfo({
         </div>
       </Form>
       <ConfirmModal
-        handleDelete={handleDeleteAccount}
+        handleOk={handleDeleteAccount}
         visible={confirmVisible}
         deleteModalHandleCancel={deleteModalHandleCancel}
         confirmVisible={confirmVisible}
@@ -518,6 +536,11 @@ export default function EditProfileInfo({
         okText="Delete">
         On press delete all your data will be lost
       </ConfirmModal>
+      <ChangePassword
+        changePassBtnClick={changePassBtnClick}
+        changePassModalHandleCancel={changePassModalHandleCancel}
+        changePassVisible={changePassVisible}
+      />
     </>
   )
 }

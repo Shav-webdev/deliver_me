@@ -28,6 +28,21 @@ export const getCompaniesFailure = () => ({
   type: GET_COMPANIES_FAILURE,
 })
 
+export const getMoreCompanyRequest = () => ({
+  type: 'GET_MORE_COMPANY_REQUEST',
+})
+export const getMoreCompanySuccsess = data => ({
+  type: 'GET_MORE_COMPANY_SUCCSESS',
+  payload: data,
+})
+export const getMoreCompanyFailure = () => ({
+  type: 'GET_MORE_COMPANY_FAILURE',
+})
+
+export const noMoreCompanyGet = () => ({
+  type: 'NO_MORE_COMPANY',
+})
+
 export const addCompanySocketSuccsess = data => ({
   type: ADD_COMPANY_SOCKET_SUCCESS,
   payload: data,

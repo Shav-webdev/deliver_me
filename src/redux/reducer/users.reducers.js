@@ -41,13 +41,14 @@ export default function usersReducer(state = initialState, action) {
       case 'GET_MORE_USERS_SUCCSESS':
         return {
           ...state,
-          gettingUsers: false,
+          gettingMoreUsers: false,
           usersData: [...state.usersData,...action.payload]
         }
       case 'GET_MORE_USERS_FAILURE':
         return {
           ...state,
           gettingMoreUsers: false,
+          hasUsers:false
         }
 
         case 'NO_MORE_USERS':

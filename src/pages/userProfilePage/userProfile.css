@@ -16,10 +16,7 @@
   height: 60px;
 }
 
-.ant-table-wrapper {
-  overflow-x: auto !important;
-  height: 100% !important;
-}
+
 .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td {
   text-align: center;

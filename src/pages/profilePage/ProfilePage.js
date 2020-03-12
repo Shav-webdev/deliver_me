@@ -5,7 +5,7 @@ import './profilePage.css'
 import Storage from '../../services/localStorage/localStorage'
 import company_avatar from '../../assets/images/company_avatar.png'
 import Menu from 'antd/es/menu'
-
+import { Badge } from 'antd'
 import Spinner from '../../components/spiner/spinner'
 import { connect } from 'react-redux'
 import {
@@ -17,6 +17,8 @@ import {
   getCompanyOrdersThunk,
   createCompanyOrderThunk,
 } from '../../redux/thunk/orders.thunks'
+import { socket } from '../../services/socket'
+import audioSound from '../../assets/sound.mp3'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import activeOrdersIcon from '../../assets/images/activeOrdersIcon.svg'
 import allOrdersIcon from '../../assets/images/allOrdersIcon.svg'
@@ -38,27 +40,49 @@ const ProfilePage = ({
   getCompanyById,
   createOrder,
   updateCompanyData,
-  getCompanyAllOrders,
+  getCompanyOrders,
   gettingCompanyOrders,
-  gettingAllOrders,
+  gettingCompanyActiveOrders,
+  gettingCompanyPendingOrders,
+  gettingCompanyDoneOrders,
+  companyOrdersData,
+  companyActiveOrdersData,
+  companyPendingOrdersData,
+  companyDoneOrdersData,
 }) => {
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-  const { companyOrdersData } = orders
+const audio= new Audio()
   useEffect(() => {
     const ls = Storage.get('deliver')
     const companyId = ls.id
     getCompanyById(companyId)
-    getCompanyAllOrders(companyId)
+    getCompanyOrders(companyId, 'all')
+    getCompanyOrders(companyId, 'active')
+    getCompanyOrders(companyId, 'pending')
+    getCompanyOrders(companyId, 'done')
     // eslint-disable-next-line no-useless-escape
   }, [])
+
+  useEffect(() => {
+    socket.emit('user_take_order', data => {
+      console.log(data)
+      audio.src = audioSound
+      audio.play()
+    })
+    socket.on('user_took_order', data => {
+      console.log(data)
+      audio.src = audioSound
+      audio.play()
+    })
+  },[])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
   }
 
-  const modalHandleCancel = () => {
+  const orderModalHandleCancel = () => {
     setVisible(false)
   }
   const toggle = () => {
@@ -93,9 +117,22 @@ const ProfilePage = ({
     deleteAccount(id)
   }
 
+  const handleChangePassBtnClick = data => {
+    const passData = {
+      id: companies.signInAsCompanyData.id,
+      ...data,
+    }
+    updateCompanyData(passData)
+  }
+
   const { signInLoading, signInAsCompanyData } = companies
 
   const { id, avatar, amount } = signInAsCompanyData
+
+  // const handleMenuClick = e => {
+  //   const type = e.key
+  //   getCompanyOrders(id, type)
+  // }
 
   return (
     <Router>
@@ -109,40 +146,65 @@ const ProfilePage = ({
             <img src={logo} alt="deliver.me" />
           </div>
           <Menu
+            // onClick={handleMenuClick}
             theme="dark"
             className="sidebar_menu_wrapper"
             mode="inline"
             defaultSelectedKeys={['1']}>
-            <Menu.Item key="1">
+            <Menu.Item key="all">
               <Link to="/company">
                 <span className="menu_item_icon">
                   <img src={allOrdersIcon} alt="All orders" />
                 </span>
-                <span>My orders</span>
+                <span className="order_text">My orders</span>
+                <span>
+                  <Badge
+                    className="company_borders_badge"
+                    count={companyOrdersData.length}
+                  />
+                </span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="2">
+            <Menu.Item key="active">
               <Link to="/company/active_orders">
                 <span className="menu_item_icon">
                   <img src={activeOrdersIcon} alt="All orders" />
                 </span>
-                <span>Active orders</span>
+                <span className="order_text">Active orders</span>
+                <span>
+                  <Badge
+                    className="company_borders_badge"
+                    count={companyActiveOrdersData.length}
+                  />
+                </span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="3">
+            <Menu.Item key="pending">
               <Link to="/company/pending_orders">
                 <span className="menu_item_icon">
                   <img src={pendingOrdersIcon} alt="All orders" />
                 </span>
-                <span>Pending orders</span>
+                <span className="order_text">Pending orders</span>
+                <span>
+                  <Badge
+                    className="company_borders_badge"
+                    count={companyPendingOrdersData.length}
+                  />
+                </span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key="done">
               <Link to="/company/completed_orders">
                 <span className="menu_item_icon">
                   <img src={doneOrdersIcon} alt="Completed orders" />
                 </span>
-                <span>Completed orders</span>
+                <span className="order_text">Completed orders</span>
+                <span>
+                  <Badge
+                    className="company_borders_badge"
+                    count={companyDoneOrdersData.length}
+                  />
+                </span>
               </Link>
             </Menu.Item>
           </Menu>
@@ -181,25 +243,22 @@ const ProfilePage = ({
             <Route path="/company/active_orders">
               <OrdersList
                 companyId={id}
-                orders={companyOrdersData}
-                loading={gettingCompanyOrders}
-                filterBy="active"
+                orders={companyActiveOrdersData}
+                loading={gettingCompanyActiveOrders}
               />
             </Route>
             <Route path="/company/completed_orders">
               <OrdersList
                 companyId={id}
-                orders={companyOrdersData}
-                loading={gettingCompanyOrders}
-                filterBy="done"
+                orders={companyDoneOrdersData}
+                loading={gettingCompanyDoneOrders}
               />
             </Route>
             <Route path="/company/pending_orders">
               <OrdersList
                 companyId={id}
-                orders={companyOrdersData}
-                loading={gettingCompanyOrders}
-                filterBy="pending"
+                orders={companyPendingOrdersData}
+                loading={gettingCompanyPendingOrders}
               />
             </Route>
             <Route path="/company/profile_info">
@@ -208,6 +267,7 @@ const ProfilePage = ({
                   handleCancelBtnClick={handleCancelEditInfoBtnClick}
                   handleSaveBtnClick={handleSaveInfoBtnClick}
                   handleEditBtnClick={handleEditInfoBtnClick}
+                  handleChangePassBtnClick={handleChangePassBtnClick}
                   state={signInAsCompanyData}
                   defaultUrl={company_avatar}
                   loading={signInLoading}
@@ -221,7 +281,7 @@ const ProfilePage = ({
         <CreateOrderModal
           visible={visible}
           handleCreateOrderSubmit={handleCreateOrderSubmit}
-          modalHandleCancel={modalHandleCancel}
+          orderModalHandleCancel={orderModalHandleCancel}
           modalTitle="Create Request"
           okText="Create"
           state={{}}
@@ -234,13 +294,30 @@ const ProfilePage = ({
 const mapStateToProps = state => {
   const { companies, orders } = state
   const { signInAsCompanyData, signInLoading } = companies
-  const { gettingCompanyOrders } = orders
+  const {
+    gettingCompanyOrders,
+    gettingCompanyActiveOrders,
+    gettingCompanyPendingOrders,
+    gettingCompanyDoneOrders,
+    companyOrdersData,
+    companyActiveOrdersData,
+    companyPendingOrdersData,
+    companyDoneOrdersData,
+  } = orders
+
   return {
     signInAsCompanyData,
     signInLoading,
     companies,
     orders,
     gettingCompanyOrders,
+    gettingCompanyActiveOrders,
+    gettingCompanyPendingOrders,
+    gettingCompanyDoneOrders,
+    companyOrdersData,
+    companyActiveOrdersData,
+    companyPendingOrdersData,
+    companyDoneOrdersData,
   }
 }
 
@@ -249,7 +326,7 @@ const mapDispatchToProps = dispatch => {
     updateCompanyData: id => dispatch(createCompanyThunk(id)),
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
     createOrder: data => dispatch(createCompanyOrderThunk(data)),
-    getCompanyAllOrders: id => dispatch(getCompanyOrdersThunk(id)),
+    getCompanyOrders: (id, type) => dispatch(getCompanyOrdersThunk(id, type)),
     deleteAccount: id => dispatch(removeCompanyByIdThunk(id)),
     updateAvatar: data => {
       dispatch(createCompanyThunk(data))
