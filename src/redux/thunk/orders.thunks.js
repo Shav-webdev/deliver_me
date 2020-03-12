@@ -119,6 +119,7 @@ export const getCompanyOrdersThunk = (id, type) => async dispatch => {
 export const createCompanyOrderThunk = data => async dispatch => {
   try {
     if (data.id) {
+      console.log(data)
       const response = await api.deleteUpdateOrder(data.id).put({ ...data })
       if (response.status !== 201) {
         errorMessage('Cannot update Order')
