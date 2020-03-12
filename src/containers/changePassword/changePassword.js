@@ -12,7 +12,6 @@ export default function ChangePassword({
   const [password, setPassword] = useState('')
   const [password1, setPassword1] = useState('')
   const [oldPassword, setOldPassword] = useState('')
-  const [defaultPass, setDefaultPass] = useState('')
 
   const [confirmPassValidVisible, setConfirmPassValidVisible] = useState(false)
 
@@ -27,18 +26,16 @@ export default function ChangePassword({
     setPassword1(pass)
   }
 
-  useEffect(() => {
-    if (changePassVisible) {
-      setDefaultPass('')
-    }
-  }, [changePassVisible])
+  // useEffect(() => {
+  //   if (changePassVisible) {
+  //   }
+  // }, [changePassVisible])
 
   const hidePassValidVisible = () => {
     setConfirmPassValidVisible(false)
   }
 
   const modalHandleCancel = () => {
-    setDefaultPass('')
     console.log(password1)
     console.log(password)
     console.log(password)

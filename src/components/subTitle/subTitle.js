@@ -8,6 +8,7 @@ export default function SubTitle(props) {
           borderBottom: '1px solid #000',
           textAlign: 'center',
           width: 'maxContent',
+          opacity: 0.7
         }}>
         {props.children}
       </h2>

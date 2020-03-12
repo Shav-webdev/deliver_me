@@ -42,6 +42,7 @@ body {
   padding: 24px;
   min-height: 280px;
 }
+
 .ant-layout-sider-collapsed .profile_company_logo {
   padding: 1.22rem 0.5rem;
 }
@@ -108,6 +109,7 @@ body {
 .company_profile_main .orders_list_item .orders_list_item_elem {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -121,11 +123,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(
-    to right,
-    rgb(36, 77, 125),
-    rgb(203, 82, 82)
-  );
+  background-image: linear-gradient(to right,
+      rgb(36, 77, 125),
+      rgb(203, 82, 82));
   padding-left: 20px;
 }
 
@@ -225,6 +225,11 @@ body {
   max-width: 220px;
   width: 100%;
   margin-bottom: 0;
+}
+
+.create_order_form .ant-form-item.receiver {
+  margin-bottom: 25px;
+  margin-top: 10px;
 }
 
 .create_order_form .order_range_picker {

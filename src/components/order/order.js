@@ -15,8 +15,17 @@ import OrderRate from '../orderRate/orderRate'
 function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   const [visible, setVisible] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
+  const [defaultRate, setDefaultRate] = useState(0)
 
-  const audio = new Audio()
+  useEffect(() => {
+    if (el.state === 'done' && el.rating === 0) {
+      setDefaultRate(0)
+    } else if (el.state === 'done' && el.rating !== 0) {
+      const rate = Number(el.rating)
+      console.log('rating data', el.rating)
+      setDefaultRate(rate)
+    }
+  })
 
   const handleUpdateOrderClick = () => {
     setVisible(true)
@@ -32,8 +41,6 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
 
     socket.emit('user_take_order', data => {
       console.log(data)
-      audio.src = audioSound
-      audio.play()
     })
 
     setVisible(false)
@@ -53,9 +60,10 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   }
 
   const getOrderRate = rate => {
-    const data = { companyId, rate }
-    console.log(data)
-    //updateOrder(data)
+    const data = { id: el.id, rating: rate }
+
+    console.log('rate', data)
+    updateOrder(data)
   }
 
   return (
@@ -108,7 +116,9 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
           {el.state !== 'pending' && (
             <Button onClick={onDeleteBtnClick}>Delete</Button>
           )}
-          {el.state === 'done' && <OrderRate getOrderRate={getOrderRate} />}
+          {el.state === 'done' && (
+            <OrderRate defaultRate={defaultRate} getOrderRate={getOrderRate} />
+          )}
         </div>
       </List.Item>
       <CreateOrderModal
