@@ -14,6 +14,7 @@ import AdminLoginForm from '../pages/adminLogin/adminLoginForm'
 import AdminDashboard from '../pages/adminDashboard/adminDashboard'
 import history from './history'
 import ProfilePage from '../pages/profilePage/ProfilePage'
+import userProfilePage from '../pages/userProfilePage/userProfilePage'
 
 export default function Routes({ token, userType }) {
   const pathTo =
@@ -22,7 +23,7 @@ export default function Routes({ token, userType }) {
       : userType === 'company'
       ? '/company'
       : userType === 'user'
-      ? '/profile/user'
+      ? '/user'
       : ''
 
   return (
@@ -53,9 +54,9 @@ export default function Routes({ token, userType }) {
           />
 
           <PrivateRoute
-            path="/profile/user"
+            path="/user"
             pathTo={pathTo}
-            component={'hj'}
+            component={userProfilePage}
             authenticated={token && userType === 'user'}
           />
           <PrivateRoute

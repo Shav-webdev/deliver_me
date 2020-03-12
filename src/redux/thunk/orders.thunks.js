@@ -31,10 +31,12 @@ export const getAllOrdersThunk = () => async dispatch => {
   }
 }
 
-export const getUserOrdersThunk = () => async dispatch => {
+export const getUserOrdersThunk = (id) => async dispatch => {
   try {
     dispatch(getUserOrdersRequest())
+    console.log('getUserordersALL')
     const response = await api.getUserOrders(id).get()
+    console.log(response)
     if (response.status !== 200) {
       errorMessage('Cannot get Orders')
       throw new Error('Cannot get Orders')
@@ -48,7 +50,7 @@ export const getUserOrdersThunk = () => async dispatch => {
 export const getCompanyOrdersThunk = id => async dispatch => {
   try {
     dispatch(getCompanyOrdersRequest())
-    const response = await api.getCompanyOrders(id).get(id)
+    const response = await api.getCompanyOrders(id).get()
     if (response.status !== 200) {
       errorMessage('Cannot get Orders')
     }

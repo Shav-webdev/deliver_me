@@ -22,7 +22,9 @@ export function validatePoint(point) {
 export function validateName(name) {
   return name.length >= 2 && name.length < 32
 }
-
+export function validateLastName(lastName){
+  return lastName.length>=2 && lastName.length<32
+}
 export function validateAddress(address) {
   return address.length >= 2 && address.length < 32
 }

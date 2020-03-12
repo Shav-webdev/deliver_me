@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(config => {
 const Endpoint = EndpointFactory(axiosInstance)
 
 export default {
-  users: new Endpoint('users'),
+  users: (lastUser,uCount)=>new Endpoint(`users?last=${lastUser}&count=${uCount}`),
   companies: new Endpoint('companies'),
   deleteUpdateUser: id => new Endpoint('users/' + id),
   deleteUpdateCompany: id => new Endpoint('companies/' + id),

@@ -4,8 +4,7 @@ import Routes from './routes/routes'
 import { connect } from 'react-redux'
 import Storage from './services/localStorage/localStorage'
 import ErrorBoundary from './containers/errorBoundary/errorBoundary'
-import io from 'socket.io-client'
-export const socket = io.connect('https://thawing-ravine-80499.herokuapp.com/')
+
 
 const App = ({ currentUserData }) => {
   const ls = Storage.get('deliver')

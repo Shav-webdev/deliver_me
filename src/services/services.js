@@ -2,7 +2,7 @@ import axios from 'axios'
 import Storage from './localStorage/localStorage'
 import { message } from 'antd'
 import history from '../routes/history'
-import { socket } from '../App'
+import { socket } from './socket'
 
 export const successMessage = (msg = '') => {
   message.success(msg)

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import {
   validateName,
+  validateLastName,
   validateAddress,
   validatePhoneNumber,
   validateTaxNumber,
@@ -21,12 +22,24 @@ export default function EditProfileInfo({
   handleEditBtnClick,
   handleSaveBtnClick,
   handleCancelBtnClick,
+  
 }) {
-  const { id, name, taxNumber, address, phone, activity, avatar } = state
+  const {
+    id,
+    name,
+    taxNumber,
+    address,
+    phone,
+    activity,
+    avatar,
+    lastName,
+    type,
+  } = state
 
   const [companyName, setCompanyName] = useState(name ? name : '')
   const [companyAddress, setCompanyAddress] = useState(address ? address : '')
   const [phoneNumber, setPhoneNumber] = useState(phone ? phone : '')
+  const [userLastName, setLastName] = useState(lastName ? lastName : '')
   const [companyTaxNumber, setCompanyTaxNumber] = useState(
     taxNumber ? taxNumber : ''
   )
@@ -36,12 +49,14 @@ export default function EditProfileInfo({
   )
 
   const [isNameValid, setIsNameValid] = useState(null)
+  const [isLastNameValid, setIsLastNameValid] = useState(null)
   const [isAddressValid, setIsAddressValid] = useState(null)
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(null)
   const [isTaxNumberValid, setIsTaxNumberValid] = useState(null)
   const [isActivityValid, setIsActivityValid] = useState(null)
 
   const [showNameValidText, setShowNameValidText] = useState(false)
+  const [showLastNameValidText, setShowLastNameValidText] = useState(false)
   const [showAddressValidText, setShowAddressValidText] = useState(false)
   const [showPhoneNumValidText, setShowPhoneNumValidText] = useState(false)
   const [showTaxNumValidText, setShowTaxNumValidText] = useState(false)
@@ -52,11 +67,13 @@ export default function EditProfileInfo({
   useEffect(() => {
     if (isInputsEditable) {
       onHandleNameValidate()
+      onHandleLastNameValidate()
       onHandleAddressValidate()
       onHandlePhoneNumValidate()
       onHandleTaxNumValidate()
       onHandleActivityValidate()
     } else {
+      onHandleLastNameValidate(false)
       setShowNameValidText(false)
       setShowAddressValidText(false)
       setShowPhoneNumValidText(false)
@@ -66,17 +83,25 @@ export default function EditProfileInfo({
   }, [isInputsEditable])
 
   useEffect(() => {
-    if (
-      companyName &&
-      phoneNumber &&
-      companyAddress &&
-      companyAddress &&
-      companyTaxNumber &&
-      setCompanyActivity
-    ) {
-      setIsSaveBtnDisabled(false)
+    if (type !== 'user') {
+      if (
+        companyName &&
+        phoneNumber &&
+        companyAddress &&
+        companyAddress &&
+        companyTaxNumber &&
+        companyActivity
+      ) {
+        setIsSaveBtnDisabled(false)
+      } else {
+        setIsSaveBtnDisabled(true)
+      }
     } else {
-      setIsSaveBtnDisabled(true)
+      if (companyName && phoneNumber && companyAddress && userLastName) {
+        setIsSaveBtnDisabled(false)
+      } else {
+        setIsSaveBtnDisabled(true)
+      }
     }
   }, [
     companyName,
@@ -84,7 +109,7 @@ export default function EditProfileInfo({
     companyAddress,
     companyTaxNumber,
     phoneNumber,
-    setCompanyActivity,
+    companyActivity,
   ])
 
   const handleNameChange = useCallback(e => {
@@ -104,6 +129,19 @@ export default function EditProfileInfo({
     }
   }
 
+  const onHandleLastNameValidate = () => {
+    if(type==="user"){
+      if (validateLastName(userLastName)) {
+            setIsLastNameValid(true)
+            setShowLastNameValidText(false)
+          } else {
+            setIsSaveBtnDisabled(true)
+            setIsLastNameValid(false)
+            setShowLastNameValidText(true)
+          }
+    } 
+  }
+
   const handleAddressChange = useCallback(e => {
     const address = e.target.value
     setCompanyAddress(address)
@@ -120,7 +158,11 @@ export default function EditProfileInfo({
       setShowAddressValidText(true)
     }
   }
-
+  const handleLastNameChange = useCallback(e => {
+    let lastName = e.target.value
+    setLastName(lastName)
+    setShowLastNameValidText(false)
+  }, [])
   const handlePhoneNumChange = useCallback(e => {
     let number = e.target.value
     setPhoneNumber(number)
@@ -156,74 +198,116 @@ export default function EditProfileInfo({
   }
 
   const handleActivityChange = useCallback(e => {
-    let activityValue = e.target.value
-    setCompanyActivity(activityValue)
-    setShowActivityValidText(false)
+    if (type !== 'user') {
+      let activityValue = e.target.value
+      setCompanyActivity(activityValue)
+      setShowActivityValidText(false)
+    }
   }, [])
 
   const onHandleActivityValidate = () => {
-    if (validateActivity(companyActivity)) {
-      setIsActivityValid(true)
-      setShowActivityValidText(false)
-    } else {
-      setIsSaveBtnDisabled(true)
-      setIsActivityValid(false)
-      setShowActivityValidText(true)
+    if (type !== 'user') {
+      if (validateActivity(companyActivity)) {
+        setIsActivityValid(true)
+        setShowActivityValidText(false)
+      } else {
+        setIsSaveBtnDisabled(true)
+        setIsActivityValid(false)
+        setShowActivityValidText(true)
+      }
     }
   }
 
   const handleEditInfoBtnClick = () => {
     handleEditBtnClick()
     setCompanyName(name)
-    setCompanyTaxNumber(taxNumber)
-    setCompanyAddress(address)
-    setCompanyActivity(activity)
+    setLastName(lastName)
     setPhoneNumber(phone)
     setAvatarUrl(avatar)
+    setCompanyAddress(address)
+    if (lastName) {
+      setCompanyActivity(activity)
+      setCompanyTaxNumber(taxNumber)
+    }
   }
 
   const handleSaveInfoBtnClick = () => {
-    onHandleNameValidate()
-    onHandleAddressValidate()
-    onHandlePhoneNumValidate()
-    onHandleTaxNumValidate()
-    onHandleActivityValidate()
-    const data = {
-      id,
-      name: companyName,
-      address: companyAddress,
-      phone: phoneNumber,
-      taxNumber: companyTaxNumber,
-      activity: companyActivity,
-      avatar: avatarUrl,
-    }
+    if (type !== 'user') {
+      onHandleNameValidate()
+      onHandleAddressValidate()
+      onHandlePhoneNumValidate()
+      onHandleTaxNumValidate()
+      onHandleActivityValidate()
+      const data = {
+        id,
+        name: companyName,
+        address: companyAddress,
+        phone: phoneNumber,
+        taxNumber: companyTaxNumber,
+        activity: companyActivity,
+        avatar: avatarUrl,
+      }
 
-    console.log(data)
-
-    if (!isNameValid) {
-      setShowNameValidText(true)
-    } else if (!isAddressValid) {
-      setShowAddressValidText(true)
-    } else if (!isPhoneNumberValid) {
-      setShowPhoneNumValidText(true)
-    } else if (!isTaxNumberValid) {
-      setShowTaxNumValidText(true)
-    } else if (!isActivityValid) {
-      setShowActivityValidText(true)
-    } else if (
-      !isNameValid &&
-      !isAddressValid &&
-      !isPhoneNumberValid &&
-      !isTaxNumberValid &&
-      !isActivityValid
-    ) {
-      setShowNameValidText(true)
-      setShowAddressValidText(true)
-      setShowPhoneNumValidText(true)
-      setShowTaxNumValidText(true)
-      setShowActivityValidText(true)
+      if (!isNameValid) {
+        setShowNameValidText(true)
+      } else if (!isAddressValid) {
+        setShowAddressValidText(true)
+      } else if (!isPhoneNumberValid) {
+        setShowPhoneNumValidText(true)
+      } else if (!isTaxNumberValid) {
+        setShowTaxNumValidText(true)
+      } else if (!isActivityValid) {
+        setShowActivityValidText(true)
+      } else if (
+        !isNameValid &&
+        !isAddressValid &&
+        !isPhoneNumberValid &&
+        !isTaxNumberValid &&
+        !isActivityValid
+      ) {
+        setShowNameValidText(true)
+        setShowAddressValidText(true)
+        setShowPhoneNumValidText(true)
+        setShowTaxNumValidText(true)
+        setShowActivityValidText(true)
+      } else {
+        handleSaveBtnClick(data)
+      }
     } else {
-      handleSaveBtnClick(data)
+      onHandleNameValidate()
+      onHandleAddressValidate()
+      onHandlePhoneNumValidate()
+      onHandleLastNameValidate()
+      const data = {
+        id,
+        name: companyName,
+        address: companyAddress,
+        phone: phoneNumber,
+        lastName: userLastName,
+        avatar: avatarUrl,
+      }
+
+      if (!isNameValid) {
+        setShowNameValidText(true)
+      } else if (!isAddressValid) {
+        setShowAddressValidText(true)
+      } else if (!isPhoneNumberValid) {
+        setShowPhoneNumValidText(true)
+      } else if (!isLastNameValid) {
+        setShowLastNameValidText(true)
+      } else if (
+        !isNameValid &&
+        !isAddressValid &&
+        !isPhoneNumberValid &&
+        !isLastNameValid
+      ) {
+        setShowNameValidText(true)
+        setShowAddressValidText(true)
+        setShowPhoneNumValidText(true)
+        setShowLastNameValidText(true)
+      } else {
+        handleSaveBtnClick(data)
+      }
     }
   }
 
@@ -316,6 +400,24 @@ export default function EditProfileInfo({
             value={isInputsEditable ? companyName : name}
           />
         </Form.Item>
+        {state.lastName && (
+          <Form.Item
+            label="Last name"
+            validateStatus={showLastNameValidText ? 'error' : 'success'}
+            hasFeedback={showLastNameValidText}
+            help={
+              showLastNameValidText
+                ? 'Last name should contain at least two characters'
+                : ''
+            }>
+            <Input
+              disabled={!isInputsEditable}
+              onChange={e => handleLastNameChange(e)}
+              onBlur={onHandleLastNameValidate}
+              value={isInputsEditable ? userLastName : lastName}
+            />
+          </Form.Item>
+        )}
         <Form.Item
           label="Address"
           validateStatus={showAddressValidText ? 'error' : 'success'}
@@ -348,38 +450,42 @@ export default function EditProfileInfo({
             value={isInputsEditable ? phoneNumber : phone}
           />
         </Form.Item>
-        <Form.Item
-          label="Tax Number"
-          validateStatus={showTaxNumValidText ? 'error' : 'success'}
-          hasFeedback={showTaxNumValidText}
-          help={
-            showTaxNumValidText
-              ? 'Tax number should contain only 8 digit either'
-              : ''
-          }>
-          <Input
-            disabled={!isInputsEditable}
-            onChange={e => handleTaxNumChange(e)}
-            onBlur={onHandleTaxNumValidate}
-            value={isInputsEditable ? companyTaxNumber : taxNumber}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Activity"
-          validateStatus={showActivityValidText ? 'error' : 'success'}
-          hasFeedback={showActivityValidText}
-          help={
-            showActivityValidText
-              ? 'Activity should contain at least two characters'
-              : ''
-          }>
-          <Input
-            disabled={!isInputsEditable}
-            onChange={e => handleActivityChange(e)}
-            onBlur={onHandleActivityValidate}
-            value={isInputsEditable ? companyActivity : activity}
-          />
-        </Form.Item>
+
+        {state.taxNumber && (
+            <Form.Item
+              label="Tax Number"
+              validateStatus={showTaxNumValidText ? 'error' : 'success'}
+              hasFeedback={showTaxNumValidText}
+              help={
+                showTaxNumValidText
+                  ? 'Tax number should contain only 8 digit either'
+                  : ''
+              }>
+              <Input
+                disabled={!isInputsEditable}
+                onChange={e => handleTaxNumChange(e)}
+                onBlur={onHandleTaxNumValidate}
+                value={isInputsEditable ? companyTaxNumber : taxNumber}
+              />
+            </Form.Item>
+          ) && (
+            <Form.Item
+              label="Activity"
+              validateStatus={showActivityValidText ? 'error' : 'success'}
+              hasFeedback={showActivityValidText}
+              help={
+                showActivityValidText
+                  ? 'Activity should contain at least two characters'
+                  : ''
+              }>
+              <Input
+                disabled={!isInputsEditable}
+                onChange={e => handleActivityChange(e)}
+                onBlur={onHandleActivityValidate}
+                value={isInputsEditable ? companyActivity : activity}
+              />
+            </Form.Item>
+          )}
         <div className="company_edit_info_profile">
           <Button type="danger" onClick={handleDelAccountBtnClick}>
             Delete account

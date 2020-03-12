@@ -28,6 +28,21 @@ export const getUsersFailure = () => ({
   type: GET_USERS_FAILURE,
 })
 
+export const getMoreUsersRequest = () => ({
+  type: 'GET_MORE_USERS_REQUEST',
+})
+export const getMoreUsersSuccsess = data => ({
+  type: 'GET_MORE_USERS_SUCCSESS',
+  payload: data,
+})
+export const getMoreUsersFailure = () => ({
+  type: 'GET_MORE_USERS_FAILURE',
+})
+
+export const noMoreUsersGet = () => ({
+  type: 'NO_MORE_USERS',
+})
+
 export const addUserSocketSuccsess = data => ({
   type: ADD_USER_SOCKET_SUCCESS,
   payload: data,

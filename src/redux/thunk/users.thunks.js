@@ -7,17 +7,19 @@ import {
   editUserSuccsess,
   removeUserFailure,
   removeUserSuccsess,
-  addUserSocketSuccsess
+  addUserSocketSuccsess,
+  getMoreUsersFailure,
+  getMoreUsersRequest,
+  getMoreUsersSuccsess,
+  signInCurrentUserSuccess,
+  noMoreUsersGet,
 } from '../action'
-import {
-  errorMessage,
-  successMessage
-} from '../../services/services'
+import { errorMessage, successMessage } from '../../services/services'
 
-export const getUsersThunk = () => async dispatch => {
+export const getUsersThunk = (last, count) => async dispatch => {
   try {
     dispatch(getUsersRequest())
-    const response = await api.users.get()
+    const response = await api.users(last, count).get()
     if (response.status !== 200) {
       throw new Error(response.data.message)
     }
@@ -28,6 +30,26 @@ export const getUsersThunk = () => async dispatch => {
     }
     dispatch(getUsersFailure())
     errorMessage(err.response.data.message)
+  }
+}
+export const getMoreUsersThunk = (last, count) => async dispatch => {
+  try {
+    dispatch(getMoreUsersRequest())
+    if (last) {
+      const response = await api.users(last, count).get()
+      if (response.status !== 206) {
+        dispatch(getMoreUsersSuccsess(response.data))
+      } else {
+        console.log('no data')
+        dispatch(noMoreUsersGet())
+      }
+    }
+  } catch (error) {
+    const err = {
+      ...error,
+    }
+    dispatch(noMoreUsersGet())
+    //errorMessage(err.response.data.message)
   }
 }
 export const addUserBySocketThunk = data => async dispatch => {
@@ -42,7 +64,7 @@ export const createUserThunk = data => async dispatch => {
   try {
     if (data.id) {
       const response = await api.deleteUpdateUser(data.id).put({
-        ...data
+        ...data,
       })
       if (response.status !== 201) {
         throw new Error(response.data.message)
@@ -79,5 +101,16 @@ export const removeUserThunk = id => async dispatch => {
     }
     dispatch(removeUserFailure())
     errorMessage(err.response.data.message)
+  }
+}
+
+
+export const getUserByIdThunk = id => async dispatch => {
+  try {    
+    const response = await api.getUserById(id).get()
+    dispatch(signInCurrentUserSuccess(response.data))
+   // successMessage(`Dear ${response.data.name}, nice to see you again`)
+  } catch (error) {
+    errorMessage('Something went wrong, try again')
   }
 }

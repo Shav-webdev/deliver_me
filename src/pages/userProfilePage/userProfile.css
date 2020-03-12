@@ -9,7 +9,7 @@
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
 }
-.logo_admin {
+.logo_user {
   display: flex;
   justify-content: center;
   background-color: transparent;
@@ -26,7 +26,7 @@
   white-space: nowrap;
   padding: 10px 10px;
 }
-.ant-table-tbody > tr:hover{
+.ant-table-tbody > tr:hover {
   cursor: pointer;
 }
 .typography_text {
@@ -61,4 +61,18 @@
 .ant-menu-dark.ant-menu-vertical-left,
 .ant-menu-dark.ant-menu-vertical-right {
   background: #ffffff00;
+}
+
+.menu_item_icon_user {
+  margin-right: 5px;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+}
+.collapsed{
+  display: none;
+}
+.menu_item_icon_user img {
+  width: 100%;
+  height: 100%;
 }

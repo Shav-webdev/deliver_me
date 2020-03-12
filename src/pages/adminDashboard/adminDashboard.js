@@ -23,14 +23,16 @@ import {
   createCompanyThunk,
   addUserBySocketThunk,
   addCompanyBySocketThunk,
+  getMoreUsersThunk,
 } from '../../redux/thunk'
 import audioSound from '../../assets/sound.mp3'
 import history from '../../routes/history'
-import { socket } from '../../App'
+import { socket } from '../../services/socket'
 import { successMessage, logOut } from '../../services/services'
 import { ModalUserEdit } from '../../components/ModalUserEdit'
 import { ModalCompanyEdit } from '../../components/ModalCompanyEdit'
 import CountRequestInfo from '../../components/CountRequestInfo/CountRequestInfo'
+import { useSelector } from 'react-redux'
 const { Header, Sider, Content } = Layout
 const { Column } = Table
 
@@ -44,6 +46,7 @@ function AdminBoard({
   users,
   companies,
   getUsers,
+  getMoreUsers,
   getCompanies,
   removeUser,
   removeCompany,
@@ -51,6 +54,8 @@ function AdminBoard({
   updateCompany,
   socketUser,
   socketCompany,
+  lastUserData,
+  hasUsers,
 }) {
   const { usersData, gettingUsers } = users
   const { companiesData } = companies
@@ -62,23 +67,63 @@ function AdminBoard({
   })
   const [modalUser, setModalUser] = useState({})
   const [modalCompany, setModalCompany] = useState({})
-const audio = new Audio()
+  const [lastUser, setLastUser] = useState(usersData)
+
+  const audio = new Audio()
   useEffect(() => {
-    getUsers()
+    getUsers(Date.now())
+
     getCompanies()
     socket.on('update_user_list', data => {
       successMessage(`${data.name} ${data.lastName} signed up !`)
       socketUser(data)
-      audio.src=audioSound
+      audio.src = audioSound
       audio.play()
     })
     socket.on('update_company_list', data => {
       successMessage(`${data.name} signed up !`)
       socketCompany(data)
-      audio.src=audioSound
+      audio.src = audioSound
       audio.play()
     })
   }, [])
+  useEffect(() => {
+    console.log(
+      'effecct 2',
+      usersData.length > 0 ? usersData[usersData.length - 1] : null
+    )
+
+    let lUser = usersData.length > 0 ? usersData[usersData.length - 1] : null
+    console.log(lUser)
+    if (hasUsers === true) {
+      lUser = usersData.length > 0 ? usersData[usersData.length - 1] : null
+      console.log(lUser)
+      scrollLoading(lUser)
+      console.log('=== chi')
+      console.log('state after set', lastUser)
+    } else {
+      console.log('===')
+      console.log('=== after set', lastUser)
+    }
+  }, [usersData.length])
+
+  const scrollLoading = lUser => {
+    window.addEventListener('scroll', () => {
+      const scrollable =
+        document.documentElement.scrollHeight - window.innerHeight
+      const scrolled = window.scrollY
+      if (Math.ceil(scrolled) === scrollable) {
+        if (lUser) {
+          console.log(users)
+          console.log(lUser, 'timeeeeeeeee')
+          console.log(lUser.createdTime)
+          setLastUser(lUser.id)
+          console.log('more useers can get', hasUsers)
+          getMoreUsers(lUser.createdTime)
+        }
+      }
+    })
+  }
 
   const filterByValue = (array, value) => {
     if (array.length > 1) {
@@ -219,7 +264,7 @@ const audio = new Audio()
               minHeight: 280,
             }}>
             {menuItem === 'users' &&
-              (gettingUsers ? (
+              (usersData.length === 0 ? (
                 <Spinner />
               ) : (
                 (usersData.sort(
@@ -232,9 +277,7 @@ const audio = new Audio()
                     onRow={r => ({
                       onClick: () => showModalUser(r),
                     })}
-                    pagination={{
-                      pageSize: 9,
-                    }}
+                    pagination={false}
                     dataSource={filtered}>
                     <Column
                       key="name"
@@ -383,9 +426,14 @@ const audio = new Audio()
 
 const mapStateToProps = state => {
   const { users, companies } = state
+  users.usersData.sort((a, b) => b.createdTime - a.createdTime)
+
+  const { usersData, hasUsers } = users
+
   return {
     users,
     companies,
+    hasUsers,
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -396,8 +444,11 @@ const mapDispatchToProps = dispatch => {
     socketCompany: data => {
       dispatch(addCompanyBySocketThunk(data))
     },
-    getUsers: () => {
-      dispatch(getUsersThunk())
+    getUsers: lastUserTime => {
+      dispatch(getUsersThunk(lastUserTime, 12))
+    },
+    getMoreUsers: lastUserTime => {
+      dispatch(getMoreUsersThunk(lastUserTime, 12))
     },
     getCompanies: () => {
       dispatch(getCompaniesThunk())

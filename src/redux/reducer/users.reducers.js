@@ -7,6 +7,8 @@ import {
 
 const initialState = {
   gettingUsers: false,
+  gettingMoreUsers:false,
+  hasUsers:true,
   usersData: [],
   signInLoading: false,
   signInAsUserData: {},
@@ -23,7 +25,7 @@ export default function usersReducer(state = initialState, action) {
       return {
         ...state,
         gettingUsers: false,
-        usersData: action.payload,
+        usersData: action.payload
       }
     case 'GET_USERS_FAILURE':
       return {
@@ -31,6 +33,29 @@ export default function usersReducer(state = initialState, action) {
         gettingUsers: false,
       }
 
+      case 'GET_MORE_USERS_REQUEST':
+        return {
+          ...state,
+          gettingMoreUsers: true,
+        }
+      case 'GET_MORE_USERS_SUCCSESS':
+        return {
+          ...state,
+          gettingUsers: false,
+          usersData: [...state.usersData,...action.payload]
+        }
+      case 'GET_MORE_USERS_FAILURE':
+        return {
+          ...state,
+          gettingMoreUsers: false,
+        }
+
+        case 'NO_MORE_USERS':
+        return {
+          ...state,
+          hasUsers: false,
+        }
+  
 case ADD_USER_SOCKET_SUCCESS:
   return{
     ...state,

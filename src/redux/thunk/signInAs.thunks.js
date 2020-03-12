@@ -37,7 +37,7 @@ export const signInAs = data => async dispatch => {
       history.push('/company')
     } else {
       successMessage('Sign In is successful !')
-      history.push('/profile/user')
+      history.push('/user')
     }
   } catch (error) {
     const err = {
