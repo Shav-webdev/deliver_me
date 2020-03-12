@@ -15,7 +15,9 @@ export default function OrdersList({ loading, orders, companyId }) {
         <Spinner />
       ) : orders.length > 0 ? (
         orders.map(el => {
-          return <Order companyId={companyId} el={el} key={el.id} />
+          return (
+            <Order companyId={companyId} el={el} key={el.id} orderKey={el.id} />
+          )
         })
       ) : (
         <Title style={{ textAlign: 'center' }}>There are no order</Title>

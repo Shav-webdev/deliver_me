@@ -87,22 +87,34 @@ body {
 
 .company_profile_main .orders_list_item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   border: 1px solid #ccc;
   background-color: #fcffff;
   padding: 0.5rem 1.5rem;
   border-radius: 5px;
   margin-bottom: 1rem;
   box-shadow: 1px 2px 4px 0px;
+  transition: 0.5s;
 }
 
 .company_profile_main .orders_list_item:hover {
   transform: scale(1.03);
-  transition: 0.3s;
   border: 1px solid #ccc;
   background-color: #fcffff;
   box-shadow: 1px 2px 4px 0px;
   cursor: pointer;
+}
+
+.company_profile_main .orders_list_item .orders_list_item_elem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.company_profile_main .orders_list_item .order_footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .company_profile_header.site-layout-background {

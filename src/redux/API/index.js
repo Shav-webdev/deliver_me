@@ -28,10 +28,6 @@ export default {
   getCompanyById: id => new Endpoint(`companies/${id}`),
   getAllActiveOrders: new Endpoint('active-orders'),
   getUserOrders: id => new Endpoint(`user-orders/${id}`),
-  // getCompanyOrders: (id, type) =>
-  //   new Endpoint(({ params: { type } }) => `company-orders/${id}`),
-
   getCompanyOrders: id => new Endpoint(`company-orders/${id}`),
-
   deleteUpdateOrder: id => new Endpoint(`orders/${id}`),
 }

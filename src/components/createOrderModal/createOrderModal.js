@@ -88,6 +88,19 @@ export default function CreateOrderModal({
       onHandleReciverPhoneValidate()
       onHandlePointsValidate()
     }
+
+    if (visible && okText === 'Create') {
+      setPoints('')
+      setTakeAddress('')
+      setDeliverAddress('')
+      setOrderDescription('')
+      setComment('')
+      setOrderStartTime(null)
+      setOrderEndTime(null)
+      setReciverPhone('')
+      setReciverName('')
+    }
+
     onHandleOrderCommentValidate()
   }, [visible])
 
@@ -302,6 +315,8 @@ export default function CreateOrderModal({
     }
   }
 
+  const dateFormat = 'L'
+
   return (
     <Modal
       title={modalTitle}
@@ -436,15 +451,15 @@ export default function CreateOrderModal({
             disabledDate={disabledDate}
             disabledTime={disabledDateTime}
             defaultValue={[
-              orderStartTime ? moment(orderStartTime) : null,
-              orderEndTime ? moment(orderEndTime) : null,
+              orderStartTime ? moment(orderStartTime, dateFormat) : null,
+              orderEndTime ? moment(orderEndTime, dateFormat) : null,
             ]}
+            format={dateFormat}
             showTime={{
               hideDisabledOptions: true,
               minuteStep: 5,
               format: 'HH:mm',
             }}
-            format="LLL"
             onChange={onTimeChangeChange}
           />
         </Form.Item>

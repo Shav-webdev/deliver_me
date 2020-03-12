@@ -76,6 +76,7 @@ export const removeCompanyByIdThunk = id => async dispatch => {
     history.push('/')
   } catch (error) {
     dispatch(removeCompanyFailure())
+    errorMessage(`${error.response.data.message}`)
   }
 }
 

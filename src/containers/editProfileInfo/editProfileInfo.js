@@ -423,7 +423,7 @@ export default function EditProfileInfo({
       <ConfirmModal
         handleOk={handleDeleteAccount}
         visible={confirmVisible}
-        deleteModalHandleCancel={deleteModalHandleCancel}
+        modalHandleCancel={deleteModalHandleCancel}
         confirmVisible={confirmVisible}
         title="Delete Account"
         okText="Delete">

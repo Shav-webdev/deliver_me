@@ -54,6 +54,8 @@ const ProfilePage = ({
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
 
+  const audio = new Audio()
+
   useEffect(() => {
     const ls = Storage.get('deliver')
     const companyId = ls.id
@@ -66,17 +68,12 @@ const ProfilePage = ({
   }, [])
 
   useEffect(() => {
-    socket.emit('user_take_order', data => {
-      console.log(data)
-      audio.src = audioSound
-      audio.play()
-    })
     socket.on('user_took_order', data => {
       console.log(data)
       audio.src = audioSound
       audio.play()
     })
-  })
+  }, [])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
