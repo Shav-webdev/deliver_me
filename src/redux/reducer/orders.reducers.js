@@ -37,6 +37,12 @@ import {
   GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
   GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
   GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
+  GET_USER_PENDING_ORDERS_REQUEST,
+  GET_USER_PENDING_ORDERS_SUCCESS,
+  GET_USER_PENDING_ORDERS_FAILURE,
+  GET_USER_DONE_ORDERS_REQUEST,
+  GET_USER_DONE_ORDERS_SUCCESS,
+  GET_USER_DONE_ORDERS_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -181,6 +187,40 @@ export default function ordersReducer(state = initialState, action) {
         gettingCompanyActiveOrders: false,
       }
 
+    case GET_USER_PENDING_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: true,
+      }
+    case GET_USER_PENDING_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+        companyPendingOrdersData: action.payload,
+      }
+    case GET_USER_PENDING_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+      }
+
+    case GET_USER_DONE_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: true,
+      }
+    case GET_USER_DONE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+        companyDoneOrdersData: action.payload,
+      }
+    case GET_USER_DONE_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+      }
+
     case GET_ALL_ORDERS_REQUEST:
       return {
         ...state,
@@ -197,14 +237,18 @@ export default function ordersReducer(state = initialState, action) {
         ...state,
         gettingAllOrders: false,
       }
-
+    case 'DONE_ORDER_SUCCESS':
+      const donOrders = state.allOrdersData.filter(
+        elem => elem.id !== action.payload.id
+      )
+      return {
+        ...state,
+        companyPendingOrdersData: [...donOrders],
+      }
     case 'TAKE_ORDER_SUCCESS':
-      console.log(action.payload)
-
       const lastOrders = state.allOrdersData.filter(
         elem => elem.id !== action.payload.id
       )
-      console.log(lastOrders)
       return {
         ...state,
         allOrdersData: [...lastOrders],

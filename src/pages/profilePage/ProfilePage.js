@@ -151,7 +151,7 @@ const ProfilePage = ({
 
   return (
     <Router>
-      <Layout style={{ marginTop: '1.5rem' }}>
+      <Layout style={{ marginTop: '4em' }}>
         <Sider
           className="theme_bg_color"
           trigger={null}

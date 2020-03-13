@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Spinner from '../spiner/spinner'
 import List from 'antd/es/list'
 import Order from '../order/order'
@@ -17,7 +17,13 @@ export default function OrdersList({
   const loadMoreDataBtnHandleClick = () => {
     const createdTime = orders[orders.length - 1].createdTime
     getMoreData(state, createdTime)
+    setIsClicked(true)
   }
+  const [isClicked, setIsClicked] = useState(false)
+
+  useEffect(() => {
+    console.log('clicked')
+  }, [isClicked])
 
   if (loading) {
     return <Spinner />

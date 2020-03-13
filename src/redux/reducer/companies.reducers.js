@@ -64,9 +64,10 @@ export default function companiesReducer(state = initialState, action) {
           hasCompanies: false,
         }
     case ADD_COMPANY_SOCKET_SUCCESS:
+      state.companiesData.pop()
       return {
         ...state,
-        companiesData: [...state.companiesData, action.payload],
+        companiesData: [action.payload,...state.companiesData]
       }
 
     case 'CREATE_COMPANY_SUCCSESS':

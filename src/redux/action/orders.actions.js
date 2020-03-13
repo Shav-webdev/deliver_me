@@ -34,6 +34,12 @@ import {
   GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
   GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
   GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
+  GET_USER_DONE_ORDERS_REQUEST,
+  GET_USER_DONE_ORDERS_SUCCESS,
+  GET_USER_DONE_ORDERS_FAILURE,
+  GET_USER_PENDING_ORDERS_REQUEST,
+  GET_USER_PENDING_ORDERS_SUCCESS,
+  GET_USER_PENDING_ORDERS_FAILURE,
 } from './constants'
 
 export const getCompanyOrdersRequest = () => ({
@@ -60,6 +66,10 @@ export const createOrderFailure = () => ({
 
 export const takeOrderSuccess = data => ({
   type: 'TAKE_ORDER_SUCCESS',
+  payload: data,
+})
+export const doneOrderSuccess = data => ({
+  type: 'DONE_ORDER_SUCCESS',
   payload: data,
 })
 
@@ -166,4 +176,25 @@ export const getMoreDoneOrdersSuccess = () => ({
 })
 export const getMoreDoneOrdersFailure = () => ({
   type: GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
+})
+export const getDoneUserOrdersRequest = () => ({
+  type: GET_USER_DONE_ORDERS_REQUEST,
+})
+export const getDoneUserOrdersSuccess = data => ({
+  type: GET_USER_DONE_ORDERS_SUCCESS,
+  payload: data,
+})
+export const getDoneUserOrdersFailure = () => ({
+  type: GET_USER_DONE_ORDERS_FAILURE,
+})
+
+export const getPendingUserOrdersRequest = () => ({
+  type: GET_USER_PENDING_ORDERS_REQUEST,
+})
+export const getPendingUserOrdersSuccess = data => ({
+  type: GET_USER_PENDING_ORDERS_SUCCESS,
+  payload: data,
+})
+export const getPendingUserOrdersFailure = () => ({
+  type: GET_USER_PENDING_ORDERS_FAILURE,
 })

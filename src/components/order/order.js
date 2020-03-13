@@ -12,6 +12,8 @@ import { socket } from '../../services/socket'
 import audioSound from '../../assets/sound.mp3'
 import OrderRate from '../orderRate/orderRate'
 
+import './order.css'
+
 function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   const [visible, setVisible] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
@@ -28,7 +30,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
       setDefaultRate(rate)
       setIsOrderRated(true)
     }
-  })
+  }, [])
 
   const handleUpdateOrderClick = () => {
     setVisible(true)
@@ -58,7 +60,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   }
 
   const handleDeleteOrder = () => {
-    deleteOrder(companyId, el.id)
+    deleteOrder(companyId, el.id, el.state, Number(Date.now()), 5)
     setConfirmVisible(false)
   }
 
@@ -77,40 +79,52 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
         className="orders_list_item">
         <div className="orders_list_item_elem">
           <div>
-            <p>
-              <strong>Order :</strong>
+            <p className="card-p">
+              <strong>Order : </strong>
               {el.order_description}
             </p>
             <p>
-              <strong>Money :</strong>
+              <strong>Shipping fee : </strong>
               {el.points}
             </p>
           </div>
           {el.state === 'pending' && (
             <div>
-              <p>
-                <strong>Deliverer :</strong>
+              <p className="card-p">
+                <strong>Deliverer : </strong>
                 {el.user_name}
               </p>
-              <p>
-                <strong>Deliverer phone :</strong>
+              <p className="card-p">
+                <strong>Deliverer phone : </strong>
                 {el.user_phone}
               </p>
             </div>
           )}
           <div>
-            <p>
-              <strong>Take address :</strong>
+            <p className="card-p">
+              <strong>Pick up address : </strong>
               {el.take_address}
             </p>
-            <p>
-              <strong>Deliver address :</strong>
+            <p className="card-p">
+              <strong>Destination address : </strong>
               {el.deliver_address}
             </p>
           </div>
+          {el.state === 'done' && (
+            <div>
+              <p className="card-p">
+                <strong>Deliverer : </strong>
+                {el.user_name}
+              </p>
+              <p className="card-p">
+                <strong>Deliverer phone : </strong>
+                {el.user_phone}
+              </p>
+            </div>
+          )}
           <div>
-            <p>
-              <strong>Status :</strong>
+            <p className="card-p">
+              <strong>Status : </strong>
               {el.state}
             </p>
           </div>
@@ -152,8 +166,8 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
 const mapDispatchToProps = dispatch => {
   return {
     updateOrder: data => dispatch(createCompanyOrderThunk(data)),
-    deleteOrder: (companyId, orderId) =>
-      dispatch(removeCompanyOrderThunk(companyId, orderId)),
+    deleteOrder: (companyId, orderId, type, last, count) =>
+      dispatch(removeCompanyOrderThunk(companyId, orderId, type, last, count)),
   }
 }
 
