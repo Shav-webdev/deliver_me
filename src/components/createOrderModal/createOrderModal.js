@@ -325,7 +325,7 @@ export default function CreateOrderModal({
       <Form className="create_order_form">
         <SubTitle>Sender</SubTitle>
         <Form.Item
-          label="Take address"
+          label="Pick up address"
           className="sender"
           validateStatus={showTakeAddressValidText ? 'error' : 'success'}
           hasFeedback={showTakeAddressValidText}
@@ -339,7 +339,7 @@ export default function CreateOrderModal({
             onChange={e => handleTakeAddressChange(e)}
             onBlur={onHandleTakeAddressValidate}
             value={takeAddress}
-            placeholder="Take address"
+            placeholder="Pick up address"
             prefix={
               <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
             }
@@ -367,7 +367,7 @@ export default function CreateOrderModal({
         <SubTitle>Receiver</SubTitle>
 
         <Form.Item
-          label="Receiver address"
+          label="Destination address"
           className='receiver'
           validateStatus={showDeliverAddressValidText ? 'error' : 'success'}
           hasFeedback={showDeliverAddressValidText}
@@ -381,7 +381,7 @@ export default function CreateOrderModal({
             onChange={e => handleDeliverAddressChange(e)}
             value={deliverAddress}
             onBlur={onHandleDeliverAddressValidate}
-            placeholder="Deliver address"
+            placeholder="Destination address"
             prefix={
               <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
             }
@@ -427,7 +427,7 @@ export default function CreateOrderModal({
         </Form.Item>
         <SubTitle>Order options</SubTitle>
         <Form.Item
-          label="Point(AMD)"
+          label="Shipping fee"
           validateStatus={showPointValidText ? 'error' : 'success'}
           hasFeedback={showPointValidText}
           help={showPointValidText ? 'Incorrect input value' : ''}>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Typography } from 'antd'
+import { socket } from '../../services/socket'
 import './cardUser.css'
 import CreateOrderModal from '../createOrderModal/createOrderModal'
 import ViewOrderModal from '../viewOrderModal/ViewOrderModal'
@@ -23,6 +24,7 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
       state: 'pending',
       userId: user.id,
     })
+    socket.emit('user_take_order', { userId: user.id })
   }
   const handleDoneOrder = e => {
     console.log('done')
@@ -36,13 +38,13 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
   const handleOpen = () => {
     console.log("open")
     //if(show!==true){
-      setVisibleOrder(true) 
+    setVisibleOrder(true)
     //}
-     
+
   }
 
   return (
-    <div  onClick={handleOpen} className="card-container">
+    <div onClick={handleOpen} className="card-container">
       <ViewOrderModal
         show={show}
         state={state}
@@ -68,8 +70,8 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
               <strong>Receiver Phone:</strong> <span>{receiver_phone}</span>
             </p>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </div>
       </div>
       <div className="item-box">
@@ -87,8 +89,8 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
               <strong>Reciever Name:</strong> <span> {receiver_name} </span>
             </p>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </div>
       </div>
       <div className="buttons item-box">
@@ -101,8 +103,8 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
             Take
           </Button>
         ) : (
-          ''
-        )}
+            ''
+          )}
         {page === 'my_pending' ? (
           <Button
             type="button"
@@ -112,8 +114,8 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
             Done
           </Button>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
     </div>
   )

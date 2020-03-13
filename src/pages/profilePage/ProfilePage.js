@@ -73,14 +73,14 @@ const ProfilePage = ({
     // eslint-disable-next-line no-useless-escape
   }, [])
 
-  // useEffect(() => {
-  //   socket.on('user_took_order', data => {
-  //     console.log(data)
-  //     audio.src = audioSound
-  //     audio.autoplay = true
-  //     audio.play()
-  //   })
-  // }, [])
+  useEffect(() => {
+    socket.on('user_took_order', data => {
+      console.log(data)
+      audio.src = audioSound
+      audio.autoplay = true
+      audio.play()
+    })
+  }, [])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -97,9 +97,9 @@ const ProfilePage = ({
     const data = order.id
       ? order
       : {
-          companyId: companies.signInAsCompanyData.id,
-          order,
-        }
+        companyId: companies.signInAsCompanyData.id,
+        order,
+      }
     createOrder(data)
     setVisible(false)
   }
@@ -151,7 +151,7 @@ const ProfilePage = ({
 
   return (
     <Router>
-      <Layout style={{ marginTop: '4em' }}>
+      <Layout>
         <Sider
           className="theme_bg_color"
           trigger={null}

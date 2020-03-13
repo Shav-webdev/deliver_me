@@ -44,9 +44,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
     const data = order
     updateOrder(data)
 
-    socket.emit('user_take_order', data => {
-      console.log(data)
-    })
+    // socket.emit('user_take_order', { data })
 
     setVisible(false)
   }
