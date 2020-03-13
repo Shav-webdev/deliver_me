@@ -63,7 +63,7 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyOrders: false,
-        companyOrdersData: action.payload,
+        companyOrdersData: [...state.companyOrdersData, ...action.payload],
       }
     case GET_COMPANY_ALL_ORDERS_FAILURE:
       return {
@@ -80,7 +80,10 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyDoneOrders: false,
-        companyDoneOrdersData: action.payload,
+        companyDoneOrdersData: [
+          ...state.companyDoneOrdersData,
+          ...action.payload,
+        ],
       }
     case GET_COMPANY_DONE_ORDERS_FAILURE:
       return {
@@ -97,7 +100,10 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyPendingOrders: false,
-        companyPendingOrdersData: action.payload,
+        companyPendingOrdersData: [
+          ...state.companyPendingOrdersData,
+          ...action.payload,
+        ],
       }
     case GET_COMPANY_PENDING_ORDERS_FAILURE:
       return {
@@ -114,7 +120,10 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyActiveOrders: false,
-        companyActiveOrdersData: action.payload,
+        companyActiveOrdersData: [
+          ...state.companyActiveOrdersData,
+          ...action.payload,
+        ],
       }
     case GET_COMPANY_ACTIVE_ORDERS_FAILURE:
       return {
@@ -190,7 +199,7 @@ export default function ordersReducer(state = initialState, action) {
       )
       return {
         ...state,
-        allOrdersData: [...lastOrders]
+        allOrdersData: [...lastOrders],
       }
 
     case GET_USER_ORDERS_REQUEST:

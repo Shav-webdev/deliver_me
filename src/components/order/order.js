@@ -12,18 +12,23 @@ import { socket } from '../../services/socket'
 import audioSound from '../../assets/sound.mp3'
 import OrderRate from '../orderRate/orderRate'
 
+import './order.css'
+
 function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   const [visible, setVisible] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
-  const [defaultRate, setDefaultRate] = useState(0)
+  const [defaultRate, setDefaultRate] = useState(null)
+  const [isOrderRated, setIsOrderRated] = useState(null)
 
   useEffect(() => {
     if (el.state === 'done' && el.rating === 0) {
       setDefaultRate(0)
+      setIsOrderRated(false)
     } else if (el.state === 'done' && el.rating !== 0) {
       const rate = Number(el.rating)
       console.log('rating data', el.rating)
       setDefaultRate(rate)
+      setIsOrderRated(true)
     }
   },[])
 
@@ -74,40 +79,40 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
         className="orders_list_item">
         <div className="orders_list_item_elem">
           <div>
-            <p>
-              <strong>Order :</strong>
+            <p className="card-p">
+              <strong>Order : </strong>
               {el.order_description}
             </p>
             <p>
-              <strong>Money :</strong>
+              <strong>Shipping fee : </strong>
               {el.points}
             </p>
           </div>
           {el.state === 'pending' && (
             <div>
-              <p>
-                <strong>Deliverer :</strong>
+              <p className="card-p">
+                <strong>Deliverer : </strong>
                 {el.user_name}
               </p>
-              <p>
-                <strong>Deliverer phone :</strong>
+              <p className="card-p">
+                <strong>Deliverer phone : </strong>
                 {el.user_phone}
               </p>
             </div>
           )}
           <div>
-            <p>
-              <strong>Take address :</strong>
+            <p className="card-p">
+              <strong>Pick up address : </strong>
               {el.take_address}
             </p>
-            <p>
-              <strong>Deliver address :</strong>
+            <p className="card-p">
+              <strong>Destination address : </strong>
               {el.deliver_address}
             </p>
           </div>
           <div>
-            <p>
-              <strong>Status :</strong>
+            <p className="card-p">
+              <strong>Status : </strong>
               {el.state}
             </p>
           </div>
@@ -117,7 +122,11 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
             <Button onClick={onDeleteBtnClick}>Delete</Button>
           )}
           {el.state === 'done' && (
-            <OrderRate defaultRate={defaultRate} getOrderRate={getOrderRate} />
+            <OrderRate
+              isOrderRated={isOrderRated}
+              defaultRate={el.rating}
+              getOrderRate={getOrderRate}
+            />
           )}
         </div>
       </List.Item>

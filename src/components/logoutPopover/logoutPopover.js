@@ -12,8 +12,8 @@ export default function LogoutPopover(props) {
           Profile information
         </Link>
       </p>
-      <p>
-        <Button type="link" onClick={logOut}>
+      <p style={{ marginBottom: '5px' }}>
+        <Button type="link" onClick={logOut} style={{ padding: '0 15px', height: '0' }}>
           Logout
         </Button>
       </p>
@@ -31,8 +31,8 @@ export default function LogoutPopover(props) {
           props.avatarUrl
             ? props.avatarUrl
             : props.companyDataUrl
-            ? props.companyDataUrl
-            : props.default
+              ? props.companyDataUrl
+              : props.default
         }
       />
     </Popover>

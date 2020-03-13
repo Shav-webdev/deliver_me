@@ -10,7 +10,9 @@
     max-width: 500px;
     width: 100%;
 }
-
+.ant-form-item-children-icon{
+    display: none;
+}
 .formCompany .ant-form-item {
     margin-bottom: 0;
 }
