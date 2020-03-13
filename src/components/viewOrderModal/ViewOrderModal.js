@@ -28,9 +28,12 @@ function ViewOrderModal({ data, show, state, setVisibleOrder, hideViewModal }) {
     setSetShow(show)
   }, [show])
 
-  const handleSubmit = () => {
-    setSetShow(false)
-    setVisibleOrder(false)
+  const handleSubmit = (e) => {
+    e.stopPropagation()
+      setSetShow(false)
+      setVisibleOrder(false)
+    
+    
   }
 
   return (

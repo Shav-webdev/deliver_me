@@ -11,7 +11,7 @@
     margin: 0 auto;
     border: 1px solid #ccc;
     min-width: 500px;
-    max-width: 730px;
+    max-width: 900px;
     transition: 0.7s ease-in-out;
 }
 .card-container:hover {

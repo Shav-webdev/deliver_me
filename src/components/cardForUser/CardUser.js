@@ -34,18 +34,22 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
     })
   }
   const handleOpen = () => {
-      setVisibleOrder(true)   
+    console.log("open")
+    //if(show!==true){
+      setVisibleOrder(true) 
+    //}
+     
   }
 
   return (
-    <div  className="card-container">
+    <div  onClick={handleOpen} className="card-container">
       <ViewOrderModal
         show={show}
         state={state}
         setVisibleOrder={setVisibleOrder}
         data={data}
       />
-      <div  onClick={handleOpen} className="item-box">
+      <div className="item-box">
         <div className="card-item">
           <p className="order">
             <strong>Order:</strong>
