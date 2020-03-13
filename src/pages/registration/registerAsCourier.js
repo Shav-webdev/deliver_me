@@ -320,7 +320,7 @@ function RegisterAsCourier() {
           hasFeedback={showAddressValidText}
           help={
             showAddressValidText
-              ? 'Address should contain at least one digit, one lower, one upper case, space'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input

@@ -335,7 +335,7 @@ export default function CreateOrderModal({
           hasFeedback={showTakeAddressValidText}
           help={
             showTakeAddressValidText
-              ? 'Address should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
@@ -376,7 +376,7 @@ export default function CreateOrderModal({
           hasFeedback={showDeliverAddressValidText}
           help={
             showDeliverAddressValidText
-              ? 'Address should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
@@ -416,7 +416,7 @@ export default function CreateOrderModal({
           hasFeedback={showReciverNameValidText}
           help={
             showReciverNameValidText
-              ? 'Name should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input

@@ -294,7 +294,7 @@ function RegisterAsCompany() {
           hasFeedback={showAddressValidText}
           help={
             showAddressValidText
-              ? 'Address should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
