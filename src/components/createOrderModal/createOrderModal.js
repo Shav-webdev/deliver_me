@@ -35,9 +35,7 @@ export default function CreateOrderModal({
     state.order_description ? state.order_description : ''
   )
   const [comment, setComment] = useState(state.comment ? state.comment : '')
-  const [orderStartTime, setOrderStartTime] = useState(
-    state.order_start_time ? state.order_start_time : ''
-  )
+
   const [orderEndTime, setOrderEndTime] = useState(
     state.order_end_time ? state.order_end_time : ''
   )
@@ -95,7 +93,6 @@ export default function CreateOrderModal({
       setDeliverAddress('')
       setOrderDescription('')
       setComment('')
-      setOrderStartTime(null)
       setOrderEndTime(null)
       setReciverPhone('')
       setReciverName('')
@@ -183,8 +180,7 @@ export default function CreateOrderModal({
   }
 
   const onTimeChangeChange = (dates, dateStrings) => {
-    setOrderStartTime(dateStrings[0])
-    setOrderEndTime(dateStrings[1])
+    setOrderEndTime(dateStrings)
   }
 
   const handleReciverPhoneChange = useCallback(e => {
@@ -237,7 +233,6 @@ export default function CreateOrderModal({
       deliver_address: deliverAddress,
       order_description: orderDescription,
       comment: comment,
-      order_start_time: orderStartTime,
       order_end_time: orderEndTime,
       receiver_name: reciverName,
       receiver_phone: selectPhonePrefix + reciverPhone,
@@ -311,7 +306,6 @@ export default function CreateOrderModal({
     currentTime.getHours()
     return {
       disabledHours: () => range(0, currentTime.getHours()),
-      disabledMinutes: () => range(0, currentTime.getMinutes()),
     }
   }
 
@@ -451,15 +445,15 @@ export default function CreateOrderModal({
           />
         </Form.Item>
         <Form.Item className="order_range_picker" label="Order time range">
-          <RangePicker
+          <DatePicker
             disabled={isOrderEditable}
             disabledDate={disabledDate}
-            disabledTime={disabledDateTime}
-            defaultValue={[
-              orderStartTime ? moment(orderStartTime, dateFormat) : null,
-              orderEndTime ? moment(orderEndTime, dateFormat) : null,
-            ]}
-            format={dateFormat}
+            //disabledTime={disabledDateTime}
+            // defaultValue={[
+            //   orderStartTime ? moment(orderStartTime, dateFormat) : null,
+            //   orderEndTime ? moment(orderEndTime, dateFormat) : null,
+            // ]}
+            // format={dateFormat}
             showTime={{
               hideDisabledOptions: true,
               minuteStep: 5,
