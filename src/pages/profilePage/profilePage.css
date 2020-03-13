@@ -1,5 +1,6 @@
 body {
-  overflow-y: overlay;
+  margin-top: 3.75rem;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
@@ -70,20 +71,26 @@ body {
   width: 100%;
 }
 
-.company_profile_main .ant-spin-container {
-  max-width: 800px;
+.company_profile_main {
+  max-height: calc(100vh - 64px);
   width: 100%;
-  margin: 0 auto;
+  overflow-y: hidden;
+}
+
+.company_profile_main .ant-spin-container {
+  max-height: calc(100vh - 130px);
+  overflow-x: hidden;
 }
 
 .company_profile_main .company_orders_list_wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: calc(100vh - 64px);
-  overflow-y: scroll;
   padding: 1rem;
+  min-height: unset;
 }
+
+/* jvhbgkj */
 
 .company_profile_main .orders_list_item {
   display: flex;
@@ -95,6 +102,7 @@ body {
   margin-bottom: 1rem;
   box-shadow: 1px 2px 4px 0px;
   transition: 0.5s;
+  margin: 1rem 2rem;
 }
 
 .company_profile_main .orders_list_item:hover {

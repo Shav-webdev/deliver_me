@@ -44,7 +44,7 @@ export const getAllOrdersThunk = () => async dispatch => {
   }
 }
 
-export const getUserOrdersThunk = (id) => async dispatch => {
+export const getUserOrdersThunk = id => async dispatch => {
   try {
     dispatch(getUserOrdersRequest())
     console.log('getUserordersALL')
@@ -60,14 +60,23 @@ export const getUserOrdersThunk = (id) => async dispatch => {
   }
 }
 
-export const getCompanyOrdersThunk = (id, type) => async dispatch => {
+export const getCompanyOrdersThunk = (
+  id,
+  type,
+  last,
+  count
+) => async dispatch => {
+  console.log('id', id)
+  console.log('type', type)
+  console.log('count', count)
+
   try {
     switch (type) {
       case ALL:
         dispatch(getCompanyOrdersRequest())
         const responseAll = await api
           .getCompanyOrders(id)
-          .get({ params: { type } })
+          .get({ params: { type, last, count: count } })
         dispatch(getCompanyOrdersSuccess(responseAll.data))
         successMessage('Orders loaded soccessfully.')
         break
@@ -75,7 +84,8 @@ export const getCompanyOrdersThunk = (id, type) => async dispatch => {
         dispatch(getActiveOrdersRequest())
         const responseActive = await api
           .getCompanyOrders(id)
-          .get({ params: { type } })
+          .get({ params: { type, last, count: count } })
+        console.log('responseActive', responseActive)
         dispatch(getActiveOrdersSuccess(responseActive.data))
         successMessage('Active orders loaded soccessfully.')
         break
@@ -83,7 +93,7 @@ export const getCompanyOrdersThunk = (id, type) => async dispatch => {
         dispatch(getDoneOrdersRequest())
         const responseDone = await api
           .getCompanyOrders(id)
-          .get({ params: { type } })
+          .get({ params: { type, last, count: count } })
         dispatch(getDoneOrdersSuccess(responseDone.data))
         successMessage('Completed orders loaded soccessfully.')
         break
@@ -91,12 +101,13 @@ export const getCompanyOrdersThunk = (id, type) => async dispatch => {
         dispatch(getPendingOrdersRequest())
         const responsePending = await api
           .getCompanyOrders(id)
-          .get({ params: { type } })
+          .get({ params: { type, last, count: count } })
         dispatch(getPendingOrdersSuccess(responsePending.data))
         successMessage('Pending orders loaded soccessfully.')
         break
     }
   } catch (error) {
+    console.log(error)
     switch (type) {
       case ALL:
         dispatch(getCompanyOrdersFailure())
@@ -127,19 +138,26 @@ export const createCompanyOrderThunk = data => async dispatch => {
         errorMessage('Cannot update Order')
       }
       dispatch(editOrderSuccess(response.data))
+      console.log(response.data)
+
       successMessage('Order updated.')
+      console.log(data.id)
+      console.log(ACTIVE)
+      getCompanyOrdersThunk(data.companyId, ACTIVE)
+      getCompanyOrdersThunk(data.id, ACTIVE) //, last, count
     } else {
       const response = await api.createOrder.post({
         ...data,
       })
       dispatch(createOrderSuccess(response.data))
-      dispatch(getCompanyOrdersThunk(data.companyId))
+      getCompanyOrdersThunk(data.companyId, ACTIVE, '0')
       successMessage('Order created.')
       if (response.status !== 201) {
         errorMessage('Cannot create Order')
       }
     }
   } catch (error) {
+    console.log(error)
     errorMessage('Something went wrong, plese try letter')
   }
 }

@@ -15,15 +15,18 @@ import OrderRate from '../orderRate/orderRate'
 function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   const [visible, setVisible] = useState(false)
   const [confirmVisible, setConfirmVisible] = useState(false)
-  const [defaultRate, setDefaultRate] = useState(0)
+  const [defaultRate, setDefaultRate] = useState(null)
+  const [isOrderRated, setIsOrderRated] = useState(null)
 
   useEffect(() => {
     if (el.state === 'done' && el.rating === 0) {
       setDefaultRate(0)
+      setIsOrderRated(false)
     } else if (el.state === 'done' && el.rating !== 0) {
       const rate = Number(el.rating)
       console.log('rating data', el.rating)
       setDefaultRate(rate)
+      setIsOrderRated(true)
     }
   })
 
@@ -117,7 +120,11 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
             <Button onClick={onDeleteBtnClick}>Delete</Button>
           )}
           {el.state === 'done' && (
-            <OrderRate defaultRate={defaultRate} getOrderRate={getOrderRate} />
+            <OrderRate
+              isOrderRated={isOrderRated}
+              defaultRate={el.rating}
+              getOrderRate={getOrderRate}
+            />
           )}
         </div>
       </List.Item>

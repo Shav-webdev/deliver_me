@@ -30,6 +30,7 @@ import Wallet from '../../components/wallet/wallet'
 import LogoutPopover from '../../components/logoutPopover/logoutPopover'
 import OrdersList from '../../components/ordersList/ordersList'
 import CreateOrderModal from '../../components/createOrderModal/createOrderModal'
+import { getLastOrderIndex } from '../../services/util'
 
 const { Header, Sider, Content } = Layout
 
@@ -53,15 +54,20 @@ const ProfilePage = ({
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-const audio= new Audio()
+  const [lastIndexOfAllOrders, setLastIndexOfAllOrders] = useState(null)
+  const [lastIndexOfActiveOrders, setLastIndexOfActiveOrders] = useState(null)
+  const [lastIndexOfPendingOrders, setLastIndexOfPendingOrders] = useState(null)
+  const [lastIndexOfDoneOrders, setLastIndexOfDoneOrders] = useState(null)
+
+  const audio = new Audio()
   useEffect(() => {
     const ls = Storage.get('deliver')
     const companyId = ls.id
     getCompanyById(companyId)
-    getCompanyOrders(companyId, 'all')
-    getCompanyOrders(companyId, 'active')
-    getCompanyOrders(companyId, 'pending')
-    getCompanyOrders(companyId, 'done')
+    getCompanyOrders(companyId, 'all', 'a', 3)
+    getCompanyOrders(companyId, 'active', 'a', 3)
+    getCompanyOrders(companyId, 'pending', 'a', 3)
+    getCompanyOrders(companyId, 'done', 'a', 3)
     // eslint-disable-next-line no-useless-escape
   }, [])
 
@@ -71,7 +77,7 @@ const audio= new Audio()
       audio.src = audioSound
       audio.play()
     })
-  },[])
+  }, [])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -124,10 +130,21 @@ const audio= new Audio()
 
   const { id, avatar, amount } = signInAsCompanyData
 
-  // const handleMenuClick = e => {
-  //   const type = e.key
-  //   getCompanyOrders(id, type)
-  // }
+  const getMoreData = (state, orders) => {
+    if (state === 'all') {
+      setLastIndexOfAllOrders(getLastOrderIndex(orders))
+      getCompanyOrders(id, state, lastIndexOfAllOrders, 3)
+    } else if (state === 'active') {
+      setLastIndexOfActiveOrders(getLastOrderIndex(orders))
+      getCompanyOrders(id, state, lastIndexOfActiveOrders, 3)
+    } else if (state === 'pending') {
+      setLastIndexOfPendingOrders(getLastOrderIndex(orders))
+      getCompanyOrders(id, state, lastIndexOfPendingOrders, 3)
+    } else if (state === 'done') {
+      setLastIndexOfPendingOrders(getLastOrderIndex(orders))
+      getCompanyOrders(id, state, lastIndexOfPendingOrders, 3)
+    }
+  }
 
   return (
     <Router>
@@ -152,12 +169,6 @@ const audio= new Audio()
                   <img src={allOrdersIcon} alt="All orders" />
                 </span>
                 <span className="order_text">My orders</span>
-                <span>
-                  <Badge
-                    className="company_borders_badge"
-                    count={companyOrdersData.length}
-                  />
-                </span>
               </Link>
             </Menu.Item>
             <Menu.Item key="active">
@@ -230,30 +241,38 @@ const audio= new Audio()
           <Content className="company_profile_main">
             <Route exact path="/company">
               <OrdersList
+                state="all"
                 companyId={id}
                 orders={companyOrdersData}
                 loading={gettingCompanyOrders}
+                getMoreData={getMoreData}
               />
             </Route>
             <Route path="/company/active_orders">
               <OrdersList
+                state="active"
                 companyId={id}
                 orders={companyActiveOrdersData}
                 loading={gettingCompanyActiveOrders}
+                getMoreData={getMoreData}
               />
             </Route>
             <Route path="/company/completed_orders">
               <OrdersList
+                state="done"
                 companyId={id}
                 orders={companyDoneOrdersData}
                 loading={gettingCompanyDoneOrders}
+                getMoreData={getMoreData}
               />
             </Route>
             <Route path="/company/pending_orders">
               <OrdersList
+                state="pending"
                 companyId={id}
                 orders={companyPendingOrdersData}
                 loading={gettingCompanyPendingOrders}
+                getMoreData={getMoreData}
               />
             </Route>
             <Route path="/company/profile_info">
@@ -321,7 +340,8 @@ const mapDispatchToProps = dispatch => {
     updateCompanyData: id => dispatch(createCompanyThunk(id)),
     getCompanyById: id => dispatch(getCompanyByIdThunk(id)),
     createOrder: data => dispatch(createCompanyOrderThunk(data)),
-    getCompanyOrders: (id, type) => dispatch(getCompanyOrdersThunk(id, type)),
+    getCompanyOrders: (id, type, last, count) =>
+      dispatch(getCompanyOrdersThunk(id, type, last, count)),
     deleteAccount: id => dispatch(removeCompanyByIdThunk(id)),
     updateAvatar: data => {
       dispatch(createCompanyThunk(data))
