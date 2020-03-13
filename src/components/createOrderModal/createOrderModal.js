@@ -331,6 +331,7 @@ export default function CreateOrderModal({
         <SubTitle>Sender</SubTitle>
         <Form.Item
           label="Take address"
+          className="sender"
           validateStatus={showTakeAddressValidText ? 'error' : 'success'}
           hasFeedback={showTakeAddressValidText}
           help={
@@ -351,11 +352,12 @@ export default function CreateOrderModal({
         </Form.Item>
         <Form.Item
           label="Description"
+          className="sender"
           validateStatus={showOrderDescValidText ? 'error' : 'success'}
           hasFeedback={showOrderDescValidText}
           help={
             showOrderDescValidText
-              ? 'Description should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input

@@ -246,7 +246,7 @@ function RegisterAsCompany() {
           hasFeedback={showNameValidText}
           help={
             showNameValidText
-              ? 'Name should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
@@ -347,7 +347,7 @@ function RegisterAsCompany() {
           hasFeedback={showActivityValidText}
           help={
             showActivityValidText
-              ? 'Activity should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
