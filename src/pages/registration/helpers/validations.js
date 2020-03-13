@@ -15,13 +15,13 @@ export function validatePoint(point) {
 }
 
 export function validateName(name) {
-  return name.length >= 1 
+  return name.length >= 1 && name.length <= 64 
 }
 export function validateLastName(lastName){
-  return lastName.length>=1 
+  return lastName.length>=1 && lastName.length <= 64 
 }
 export function validateAddress(address) {
-  return address.length >= 1
+  return address.length >= 1 && address.length <= 64 
 }
 
 export function validateComment(comment) {
@@ -43,5 +43,5 @@ export function validateTaxNumber(number) {
 }
 
 export function validateActivity(activity) {
-  return activity.length >= 1
+  return activity.length >= 1  && activity.length <= 64
 }
