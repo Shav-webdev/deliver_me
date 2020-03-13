@@ -50,6 +50,10 @@ const ProfilePage = ({
   companyActiveOrdersData,
   companyPendingOrdersData,
   companyDoneOrdersData,
+  hasMoreDoneOrder,
+  hasMoreActiveOrder,
+  hasMoreAllOrder,
+  hasMorePendingOrder,
 }) => {
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
@@ -147,7 +151,7 @@ const ProfilePage = ({
 
   return (
     <Router>
-      <Layout style={{ marginTop: '.8rem' }}>
+      <Layout style={{ marginTop: '1.5rem' }}>
         <Sider
           className="theme_bg_color"
           trigger={null}
@@ -240,6 +244,7 @@ const ProfilePage = ({
           <Content className="company_profile_main">
             <Route exact path="/company">
               <OrdersList
+                hasMoreOrder={hasMoreAllOrder}
                 state="all"
                 companyId={id}
                 orders={companyOrdersData}
@@ -249,6 +254,7 @@ const ProfilePage = ({
             </Route>
             <Route path="/company/active_orders">
               <OrdersList
+                hasMoreOrder={hasMoreActiveOrder}
                 state="active"
                 companyId={id}
                 orders={companyActiveOrdersData}
@@ -258,6 +264,7 @@ const ProfilePage = ({
             </Route>
             <Route path="/company/completed_orders">
               <OrdersList
+                hasMoreOrder={hasMoreDoneOrder}
                 state="done"
                 companyId={id}
                 orders={companyDoneOrdersData}
@@ -267,6 +274,7 @@ const ProfilePage = ({
             </Route>
             <Route path="/company/pending_orders">
               <OrdersList
+                hasMoreOrder={hasMorePendingOrder}
                 state="pending"
                 companyId={id}
                 orders={companyPendingOrdersData}
@@ -317,6 +325,10 @@ const mapStateToProps = state => {
     companyActiveOrdersData,
     companyPendingOrdersData,
     companyDoneOrdersData,
+    hasMoreDoneOrder,
+    hasMoreActiveOrder,
+    hasMoreAllOrder,
+    hasMorePendingOrder,
   } = orders
 
   return {
@@ -332,6 +344,10 @@ const mapStateToProps = state => {
     companyActiveOrdersData,
     companyPendingOrdersData,
     companyDoneOrdersData,
+    hasMoreDoneOrder,
+    hasMoreActiveOrder,
+    hasMoreAllOrder,
+    hasMorePendingOrder,
   }
 }
 

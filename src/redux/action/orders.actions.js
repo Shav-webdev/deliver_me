@@ -26,6 +26,14 @@ import {
   GET_USER_ORDERS_REQUEST,
   GET_USER_ORDERS_SUCCESS,
   GET_USER_ORDERS_FAILURE,
+  GET_COMPANY_MORE_ALL_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ALL_ORDERS_FAILURE,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
+  GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
 } from './constants'
 
 export const getCompanyOrdersRequest = () => ({
@@ -130,4 +138,32 @@ export const getPendingOrdersSuccess = data => ({
 })
 export const getPendingOrdersFailure = () => ({
   type: GET_COMPANY_PENDING_ORDERS_FAILURE,
+})
+
+export const getMoreAllOrdersSuccess = () => ({
+  type: GET_COMPANY_MORE_ALL_ORDERS_SUCCESS,
+})
+export const getMoreAllOrdersFailure = () => ({
+  type: GET_COMPANY_MORE_ALL_ORDERS_FAILURE,
+})
+
+export const getMoreActiveOrdersSuccess = () => ({
+  type: GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS,
+})
+export const getMoreActiveOrdersFailure = () => ({
+  type: GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE,
+})
+
+export const getMorePendingOrdersSuccess = () => ({
+  type: GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS,
+})
+export const getMorePendingOrdersFailure = () => ({
+  type: GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
+})
+
+export const getMoreDoneOrdersSuccess = () => ({
+  type: GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
+})
+export const getMoreDoneOrdersFailure = () => ({
+  type: GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
 })

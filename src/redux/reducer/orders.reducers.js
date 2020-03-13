@@ -29,6 +29,14 @@ import {
   ADD_ORDER_BY_SOCKET_REQUEST,
   ADD_ORDER_BY_SOCKET_SUCCESS,
   ADD_ORDER_BY_SOCKET_FAILURE,
+  GET_COMPANY_MORE_ALL_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ALL_ORDERS_FAILURE,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
+  GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -38,12 +46,16 @@ const initialState = {
   userOrdersData: [],
   gettingCompanyOrders: false,
   companyOrdersData: [],
+  hasMoreAllOrder: true,
   gettingCompanyActiveOrders: false,
   companyActiveOrdersData: [],
+  hasMoreActiveOrder: true,
   gettingCompanyDoneOrders: false,
   companyDoneOrdersData: [],
+  hasMoreDoneOrder: true,
   gettingCompanyPendingOrders: false,
   companyPendingOrdersData: [],
+  hasMorePendingOrder: true,
 }
 
 export default function ordersReducer(state = initialState, action) {
@@ -63,6 +75,50 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyOrders: false,
+      }
+
+    case GET_COMPANY_MORE_ALL_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreAllOrder: true,
+      }
+    case GET_COMPANY_MORE_ALL_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreAllOrder: false,
+      }
+
+    case GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreActiveOrder: true,
+      }
+    case GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreActiveOrder: false,
+      }
+
+    case GET_COMPANY_MORE_PENDING_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMorePendingOrder: true,
+      }
+    case GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMorePendingOrder: false,
+      }
+
+    case GET_COMPANY_MORE_DONE_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreDoneOrder: true,
+      }
+    case GET_COMPANY_MORE_DONE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreDoneOrder: false,
       }
 
     case GET_COMPANY_DONE_ORDERS_REQUEST:

@@ -12,19 +12,15 @@ export default function OrdersList({
   orders,
   companyId,
   getMoreData,
+  hasMoreOrder,
 }) {
   const loadMoreDataBtnHandleClick = () => {
-    console.log('last index arr', orders[orders.length - 1].id)
     const createdTime = orders[orders.length - 1].createdTime
     getMoreData(state, createdTime)
   }
 
   if (loading) {
     return <Spinner />
-  }
-
-  if (orders[orders.length - 1]) {
-    console.log('last index arr orders', orders[orders.length - 1].createdTime)
   }
 
   return (
@@ -47,7 +43,9 @@ export default function OrdersList({
           </Title>
         )}
         <div style={{ textAlign: 'center' }}>
-          <Button onClick={loadMoreDataBtnHandleClick}>Load more</Button>
+          {hasMoreOrder && (
+            <Button onClick={loadMoreDataBtnHandleClick}>Load more</Button>
+          )}
         </div>
       </List>
     </>
