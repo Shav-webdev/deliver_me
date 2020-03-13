@@ -50,6 +50,11 @@ export const createOrderFailure = () => ({
   type: CREATE_ORDER_FAILURE,
 })
 
+export const takeOrderSuccess = data => ({
+  type: 'TAKE_ORDER_SUCCESS',
+  payload: data,
+})
+
 export const editOrderRequest = () => ({
   type: EDIT_ORDER_REQUEST,
 })

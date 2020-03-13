@@ -1,0 +1,90 @@
+.card-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fcffff;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    box-shadow: 1px 2px 4px 0px;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    min-width: 200px;
+    max-width: 730px;
+    transition: 0.7s ease-in-out;
+}
+.card-container:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+}
+
+.card-container .item-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-container .card-item {
+    padding: 5px;
+}
+
+.card-container .card-item p span {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    max-width: 140px;
+    min-width: 20px;
+    width: 100%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 0.5rem;
+    vertical-align: top;
+}
+
+.card-item .delete-button {
+    line-height: 1.499;
+    position: relative;
+    display: inline-block;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    background-image: none;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    touch-action: manipulation;
+    height: 32px;
+    padding: 0 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.65);
+    background-color: #fff;
+    border-color: #d9d9d9;
+}
+
+.delete-button:hover {
+    background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+    background-color: #f6f6f6;
+}
+
+.delete-button:active {
+    position: relative;
+    top: 1px;
+}
+
+@media(max-width: 562px) {
+    .card-container .card-item p span {
+        width: 80px;
+    }
+
+    .card-container .item-box {
+        flex-wrap: wrap;
+    }
+}
+
+.card-container{
+    margin: 10px;
+}

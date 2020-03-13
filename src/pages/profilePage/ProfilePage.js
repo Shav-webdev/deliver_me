@@ -53,7 +53,7 @@ const ProfilePage = ({
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-const audio= new Audio()
+  const audio = new Audio()
   useEffect(() => {
     const ls = Storage.get('deliver')
     const companyId = ls.id
@@ -69,9 +69,10 @@ const audio= new Audio()
     socket.on('user_took_order', data => {
       console.log(data)
       audio.src = audioSound
+      audio.autoplay = true
       audio.play()
     })
-  },[])
+  }, [])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -88,9 +89,9 @@ const audio= new Audio()
     const data = order.id
       ? order
       : {
-          companyId: companies.signInAsCompanyData.id,
-          order,
-        }
+        companyId: companies.signInAsCompanyData.id,
+        order,
+      }
     createOrder(data)
     setVisible(false)
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Typography, Popover, Avatar } from 'antd'
+import { Table, Typography, Popover, Avatar, Rate } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -24,15 +24,17 @@ import {
   getUserOrdersThunk,
   getAllOrdersThunk,
   getUserByIdThunk,
+  updateOrderByUserThunk
 } from '../../redux/thunk'
 import history from '../../routes/history'
 import { successMessage, logOut } from '../../services/services'
 import UserPopover from '../../components/userPopoverLogout/userPopover'
 import EditProfileInfo from '../../containers/editProfileInfo/editProfileInfo'
+import CardUser from '../../components/cardForUser/CardUser'
 
 const { Header, Sider, Content } = Layout
 const { Column } = Table
-
+const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful']
 const defaultState = {
   collapsed: false,
   isUpdated: false,
@@ -46,12 +48,14 @@ const userProfilePage = ({
   getUser,
   currentUserData,
   updateUser,
+  gettingAllOrders,
+  takeOrder
 }) => {
-  const { ordersData, gettingUserOrders } = orders
+  const { gettingUserOrders, allOrdersData } = orders
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-  const { amount, name, lastName, phone, address, avatar } = currentUserData
+  const { amount, name, lastName, phone, address, avatar ,rating} = currentUserData
   const [state, setState] = useState(defaultState)
-  const [menuItem, setMenuItem] = useState('users')
+  const [menuItem, setMenuItem] = useState('a_orders')
 
   useEffect(() => {
     const ls = Storage.get('deliver')
@@ -74,6 +78,7 @@ const userProfilePage = ({
     setIsInputsEditable(false)
   }
   const onMenuSelect = e => {
+    console.log(e.key)
     setMenuItem(e.key)
   }
 
@@ -86,7 +91,7 @@ const userProfilePage = ({
 
   return (
     <div>
-      <Layout>
+      <Layout style={{ minWidth: '700px' }}>
         <Sider
           trigger={null}
           style={{ minHeight: '100vh' }}
@@ -106,19 +111,25 @@ const userProfilePage = ({
               <span className="menu_item_icon_user">
                 <img src={allOrdersIcon} alt="All orders" />
               </span>
-              <span className={state.collapsed?'collapsed':""}>Active orders</span>
+              <span className={state.collapsed ? 'collapsed' : ''}>
+                Active orders
+              </span>
             </Menu.Item>
             <Menu.Item key="my_pending">
               <span className="menu_item_icon_user">
                 <img src={pendingOrdersIcon} alt="Pending orders" />
               </span>
-              <span className={state.collapsed?'collapsed':""}>My Pending orders</span>
+              <span className={state.collapsed ? 'collapsed' : ''}>
+                My Pending orders
+              </span>
             </Menu.Item>
             <Menu.Item key="my_completed">
               <span className="menu_item_icon_user">
                 <img src={doneOrdersIcon} alt="Completed orders" />
               </span>
-              <span className={state.collapsed?'collapsed':""}>My Completed orders</span>
+              <span className={state.collapsed ? 'collapsed' : ''}>
+                My Completed orders
+              </span>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -141,21 +152,33 @@ const userProfilePage = ({
                 Wallet: {amount ? amount : 0}
               </Typography>
             </div>
-
-            <UserPopover
-              name={name}
-              setMenuItem={setMenuItem}
-              lastName={lastName}
-              avatar={avatar}
-            />
+            <div>
+              
+              <Rate
+                disabled
+                style={{ marginRight: '10px' }}
+                tooltips={desc}
+                value={rating}
+              />
+              <UserPopover
+                name={name}
+                setMenuItem={setMenuItem}
+                lastName={lastName}
+                avatar={avatar}
+              />
+            </div>
           </Header>
           <Content
             style={{
+              display:"flex",
+              flexDirection:"column",
+              justifyContent:"center",
+              alignItems:"center",
               margin: '15px 15px',
               padding: 10,
               background: '#fff',
-              minHeight: 280,
-            }}>
+              minHeight: 280,}}
+            >
             {menuItem === 'edit' && (
               <div className="company_profile_section_wrapper">
                 <EditProfileInfo
@@ -167,6 +190,19 @@ const userProfilePage = ({
                 />
               </div>
             )}
+            {allOrdersData.length===0? <Spinner />:           
+            allOrdersData.map(el => {
+             return( 
+                <CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} takeOrder={takeOrder} page={menuItem} key={el.id}/>
+              )
+            })}
+            
+  
+          
+              
+              
+
+              
           </Content>
         </Layout>
       </Layout>
@@ -177,6 +213,7 @@ const userProfilePage = ({
 const mapStateToProps = state => {
   const { orders, currentUser } = state
   const { currentUserData } = currentUser
+  console.log(orders.allOrdersData)
   return {
     orders,
     currentUserData,
@@ -196,6 +233,9 @@ const mapDispatchToProps = dispatch => {
     updateUser: data => {
       dispatch(createUserThunk(data))
     },
+    takeOrder:(data)=>{
+      dispatch(updateOrderByUserThunk(data))
+    }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(userProfilePage)
