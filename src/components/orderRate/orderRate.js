@@ -3,13 +3,8 @@ import { Rate } from 'antd'
 
 const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful']
 
-export default function OrderRate({ getOrderRate, defaultRate }) {
-  const [rate, setRate] = useState(defaultRate)
-
-  console.log(rate)
-  console.log(typeof rate)
-
-  console.log('default', typeof defaultRate)
+export default function OrderRate({ getOrderRate, defaultRate, isOrderRated }) {
+  const [rate, setRate] = useState(0)
 
   const handleChange = rate => {
     setRate(rate)
@@ -23,10 +18,11 @@ export default function OrderRate({ getOrderRate, defaultRate }) {
   return (
     <span onClick={onRateHandleClick}>
       <Rate
+        disabled={isOrderRated}
         defaultValue={defaultRate}
         tooltips={desc}
         onChange={handleChange}
-        value={rate}
+        value={defaultRate}
       />
     </span>
   )
