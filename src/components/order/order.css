@@ -1,9 +1,9 @@
 .card-p {
-  display: inline-block;
   white-space: nowrap;
-  width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 0.5rem;
   vertical-align: top;
+  max-width: 20em;
+  min-width: 9em;
 }

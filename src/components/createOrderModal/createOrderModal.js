@@ -22,6 +22,7 @@ export default function CreateOrderModal({
   okText,
   modalTitle,
   state,
+  userType
 }) {
   const [orderId, setOrderId] = useState(state.id ? state.id : null)
   const [points, setPoints] = useState(state.points ? state.points : '')

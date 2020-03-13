@@ -30,7 +30,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
       setDefaultRate(rate)
       setIsOrderRated(true)
     }
-  })
+  }, [])
 
   const handleUpdateOrderClick = () => {
     setVisible(true)
@@ -60,7 +60,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
   }
 
   const handleDeleteOrder = () => {
-    deleteOrder(companyId, el.id)
+    deleteOrder(companyId, el.id, el.state, Number(Date.now()), 5)
     setConfirmVisible(false)
   }
 
@@ -110,6 +110,18 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
               {el.deliver_address}
             </p>
           </div>
+          {el.state === 'done' && (
+            <div>
+              <p className="card-p">
+                <strong>Deliverer : </strong>
+                {el.user_name}
+              </p>
+              <p className="card-p">
+                <strong>Deliverer phone : </strong>
+                {el.user_phone}
+              </p>
+            </div>
+          )}
           <div>
             <p className="card-p">
               <strong>Status : </strong>
@@ -154,8 +166,8 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
 const mapDispatchToProps = dispatch => {
   return {
     updateOrder: data => dispatch(createCompanyOrderThunk(data)),
-    deleteOrder: (companyId, orderId) =>
-      dispatch(removeCompanyOrderThunk(companyId, orderId)),
+    deleteOrder: (companyId, orderId, type, last, count) =>
+      dispatch(removeCompanyOrderThunk(companyId, orderId, type, last, count)),
   }
 }
 

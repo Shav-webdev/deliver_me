@@ -58,9 +58,10 @@ export default function usersReducer(state = initialState, action) {
         }
   
 case ADD_USER_SOCKET_SUCCESS:
+  state.usersData.pop()
   return{
     ...state,
-    usersData:[...state.usersData,action.payload]
+    usersData:[action.payload,...state.usersData]
   }
 
 
