@@ -54,30 +54,29 @@ const ProfilePage = ({
   const [visible, setVisible] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [isInputsEditable, setIsInputsEditable] = useState(false)
-  const [lastIndexOfAllOrders, setLastIndexOfAllOrders] = useState(null)
-  const [lastIndexOfActiveOrders, setLastIndexOfActiveOrders] = useState(null)
-  const [lastIndexOfPendingOrders, setLastIndexOfPendingOrders] = useState(null)
-  const [lastIndexOfDoneOrders, setLastIndexOfDoneOrders] = useState(null)
+  const [ordersDefaultCount, setOrdersDefaultCount] = useState(5)
 
-  const audio = new Audio()
+  // const audio = new Audio()
   useEffect(() => {
     const ls = Storage.get('deliver')
     const companyId = ls.id
+    const firstCreatedTime = Number(Date.now())
     getCompanyById(companyId)
-    getCompanyOrders(companyId, 'all', 'a', 3)
-    getCompanyOrders(companyId, 'active', 'a', 3)
-    getCompanyOrders(companyId, 'pending', 'a', 3)
-    getCompanyOrders(companyId, 'done', 'a', 3)
+    getCompanyOrders(companyId, 'all', firstCreatedTime, ordersDefaultCount)
+    getCompanyOrders(companyId, 'active', firstCreatedTime, ordersDefaultCount)
+    getCompanyOrders(companyId, 'pending', firstCreatedTime, ordersDefaultCount)
+    getCompanyOrders(companyId, 'done', firstCreatedTime, ordersDefaultCount)
     // eslint-disable-next-line no-useless-escape
   }, [])
 
-  useEffect(() => {
-    socket.on('user_took_order', data => {
-      console.log(data)
-      audio.src = audioSound
-      audio.play()
-    })
-  }, [])
+  // useEffect(() => {
+  //   socket.on('user_took_order', data => {
+  //     console.log(data)
+  //     audio.src = audioSound
+  //     audio.autoplay = true
+  //     audio.play()
+  //   })
+  // }, [])
 
   const handleCreateOrderClick = () => {
     setVisible(true)
@@ -130,25 +129,25 @@ const ProfilePage = ({
 
   const { id, avatar, amount } = signInAsCompanyData
 
-  const getMoreData = (state, orders) => {
+  const getMoreData = (state, createdTime) => {
     if (state === 'all') {
-      setLastIndexOfAllOrders(getLastOrderIndex(orders))
-      getCompanyOrders(id, state, lastIndexOfAllOrders, 3)
+      console.log('all index', createdTime)
+      getCompanyOrders(id, state, createdTime, ordersDefaultCount)
     } else if (state === 'active') {
-      setLastIndexOfActiveOrders(getLastOrderIndex(orders))
-      getCompanyOrders(id, state, lastIndexOfActiveOrders, 3)
+      console.log('active index', createdTime)
+      getCompanyOrders(id, state, createdTime, ordersDefaultCount)
     } else if (state === 'pending') {
-      setLastIndexOfPendingOrders(getLastOrderIndex(orders))
-      getCompanyOrders(id, state, lastIndexOfPendingOrders, 3)
+      console.log('pending last id', createdTime)
+      getCompanyOrders(id, state, createdTime, ordersDefaultCount)
     } else if (state === 'done') {
-      setLastIndexOfPendingOrders(getLastOrderIndex(orders))
-      getCompanyOrders(id, state, lastIndexOfPendingOrders, 3)
+      console.log('done index', createdTime)
+      getCompanyOrders(id, state, createdTime, ordersDefaultCount)
     }
   }
 
   return (
     <Router>
-      <Layout>
+      <Layout style={{ marginTop: '.8rem' }}>
         <Sider
           className="theme_bg_color"
           trigger={null}
@@ -308,6 +307,7 @@ const ProfilePage = ({
 const mapStateToProps = state => {
   const { companies, orders } = state
   const { signInAsCompanyData, signInLoading } = companies
+  console.log(state)
   const {
     gettingCompanyOrders,
     gettingCompanyActiveOrders,

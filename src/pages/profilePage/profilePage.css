@@ -1,5 +1,4 @@
 body {
-  margin-top: 3.75rem;
   overflow-y: hidden;
   overflow-x: hidden;
 }
@@ -43,6 +42,7 @@ body {
   padding: 24px;
   min-height: 280px;
 }
+
 .ant-layout-sider-collapsed .profile_company_logo {
   padding: 1.22rem 0.5rem;
 }
@@ -234,6 +234,11 @@ body {
   max-width: 220px;
   width: 100%;
   margin-bottom: 0;
+}
+
+.create_order_form .ant-form-item.receiver {
+  margin-bottom: 25px;
+  margin-top: 10px;
 }
 
 .create_order_form .order_range_picker {

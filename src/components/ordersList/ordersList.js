@@ -14,17 +14,23 @@ export default function OrdersList({
   getMoreData,
 }) {
   const loadMoreDataBtnHandleClick = () => {
-    console.log('state', state)
-    console.log('orders', orders)
-    getMoreData(state, orders)
+    console.log('last index arr', orders[orders.length - 1].id)
+    const createdTime = orders[orders.length - 1].createdTime
+    getMoreData(state, createdTime)
+  }
+
+  if (loading) {
+    return <Spinner />
+  }
+
+  if (orders[orders.length - 1]) {
+    console.log('last index arr orders', orders[orders.length - 1].createdTime)
   }
 
   return (
     <>
       <List className="company_orders_list_wrapper">
-        {loading ? (
-          <Spinner />
-        ) : orders.length > 0 ? (
+        {orders.length > 0 ? (
           orders.map(el => {
             return (
               <Order
@@ -36,7 +42,9 @@ export default function OrdersList({
             )
           })
         ) : (
-          <Title style={{ textAlign: 'center' }}>There are no order</Title>
+          <Title level={3} style={{ textAlign: 'center' }}>
+            There are no orders
+          </Title>
         )}
         <div style={{ textAlign: 'center' }}>
           <Button onClick={loadMoreDataBtnHandleClick}>Load more</Button>

@@ -335,7 +335,7 @@ export default function CreateOrderModal({
           hasFeedback={showTakeAddressValidText}
           help={
             showTakeAddressValidText
-              ? 'Address should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
@@ -371,11 +371,12 @@ export default function CreateOrderModal({
 
         <Form.Item
           label="Receiver address"
+          className='receiver'
           validateStatus={showDeliverAddressValidText ? 'error' : 'success'}
           hasFeedback={showDeliverAddressValidText}
           help={
             showDeliverAddressValidText
-              ? 'Address should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
@@ -391,6 +392,7 @@ export default function CreateOrderModal({
         </Form.Item>
         <Form.Item
           label="Receiver phone"
+          className='receiver'
           validateStatus={showReciverPhoneValidText ? 'error' : 'success'}
           hasFeedback={showReciverPhoneValidText}
           help={
@@ -409,11 +411,12 @@ export default function CreateOrderModal({
         </Form.Item>
         <Form.Item
           label="Receiver name"
+          className='receiver'
           validateStatus={showReciverNameValidText ? 'error' : 'success'}
           hasFeedback={showReciverNameValidText}
           help={
             showReciverNameValidText
-              ? 'Name should contain at least two characters'
+              ? 'The input exceeds the limit on the number of characters allowed'
               : ''
           }>
           <Input
