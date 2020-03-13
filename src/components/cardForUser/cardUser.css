@@ -88,3 +88,12 @@
 .card-container{
     margin: 10px;
 }
+.item-box{
+    margin-top: 15px;
+}
+.buttons{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}

@@ -25,7 +25,7 @@ function Order({ el, updateOrder, deleteOrder, companyId, orderKey }) {
       console.log('rating data', el.rating)
       setDefaultRate(rate)
     }
-  })
+  },[])
 
   const handleUpdateOrderClick = () => {
     setVisible(true)

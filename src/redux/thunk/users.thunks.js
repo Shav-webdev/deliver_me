@@ -76,7 +76,7 @@ export const createUserThunk = data => async dispatch => {
       })
       dispatch(createUserSuccsess(response.data))
       successMessage('Data successfully created !')
-      dispatch(getUsersThunk())
+      dispatch(getUsersThunk(Date.now(),8))
       if (response.status !== 201) {
         throw new Error(response.data.message)
       }
@@ -93,7 +93,7 @@ export const removeUserThunk = id => async dispatch => {
   try {
     await api.deleteUpdateUser(id).delete()
     dispatch(removeUserSuccsess(id))
-    dispatch(getUsersThunk())
+    dispatch(getUsersThunk(Date.now(),8))
   } catch (error) {
     const err = {
       ...error,

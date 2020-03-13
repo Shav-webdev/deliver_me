@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Typography, Popover, Avatar, Rate } from 'antd'
+import { Table, Typography, Popover, Avatar, Rate, Card } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -44,14 +44,16 @@ const defaultState = {
 const userProfilePage = ({
   orders,
   getActiveOrders,
-  getUserOrders,
+  getUserPendOrders,
+  getUserDoneOrders,
   getUser,
   currentUserData,
   updateUser,
   gettingAllOrders,
+  doneOrder,
   takeOrder
 }) => {
-  const { gettingUserOrders, allOrdersData } = orders
+  const { gettingUserOrders, allOrdersData,companyPendingOrdersData,companyDoneOrdersData } = orders
   const [isInputsEditable, setIsInputsEditable] = useState(false)
   const { amount, name, lastName, phone, address, avatar ,rating} = currentUserData
   const [state, setState] = useState(defaultState)
@@ -60,7 +62,8 @@ const userProfilePage = ({
   useEffect(() => {
     const ls = Storage.get('deliver')
     const id = ls ? ls.id : ''
-    getUserOrders(id)
+    getUserPendOrders(id)
+    getUserDoneOrders(id)
     getUser(id)
     getActiveOrders()
   }, [])
@@ -190,12 +193,17 @@ const userProfilePage = ({
                 />
               </div>
             )}
-            {allOrdersData.length===0? <Spinner />:           
+            {menuItem==='a_orders' ? (allOrdersData.length===0? <Spinner />:           
             allOrdersData.map(el => {
              return( 
                 <CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} takeOrder={takeOrder} page={menuItem} key={el.id}/>
               )
-            })}
+            })):
+            menuItem==='my_pending' ? companyPendingOrdersData.map(el=>{
+              return (<CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} doneOrder={doneOrder} page={menuItem} key={el.id} />)
+            }):menuItem==='my_completed'?companyDoneOrdersData.map(el=>{
+              return (<CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} updateOrder={updateOrder} page={menuItem} key={el.id}/>)
+            }):""}
             
   
           
@@ -221,8 +229,11 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    getUserOrders: id => {
-      dispatch(getUserOrdersThunk(id))
+    getUserPendOrders: id => {
+      dispatch(getUserOrdersThunk(id,'pending'))
+    },
+    getUserDoneOrders: id => {
+      dispatch(getUserOrdersThunk(id,'done'))
     },
     getActiveOrders: () => {
       dispatch(getAllOrdersThunk())
@@ -234,6 +245,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(createUserThunk(data))
     },
     takeOrder:(data)=>{
+      dispatch(updateOrderByUserThunk(data))
+    },
+    doneOrder:(data)=>{
       dispatch(updateOrderByUserThunk(data))
     }
   }

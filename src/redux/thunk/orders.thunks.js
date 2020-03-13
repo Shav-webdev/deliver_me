@@ -20,6 +20,10 @@ import {
   getDoneOrdersRequest,
   getDoneOrdersSuccess,
   getDoneOrdersFailure,
+  getDoneUserOrdersRequest,
+  getDoneUserOrdersSuccess,
+  getPendingUserOrdersRequest,
+  getPendingUserOrdersSuccess,
   getPendingOrdersRequest,
   getPendingOrdersSuccess,
   getPendingOrdersFailure,
@@ -75,46 +79,42 @@ export const getUserOrdersThunk = (id, type) => async dispatch => {
   //   dispatch(getUserOrdersFailure())
   // }
   try {
-    switch (type) {
-      case ACTIVE:
-        dispatch(getActiveOrdersRequest())
-        const responseActive = await api.getUserOrders(id, type).get()
-        dispatch(getAllOrdersSuccess(responseActive.data))
-        successMessage('Active orders loaded soccessfully.')
-        break
-      case DONE:
-        dispatch(getDoneOrdersRequest())
-        const responseDone = await api.getCompanyOrders(id, type).get()
-        dispatch(getDoneOrdersSuccess(responseDone.data))
-        successMessage('Completed orders loaded soccessfully.')
-        break
-      case PENDING:
-        dispatch(getPendingOrdersRequest())
-        const responsePending = await api
-          .getCompanyOrders(id)
-          .get({ params: { type } })
-        dispatch(getPendingOrdersSuccess(responsePending.data))
-        successMessage('Pending orders loaded soccessfully.')
-        break
+    if (type === 'active') {
+      dispatch(getActiveOrdersRequest())
+      const responseActive = await api.getUserOrders(id, type).get()
+      dispatch(getAllOrdersSuccess(responseActive.data))
+      successMessage('Active orders loaded soccessfully.')
+      return
+    } else if (type === 'done') {
+      dispatch(getDoneUserOrdersRequest())
+      const responseDone = await api.getUserOrders(id, type).get()
+      dispatch(getDoneUserOrdersSuccess(responseDone.data))
+      successMessage('Completed orders loaded soccessfully.')
+      return
+    } else if (type === 'pending') {
+      dispatch(getPendingUserOrdersRequest())
+      const responsePending = await api.getUserOrders(id, type).get()
+      dispatch(getPendingUserOrdersSuccess(responsePending.data))
+      successMessage('Pending orders loaded soccessfully.')
+      return
     }
   } catch (error) {
-    switch (type) {
-      case ALL:
-        dispatch(getCompanyOrdersFailure())
-        errorMessage('Cannot get Orders')
-        break
-      case ACTIVE:
-        dispatch(getActiveOrdersFailure())
-        errorMessage('Cannot get active orders')
-        break
-      case DONE:
-        dispatch(getDoneOrdersFailure())
-        errorMessage('Cannot get completed orders')
-        break
-      case PENDING:
-        dispatch(getPendingOrdersFailure())
-        errorMessage('Cannot get pending orders')
-        break
+    if (type === 'all') {
+      dispatch(getUserOrdersFailure())
+      errorMessage('Cannot get Orders')
+      return
+    } else if (type === 'active') {
+      dispatch(getActiveOrdersFailure())
+      errorMessage('Cannot get active orders')
+      return
+    } else if (type === 'done') {
+      dispatch(getDoneUserOrdersFailure())
+      errorMessage('Cannot get completed orders')
+      return
+    } else if (type === 'done') {
+      dispatch(getPendingUserOrdersFailure())
+      errorMessage('Cannot get pending orders')
+      return
     }
   }
 }
