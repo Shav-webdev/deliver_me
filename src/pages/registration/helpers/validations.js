@@ -9,24 +9,19 @@ export function validatePassword(password) {
   return re.test(String(password))
 }
 
-export function validateAdminPassword(password) {
-  const re = /^[0-9a-zA-Z]{8,32}$/
-  return re.test(String(password))
-}
-
 export function validatePoint(point) {
   const re = /^[1-9]\d*(\d+)?$/
   return re.test(String(point))
 }
 
 export function validateName(name) {
-  return name.length >= 2 && name.length < 32
+  return name.length >= 1 
 }
 export function validateLastName(lastName){
-  return lastName.length>=2 && lastName.length<32
+  return lastName.length>=1 
 }
 export function validateAddress(address) {
-  return address.length >= 2 && address.length < 32
+  return address.length >= 1
 }
 
 export function validateComment(comment) {
@@ -48,5 +43,5 @@ export function validateTaxNumber(number) {
 }
 
 export function validateActivity(activity) {
-  return activity.length >= 2 && activity.length < 32
+  return activity.length >= 1
 }
