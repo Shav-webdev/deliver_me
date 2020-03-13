@@ -88,12 +88,14 @@ function AdminBoard({
       successMessage(`${data.name} ${data.lastName} signed up !`)
       socketUser(data)
       audio.src = audioSound
+      audio.autoplay = true
       audio.play()
     })
     socket.on('update_company_list', data => {
       successMessage(`${data.name} signed up !`)
       socketCompany(data)
       audio.src = audioSound
+      audio.autoplay = true
       audio.play()
     })
   }, [])

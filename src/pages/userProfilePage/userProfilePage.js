@@ -49,11 +49,10 @@ const userProfilePage = ({
   getUser,
   currentUserData,
   updateUser,
-  gettingAllOrders,
   doneOrder,
   takeOrder
 }) => {
-  const { gettingUserOrders, allOrdersData,companyPendingOrdersData,companyDoneOrdersData } = orders
+  const { gettingUserOrders,gettingAllOrders,gettingCompanyPendingOrders,gettingCompanyDoneOrders, allOrdersData,companyPendingOrdersData,companyDoneOrdersData } = orders
   const [isInputsEditable, setIsInputsEditable] = useState(false)
   const { amount, name, lastName, phone, address, avatar ,rating} = currentUserData
   const [state, setState] = useState(defaultState)
@@ -193,24 +192,19 @@ const userProfilePage = ({
                 />
               </div>
             )}
-            {menuItem==='a_orders' ? (allOrdersData.length===0? <Spinner />:           
+            {menuItem==='a_orders' ? (gettingAllOrders? <Spinner />:           
             allOrdersData.map(el => {
              return( 
                 <CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} takeOrder={takeOrder} page={menuItem} key={el.id}/>
               )
             })):
-            menuItem==='my_pending' ? companyPendingOrdersData.map(el=>{
+            menuItem==='my_pending' ?gettingCompanyPendingOrders?<Spinner/>: companyPendingOrdersData.map(el=>{
               return (<CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} doneOrder={doneOrder} page={menuItem} key={el.id} />)
-            }):menuItem==='my_completed'?companyDoneOrdersData.map(el=>{
-              return (<CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el} updateOrder={updateOrder} page={menuItem} key={el.id}/>)
+            }):menuItem==='my_completed'?gettingCompanyDoneOrders?<Spinner/>:companyDoneOrdersData.map(el=>{
+              return (<CardUser user={currentUserData} getActiveOrders={getActiveOrders} data={el}  page={menuItem} key={el.id}/>)
             }):""}
             
-  
-          
-              
-              
-
-              
+               
           </Content>
         </Layout>
       </Layout>

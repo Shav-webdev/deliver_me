@@ -10,7 +10,7 @@
     justify-content: space-evenly;
     margin: 0 auto;
     border: 1px solid #ccc;
-    min-width: 200px;
+    min-width: 500px;
     max-width: 730px;
     transition: 0.7s ease-in-out;
 }
@@ -35,8 +35,6 @@
     white-space: nowrap;
     max-width: 140px;
     min-width: 20px;
-    width: 100%;
-
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 0.5rem;
@@ -89,7 +87,7 @@
     margin: 10px;
 }
 .item-box{
-    margin-top: 15px;
+    margin: 15px;
 }
 .buttons{
     display: flex;

@@ -1,0 +1,11 @@
+.view_order_form {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.view_order_form .ant-form-item.receiver {
+    margin-top: 0px;
+  }
+  .view_order_form .ant-form-item{
+      margin-bottom: 0;
+  }

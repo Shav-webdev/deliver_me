@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button } from 'antd'
+import { Button, Typography } from 'antd'
 import './cardUser.css'
 import CreateOrderModal from '../createOrderModal/createOrderModal'
 import ViewOrderModal from '../viewOrderModal/ViewOrderModal'
@@ -13,39 +13,39 @@ function CardUser({ data, takeOrder, doneOrder, user, getActiveOrders, page }) {
     receiver_phone,
     company_name,
     order_description,
+    state,
   } = data
-  const [visible, setVisible] = useState(false)
-  const handleTakeOrder = () => {
+  const [show, setVisibleOrder] = useState(false)
+  const handleTakeOrder = e => {
+    e.stopPropagation()
     takeOrder({
       id: id,
       state: 'pending',
       userId: user.id,
     })
   }
-  const handleDoneOrder = () => {
+  const handleDoneOrder = e => {
+    console.log('done')
+    e.stopPropagation()
     doneOrder({
       id: id,
       state: 'done',
       userId: user.id,
     })
   }
-  const handleOpenModal = () => {
-    setVisible(true)
+  const handleOpen = () => {
+      setVisibleOrder(true)   
   }
-  const modalHandleCancel = () => {
-    console.log('cancel')
-    setVisible(false)
-    console.log(visible)
-    setVisible(false)
-  }
+
   return (
-    <div onClick={handleOpenModal} className="card-container">
+    <div  className="card-container">
       <ViewOrderModal
-        visible={visible}
-        orderModalHandleCancel={modalHandleCancel}
+        show={show}
+        state={state}
+        setVisibleOrder={setVisibleOrder}
         data={data}
       />
-      <div className="item-box">
+      <div  onClick={handleOpen} className="item-box">
         <div className="card-item">
           <p className="order">
             <strong>Order:</strong>

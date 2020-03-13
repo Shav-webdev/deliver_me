@@ -60,6 +60,11 @@ export const takeOrderSuccess = data => ({
   type: 'TAKE_ORDER_SUCCESS',
   payload: data,
 })
+export const doneOrderSuccess = data => ({
+  type: 'DONE_ORDER_SUCCESS',
+  payload: data,
+})
+
 
 export const editOrderRequest = () => ({
   type: EDIT_ORDER_REQUEST,

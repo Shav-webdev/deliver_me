@@ -182,7 +182,7 @@ export default function ordersReducer(state = initialState, action) {
         )
         return {
           ...state,
-          companyDoneOrdersData: [...donOrders]
+          companyPendingOrdersData: [...donOrders]
         }
     case 'TAKE_ORDER_SUCCESS':
       const lastOrders = state.allOrdersData.filter(

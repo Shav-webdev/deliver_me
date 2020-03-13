@@ -1,88 +1,100 @@
-import React from 'react'
-import { Form, Input } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Form, Input, Icon, Select, DatePicker, Typography } from 'antd'
 import Modal from 'antd/es/modal'
+const { RangePicker } = DatePicker
+const { Option } = Select
+const { TextArea } = Input
+import './ViewOrder.css'
+import moment from 'moment'
 import SubTitle from '../subTitle/subTitle'
-function ViewOrderModal({ data, visible, setVisible, orderModalHandleCancel }) {
-  //   const {
-  //     points,
-  //     id,
-  //     take_address,
-  //     deliver_address,
-  //     receiver_name,
-  //     receiver_phone,
-  //     company_name,
-  //     order_description,
-  //   } = data
+function ViewOrderModal({ data, show, state, setVisibleOrder, hideViewModal }) {
+  const {
+    points,
+    comment,
+    id,
+    take_address,
+    deliver_address,
+    receiver_name,
+    receiver_phone,
+    company_name,
+    order_description,
+    order_start_time,
+    order_end_time,
+  } = data
+
+  const [visible, setSetShow] = useState(show)
+
+  useEffect(() => {
+    setSetShow(show)
+  }, [show])
+
+  const handleSubmit = () => {
+    setSetShow(false)
+    setVisibleOrder(false)
+  }
+
   return (
     <Modal
       title={'Order'}
+      visible={visible}
       style={{ top: 20 }}
       width={756}
-      onCancel={orderModalHandleCancel}>
-      <Form className="create_order_form">
+      cancelButtonProps={{ style: { display: 'none' } }}
+      onOk={handleSubmit}>
+      <Form className="view_order_form">
         <SubTitle>Sender</SubTitle>
-        <Form.Item label="Take address">
-          <Input
-            disabled
-            value={take_address}
-            prefix={
-              <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
-            }
-          />
-        </Form.Item>
+
         <Form.Item label="Description">
-          <Input disabled value={orderDescription} />
+          <Typography>{order_description}</Typography>
         </Form.Item>
-
-        <SubTitle>Receiver</SubTitle>
-
+        <Form.Item label="Take address">
+          {}
+          <Typography>
+            <Icon
+              type="environment"
+              style={{ color: 'rgba(0,0,0,.25)', marginRight: '10px' }}
+            />
+            {take_address}
+          </Typography>
+        </Form.Item>
+        {state !== 'active' ? <SubTitle>Receiver</SubTitle> : ''}
         <Form.Item label="Receiver address" className="receiver">
-          <Input
-            disabled
-            value={deliverAddress}
-            prefix={
-              <Icon type="environment" style={{ color: 'rgba(0,0,0,.25)' }} />
-            }
-          />
+          <Typography>
+            <Icon
+              type="environment"
+              style={{ color: 'rgba(0,0,0,.25)', marginRight: '10px' }}
+            />
+            {deliver_address}
+          </Typography>
         </Form.Item>
-        <Form.Item label="Receiver phone" className="receiver">
-          <Input
-            disabled={isOrderEditable}
-            value={reciverPhone}
-            addonBefore={prefixSelector}
-          />
-        </Form.Item>
-        <Form.Item label="Receiver name" className="receiver">
-          <Input
-            disabled={isOrderEditable}
-            value={reciverName}
-            prefix={<Icon type="name" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          />
-        </Form.Item>
+        {state !== 'active' && (
+          <Form.Item label="Receiver phone" className="receiver">
+            <Typography>{receiver_phone}</Typography>
+          </Form.Item>
+        )}
+        {state !== 'active' && (
+          <Form.Item label="Receiver name" className="receiver">
+            <Typography>
+              <Icon
+                type="name"
+                style={{ color: 'rgba(0,0,0,.25)', marginRight: '10px' }}
+              />
+              {receiver_name}
+            </Typography>
+          </Form.Item>
+        )}
         <SubTitle>Order options</SubTitle>
         <Form.Item label="Point(AMD)">
-          <Input
-            disabled
-            value={points}
-            prefix={
-              <Icon
-                type="DollarOutlined"
-                style={{ color: 'rgba(0,0,0,.25)' }}
-              />
-            }
-          />
+          <Typography>
+            <Icon
+              type="DollarOutlined"
+              style={{ color: 'rgba(0,0,0,.25)', marginRight: '10px' }}
+            />
+            {points}
+          </Typography>
         </Form.Item>
         <Form.Item className="order_range_picker" label="Order time range">
-          <RangePicker
-            disabled
-            disabledDate
-            disabledTime
-            defaultValue={[
-              orderStartTime ? moment(orderStartTime, dateFormat) : null,
-              orderEndTime ? moment(orderEndTime, dateFormat) : null,
-            ]}
-            format={dateFormat}
-          />
+          <Typography>{order_end_time}</Typography>
         </Form.Item>
         <Form.Item label="Comment">
           <TextArea disabled value={comment} placeholder="Comment" />
