@@ -29,12 +29,20 @@ import {
   ADD_ORDER_BY_SOCKET_REQUEST,
   ADD_ORDER_BY_SOCKET_SUCCESS,
   ADD_ORDER_BY_SOCKET_FAILURE,
+  GET_COMPANY_MORE_ALL_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ALL_ORDERS_FAILURE,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE,
+  GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_PENDING_ORDERS_FAILURE,
+  GET_COMPANY_MORE_DONE_ORDERS_SUCCESS,
+  GET_COMPANY_MORE_DONE_ORDERS_FAILURE,
   GET_USER_PENDING_ORDERS_REQUEST,
   GET_USER_PENDING_ORDERS_SUCCESS,
   GET_USER_PENDING_ORDERS_FAILURE,
   GET_USER_DONE_ORDERS_REQUEST,
   GET_USER_DONE_ORDERS_SUCCESS,
-  GET_USER_DONE_ORDERS_FAILURE
+  GET_USER_DONE_ORDERS_FAILURE,
 } from '../action/constants'
 
 const initialState = {
@@ -44,12 +52,16 @@ const initialState = {
   userOrdersData: [],
   gettingCompanyOrders: false,
   companyOrdersData: [],
+  hasMoreAllOrder: true,
   gettingCompanyActiveOrders: false,
   companyActiveOrdersData: [],
+  hasMoreActiveOrder: true,
   gettingCompanyDoneOrders: false,
   companyDoneOrdersData: [],
+  hasMoreDoneOrder: true,
   gettingCompanyPendingOrders: false,
   companyPendingOrdersData: [],
+  hasMorePendingOrder: true,
 }
 
 export default function ordersReducer(state = initialState, action) {
@@ -69,6 +81,50 @@ export default function ordersReducer(state = initialState, action) {
       return {
         ...state,
         gettingCompanyOrders: false,
+      }
+
+    case GET_COMPANY_MORE_ALL_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreAllOrder: true,
+      }
+    case GET_COMPANY_MORE_ALL_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreAllOrder: false,
+      }
+
+    case GET_COMPANY_MORE_ACTIVE_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreActiveOrder: true,
+      }
+    case GET_COMPANY_MORE_ACTIVE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreActiveOrder: false,
+      }
+
+    case GET_COMPANY_MORE_PENDING_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMorePendingOrder: true,
+      }
+    case GET_COMPANY_MORE_PENDING_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMorePendingOrder: false,
+      }
+
+    case GET_COMPANY_MORE_DONE_ORDERS_FAILURE:
+      return {
+        ...state,
+        hasMoreDoneOrder: true,
+      }
+    case GET_COMPANY_MORE_DONE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        hasMoreDoneOrder: false,
       }
 
     case GET_COMPANY_DONE_ORDERS_REQUEST:
@@ -131,43 +187,39 @@ export default function ordersReducer(state = initialState, action) {
         gettingCompanyActiveOrders: false,
       }
 
+    case GET_USER_PENDING_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: true,
+      }
+    case GET_USER_PENDING_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+        companyPendingOrdersData: action.payload,
+      }
+    case GET_USER_PENDING_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyPendingOrders: false,
+      }
 
-      case GET_USER_PENDING_ORDERS_REQUEST:
-        return {
-          ...state,
-          gettingCompanyPendingOrders: true,
-        }
-      case GET_USER_PENDING_ORDERS_SUCCESS:
-        return {
-          ...state,
-          gettingCompanyPendingOrders: false,
-          companyPendingOrdersData: action.payload,
-        }
-      case GET_USER_PENDING_ORDERS_FAILURE:
-        return {
-          ...state,
-          gettingCompanyPendingOrders: false,
-        }
-
-
-      case GET_USER_DONE_ORDERS_REQUEST:
-        return {
-          ...state,
-          gettingCompanyDoneOrders: true,
-        }
-      case GET_USER_DONE_ORDERS_SUCCESS:
-        return {
-          ...state,
-          gettingCompanyDoneOrders: false,
-          companyDoneOrdersData: action.payload,
-        }
-      case GET_USER_DONE_ORDERS_FAILURE:
-        return {
-          ...state,
-          gettingCompanyDoneOrders: false,
-        }
-
-
+    case GET_USER_DONE_ORDERS_REQUEST:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: true,
+      }
+    case GET_USER_DONE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+        companyDoneOrdersData: action.payload,
+      }
+    case GET_USER_DONE_ORDERS_FAILURE:
+      return {
+        ...state,
+        gettingCompanyDoneOrders: false,
+      }
 
     case GET_ALL_ORDERS_REQUEST:
       return {
@@ -185,14 +237,14 @@ export default function ordersReducer(state = initialState, action) {
         ...state,
         gettingAllOrders: false,
       }
-      case 'DONE_ORDER_SUCCESS':
-        const donOrders = state.allOrdersData.filter(
-          elem => elem.id !== action.payload.id
-        )
-        return {
-          ...state,
-          companyPendingOrdersData: [...donOrders]
-        }
+    case 'DONE_ORDER_SUCCESS':
+      const donOrders = state.allOrdersData.filter(
+        elem => elem.id !== action.payload.id
+      )
+      return {
+        ...state,
+        companyPendingOrdersData: [...donOrders],
+      }
     case 'TAKE_ORDER_SUCCESS':
       const lastOrders = state.allOrdersData.filter(
         elem => elem.id !== action.payload.id

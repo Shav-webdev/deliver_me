@@ -32,8 +32,16 @@ import {
   addOrderBySocketRequest,
   addOrderBySocketSuccsess,
   addOrderBySocketFailure,
+  getMoreAllOrdersSuccess,
+  getMoreAllOrdersFailure,
+  getMoreActiveOrdersSuccess,
+  getMoreActiveOrdersFailure,
+  getMorePendingOrdersSuccess,
+  getMorePendingOrdersFailure,
+  getMoreDoneOrdersSuccess,
+  getMoreDoneOrdersFailure,
 } from '../action'
-import {getUserByIdThunk} from './users.thunks'
+import { getUserByIdThunk } from './users.thunks'
 import { errorMessage, successMessage } from '../../services/services'
 
 export const getAllOrdersThunk = () => async dispatch => {
@@ -59,17 +67,17 @@ export const updateOrderByUserThunk = data => async dispatch => {
     if (response.status !== 201) {
       errorMessage('Cannot update Order')
     }
-    if(data.state==='pending'){
+    if (data.state === 'pending') {
       dispatch(takeOrderSuccess(data))
-      dispatch(getUserOrdersThunk(data.userId,'pending'))
+      dispatch(getUserOrdersThunk(data.userId, 'pending'))
       successMessage('Order taken.')
-    }else if(data.state==='done'){
+    } else if (data.state === 'done') {
       dispatch(doneOrderSuccess(data))
       successMessage('Order Done.')
       dispatch(getUserByIdThunk(data.userId))
-      dispatch(getUserOrdersThunk(data.userId,'done'))
+      dispatch(getUserOrdersThunk(data.userId, 'done'))
     }
-    
+
     getAllOrdersThunk()
   } catch (error) {
     errorMessage('Something went wrong, please try later')
@@ -99,11 +107,11 @@ export const getUserOrdersThunk = (id, type) => async dispatch => {
     }
   } catch (error) {
     if (type === 'all') {
-     // dispatch(getUserOrdersFailure())
+      // dispatch(getUserOrdersFailure())
       errorMessage('Cannot get Orders')
       return
     } else if (type === 'active') {
-     // dispatch(getActiveOrdersFailure())
+      // dispatch(getActiveOrdersFailure())
       errorMessage('Cannot get active orders')
       return
     } else if (type === 'done') {
@@ -131,7 +139,12 @@ export const getCompanyOrdersThunk = (
         const responseAll = await api
           .getCompanyOrders(id)
           .get({ params: { type, last, count: count } })
+        if (responseAll.data.length < 5) {
+          dispatch(getCompanyOrdersSuccess([]))
+          dispatch(getMoreAllOrdersSuccess())
+        }
         dispatch(getCompanyOrdersSuccess(responseAll.data))
+        getMoreAllOrdersFailure()
         successMessage('Orders loaded successfully.')
         break
       case ACTIVE:
@@ -140,10 +153,12 @@ export const getCompanyOrdersThunk = (
           .getCompanyOrders(id)
           .get({ params: { type, last, count: count } })
         console.log('responseActive', responseActive)
-        if (responseActive.status === 206) {
+        if (responseActive.data.length < 5) {
           dispatch(getActiveOrdersSuccess([]))
+          dispatch(getMoreActiveOrdersSuccess())
         }
         dispatch(getActiveOrdersSuccess(responseActive.data))
+        getMoreActiveOrdersFailure()
         successMessage('Active orders loaded successfully.')
         break
       case DONE:
@@ -151,7 +166,12 @@ export const getCompanyOrdersThunk = (
         const responseDone = await api
           .getCompanyOrders(id)
           .get({ params: { type, last, count: count } })
+        if (responseDone.data.length < 5) {
+          dispatch(getDoneOrdersSuccess([]))
+          dispatch(getMoreDoneOrdersSuccess())
+        }
         dispatch(getDoneOrdersSuccess(responseDone.data))
+        getMoreDoneOrdersFailure()
         successMessage('Completed orders loaded successfully.')
         break
       case PENDING:
@@ -160,10 +180,12 @@ export const getCompanyOrdersThunk = (
           .getCompanyOrders(id)
           .get({ params: { type, last, count: count } })
         console.log('responsePending', responsePending)
-        if (responsePending.status === 206) {
+        if (responsePending.data.length < 5) {
           dispatch(getPendingOrdersSuccess([]))
+          dispatch(getMorePendingOrdersSuccess())
         }
         dispatch(getPendingOrdersSuccess(responsePending.data))
+        getMorePendingOrdersFailure()
         successMessage('Pending orders loaded successfully.')
         break
     }
@@ -227,12 +249,17 @@ export const createCompanyOrderThunk = data => async dispatch => {
 
 export const removeCompanyOrderThunk = (
   companyId,
-  orderId
+  orderId,
+  type,
+  last,
+  count
 ) => async dispatch => {
+  console.log(companyId, orderId, type, last, count)
   try {
     await api.deleteUpdateOrder(orderId).delete()
     dispatch(removeOrderSuccess(orderId))
     dispatch(getCompanyOrdersThunk(companyId))
+    getCompanyOrdersThunk(companyId, type, last, count)
     successMessage('Order deleted.')
   } catch (error) {
     dispatch(removeOrderFailure())
