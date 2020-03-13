@@ -228,8 +228,12 @@ body {
 }
 
 .create_order_form .ant-form-item.receiver {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   margin-top: 10px;
+}
+
+.create_order_form .ant-form-item.sender {
+  margin-bottom: 20px;
 }
 
 .create_order_form .order_range_picker {
